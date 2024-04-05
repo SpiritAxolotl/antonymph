@@ -69,7 +69,7 @@ const platformFixes = {
 
 function applyFixes() {
   const browserType = getBrowserType();
-  const isMac = navigator.userAgent.indexOf("Mac") !== -1;
+  const isMac = navigator.userAgent.includes("Mac");
   if (browserType == "mobile")
     mobileMode();
   platformFixes.focusFix = browserType == "firefox";
@@ -215,12 +215,13 @@ function setDisplaySizeString() {
   if (window.innerWidth > (window.outerWidth + 16))
     displaySizeString.innerHTML += '<br><font color="yellow">You seem to be using zoom, please use 100% (globally).</font>'
 }
-              
+
 /************************************************/
 /* DevTools doesn't let you see more than 10k   */
 /* characters of JS code in the inspector. So   */
 /* if it cuts off here for you, use either the  */
 /* Sources tab in DevTools or just view-source. */
+/* Spax fork update. Moved to a separate file!! */
 /************************************************/
 
 const navSound = new Audio("/antonymph/navigate.mp3");
@@ -266,7 +267,7 @@ function mobileMode() {
   const mobileNotification = document.getElementById("mobileNotification");
   mobileOverlay.onclick = (e) => {
     e.preventDefault();
-    if (e?.srcElement?.id != "bypassMobile") 
+    if (e?.srcElement?.id != "bypassMobile")
       document.body?.requestFullscreen?.();
     navigator?.vibrate?.(64);
     mobileNotification.style.left = "-4px";
@@ -516,9 +517,9 @@ function renderScreenSizePreview() {
     const scaledOff = element[2]?.map(e=>Math.floor(e*canvasScale)) || [0,0];
     element[1](ctx, [...scaledSize.map((e,i)=>Math.floor((canvasSize[i]-e+scaledOff[i])/2)), ...scaledSize]);
   }
-  
+
   requestAnimationFrame(renderScreenSizePreview);
-  
+
 }
 
 function getDate(){
@@ -671,7 +672,7 @@ function popupCheck() {
   lastCheck = Date.now();
   state.innerText = "Checking for popup permission...";
   popupsCheckCounter = 0;
-  const check = [0,1,2].map(e => 
+  const check = [0,1,2].map(e =>
     window.open("check.html", `check-${e}`, "popup,height=100,width=100,top=0,left=0")
   );
   if (check.includes(null)) {
@@ -695,11 +696,11 @@ function getPopups() {
     if (paintWindow?.unsaved)
       paintWindow.onbeforeunload = null;
   } catch {}
-  popups = [0,1,2,3,4].map(e => 
+  popups = [0,1,2,3,4].map(e =>
     window.open("popup.html", `target-${e}`, "popup,height=200,width=180,top=32,left=32")
   );
 
-  popupState = [0,1,2,3,4].map(e => 
+  popupState = [0,1,2,3,4].map(e =>
     ({
       x: -1,
       y: -1,
@@ -730,7 +731,7 @@ function getPopups() {
 
 function closePopups(skipLast) {
   mainAudio.pause();
-  [0,1,2,3,...(skipLast ? [] : [4])].map(e => 
+  [0,1,2,3,...(skipLast ? [] : [4])].map(e =>
     window.open("close.html", `target-${e}`, "popup,height=100,width=100,top=0,left=0")
   );
 }
@@ -939,7 +940,7 @@ setInterval(()=>{
   iconFrame++;
   if (iconFrame > 10) iconFrame = 0;
   const iconUrl = icons[iconFrame];
-  
+
   document.querySelector("link[rel~='icon']").href = iconUrl;
   /* I wanted to animate the favicon for all windows but it messed up the performance or something
   for (const popup of popups) {
@@ -997,12 +998,12 @@ function move(index, x, y, rateLimit) {
   popupState[index].sillyHidden = false;
   //if (popupState[index].x !== x || popupState[index].y !== y || ignoreLimits) {
   if (popups[index].screenLeft !== x || popups[index].screenTop !== y || ignoreLimits) {
-    
+
       debug_action_calls++;
       //if (rateLimit) popups[index].lastMove = Date.now();
       if (rateLimit) rateLimitState = 1;
       popups[index].moveTo(x, y);
-    
+
     popupState[index].x = x;
     popupState[index].y = y;
   }
@@ -1022,7 +1023,7 @@ function size(index, w, h, rateLimit) {
   popupState[index].sillyHidden = false;
   //if (popupState[index].w !== w || popupState[index].h !== h || ignoreLimits) {
   if (popups[index].outerWidth !== w || popups[index].outerHeight !== h || ignoreLimits) {
-    
+
       debug_action_calls++;
       //if (rateLimit) popups[index].lastResize = Date.now();
       if (rateLimit) rateLimitState = 1;
@@ -1499,9 +1500,9 @@ function part1(currentBeat) {
     if (currentBeat >= 23 + 12/16) {
       move(1, 1100, 460 + Math.floor((currentBeat*16 + 1)%2)*20);
     } else {
-      move(1, 1100, 460 + Math.floor((Math.min(23.74, currentBeat)*4)%2)*20);  
+      move(1, 1100, 460 + Math.floor((Math.min(23.74, currentBeat)*4)%2)*20);
     }
-    
+
 
     try {
       const messages = [
@@ -1548,14 +1549,14 @@ function part2(currentBeat) {
       ]
       const offset = offsets[currentBeat >= 32 ? Math.floor((currentBeat*4 - 2 + 0.75)%3) + 1 : 0];
       move(2, offset[0], offset[1] + Math.floor(easeOutCubic(bounceBack((currentBeat*8 + 1.5) % 2))*-50));
-      size(2, 640, 556); 
+      size(2, 640, 556);
     }
   }
   */
 
   if (oneTime(1, currentBeat, 24)) {
     restorePopup(0, true);
-    sillyHide(1); 
+    sillyHide(1);
     setBackgroundTransColor("background-color 0s", "#637");
     popups[1].document.body.innerHTML = plain("#637");
     popups[3].document.body.innerHTML = plain("#637");
@@ -1682,9 +1683,9 @@ function part2(currentBeat) {
 
   if (oneTime(0, currentBeat, 32)) {
     restorePopup(1);
-    sillyHide(2); 
-    sillyHide(3); 
-    sillyHide(4); 
+    sillyHide(2);
+    sillyHide(3);
+    sillyHide(4);
     popups[0].document.body.innerHTML = `
 <svg viewBox="0 0 512 512" id="gay" style="transform: scale(4) rotate(0deg); height: 100%; left: 0; right: 0; margin: 0 auto; position: absolute;filter: sepia(0.5);">
 <g><polygon fill="#FEFF00" points="260,258 463.8,-94.9 667.5,258"></polygon>
@@ -1800,7 +1801,7 @@ function part2(currentBeat) {
       if (coverup) coverup.style.display = "none";
       // popups[4].document.getElementById("lol").style.background = textFlashColor;
     }
-    
+
     // We have to do it this way because a CSS animation makes the SVG blurry
     const gayBackground = popups[0]?.document?.getElementById("gay");
     if (gayBackground)
@@ -1822,8 +1823,8 @@ function part2(currentBeat) {
     sillyHide(0);
     sillyHide(1);
     sillyHide(2);
-    sillyHide(3); 
-    sillyHide(4); 
+    sillyHide(3);
+    sillyHide(4);
   }
 }
 
@@ -1886,7 +1887,7 @@ function part3(currentBeat) {
   position: absolute; left: 0; top: 0;
 }
 .ios_txt {
-  width: 100%; 
+  width: 100%;
   color: #EEE;
   font-family: sans-serif;
   text-align: center;
@@ -2636,7 +2637,7 @@ function part4(currentBeat) {
             } catch {}
           }, 6000);
         }
-        
+
         excellentEl.style.opacity = 1;
         excellentEl.classList.remove("transTrans");
         excellentEl.style.transform = 'scale(2.2) rotate(' + (((hitBeat[4] % 3) - 1)*2) + 'deg)';
@@ -2669,7 +2670,7 @@ function part4(currentBeat) {
     const availableArrows = nectarBeats.filter(e=>(e[3] ? e[0] + e[1] : e[0])>=currentBeat);
     const hitArrows = nectarBeats.filter(e=>e[0]<currentBeat);
     let lastHit = popups[0].window.lastHit || 0;
-    
+
     /*
     if (lastHit < hitArrows.length) {
       const excellentEl = popups[0].document.getElementById("excellent");
@@ -2717,7 +2718,7 @@ function part4(currentBeat) {
       arrowEl.style.filter = "brightness(" + Math.max(1,1.5-((currentBeat*4)%1)) + ")";
 
       const offsetX = 480 + ((i-1.5)*offsetXmult) - 100;
-      
+
       arrowEl.style.top = 100 + (i % 2 ? offset : -offset) + "px";
       perfectEl.style.top = 24 + (i % 2 ? offset : -offset) + "px";
       arrowEl.style.left = offsetX + "px";
@@ -2749,13 +2750,13 @@ function part4(currentBeat) {
 
       if (currentBeat >= 73)
         setPopupHistory(i, (platformFixes.alternateArrows ? ["←","↓","↑","→"] : ["🢀","🢃","🢁","🢂"])[currentArrow[2]]);
-      
+
       if (currentArrow[4] >= 16 && currentArrow[4] < 20)
         popups[i].document.getElementById("arrow").style.transform = 'rotate(' + ([270,180,0,90][currentArrow[2]] + ((Math.max(0,currentArrow[0]-currentBeat)*360*2)%360)) + 'deg)';
-      else 
+      else
         popups[i].document.getElementById("arrow").style.transform = 'rotate(' + [270,180,0,90][currentArrow[2]] + 'deg)';
       popups[i].document.getElementById("arrow").style.filter = `hue-rotate(${noteColor}deg)${rainbowNotes ? ' saturate(1.5)' : ''}`;
-      
+
       popups[i].document.getElementById("hoId").style.transform = 'rotate(' + [270,180,0,90][currentArrow[2]] + 'deg)';
       popups[i].document.getElementById("hold").style.opacity = isHold ? 1 : 0;
       popups[i].document.getElementById("hoId").style.opacity = (isHold && arrowOffset < 0) ? ((Math.floor(currentBeat*32)%2)/2 + 0.5) : 0;
@@ -2796,7 +2797,7 @@ function part4(currentBeat) {
   }
 
 
-  if (oneTime(4, currentBeat, 80)) { 
+  if (oneTime(4, currentBeat, 80)) {
     playPatternWithOffset(2, beatToMs(1 - (currentBeat - 80)));
     playPatternWithOffset(2, beatToMs(1.5 - (currentBeat - 80)));
     playPatternWithOffset(2, beatToMs(2 - (currentBeat - 80)));
@@ -2813,7 +2814,7 @@ function part5(currentBeat) {
     sillyHide(3);
     sillyHide(4);
     setBackgroundTransColor("background-color 0s", `#000`);
-    
+
     popups[4].document.body.innerHTML = plain();
     popups[2].document.body.innerHTML = `<style>@font-face{font-family: "sans undertale";src: url("/antonymph/DeterminationSansWeb.woff");} #sans{font-family: "sans undertale";font-size: 32px;position:absolute;color: white;top: 0px;left: 180px;width: 370px;}</style><div style="width:100%;height:100%;background:black;image-rendering: pixelated"><img src="/antonymph/textbox_tacky.png" onload="setInterval(()=>{document.querySelector('#sans').innerText=document.title}, 16)"><img src="/antonymph/textbox_shy.png" style="position:absolute;top:0;left:0;opacity:0;image-rendering: pixelated"><p id="sans">test</p></div>`;
   }
@@ -3030,7 +3031,7 @@ function part6(currentBeat) {
     elements[2].childNodes.forEach((n,i) => n.style.filter = currentIndex == i/2 ? "saturate(2)" : "");
     if (progress >= 0.99)
       elements[4].style.opacity = 0;
-    
+
     // move(0, 921, 196);
     // move(1, 1292, 196);
     // size(0, 364 + OFF_X, 648 + OFF_Y);
