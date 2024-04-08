@@ -475,11 +475,7 @@ Music volume <input id="volume" type="range" value="1" min="0" max="1" step="0.0
     platformFixes.focusFix = browserType == "firefox";
     platformFixes.buggyCorners = browserType == "firefox" && isMac;
     platformFixes.alternateArrows = isMac;
-    if (browserType == "chrome" || browserType == "opera") {
-      document.getElementById("firefoxIsAwesome").style.display = "none";
-    } else {
-      document.getElementById("chromiumIsLaggy").style.display = "none";
-    }
+    document.getElementById((browserType == "chrome" || browserType == "opera") ? "firefoxIsAwesome" : "chromiumIsLaggy").style.display = "none";
   }
 
   function getBrowserType() {
@@ -617,7 +613,7 @@ Music volume <input id="volume" type="range" value="1" min="0" max="1" step="0.0
     if (window.innerWidth > (window.outerWidth + 16))
       displaySizeString.innerHTML += '<br><font color="yellow">You seem to be using zoom, please use 100% (globally).</font>'
   }
-                
+           
   /************************************************/
   /* DevTools doesn't let you see more than 10k   */
   /* characters of JS code in the inspector. So   */
