@@ -1,4 +1,3 @@
-
 /*****************************************************************************\
 | Hi, curious pony!                                                    [INFO] |
 |                                                                             |
@@ -14,7 +13,7 @@
 | go for.                                                                     |
 |                                                                             |
 | Oh, and if you'd like to save this entire thing on your hard drive,         |
-| https://lyra.horse/antonymph/antonymph_20240206.zip                         |
+| https://lyra.horse/antonymph/antonymph_20240408.zip                         |
 |                                                               ~ Lyra Rebane |
 \*****************************************************************************/
 
@@ -75,9 +74,7 @@ function applyFixes() {
   platformFixes.focusFix = browserType == "firefox";
   platformFixes.buggyCorners = browserType == "firefox" && isMac;
   platformFixes.alternateArrows = isMac;
-  if (browserType == "chrome" || browserType == "opera") {
-    document.getElementById("firefoxIsAwesome").style.display = "none";
-  }
+  document.getElementById((browserType == "chrome" || browserType == "opera") ? "firefoxIsAwesome" : "chromiumIsLaggy").style.display = "none";
 }
 
 function getBrowserType() {
