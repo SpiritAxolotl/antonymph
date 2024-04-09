@@ -13,7 +13,7 @@
 | go for.                                                                     |
 |                                                                             |
 | Oh, and if you'd like to save this entire thing on your hard drive,         |
-| https://lyra.horse/antonymph/antonymph_20240408.zip                         |
+| https://lyra.horse/assets/antonymph_20240408.zip                         |
 |                                                               ~ Lyra Rebane |
 \*****************************************************************************/
 
@@ -28,9 +28,9 @@ const endText = document.getElementById("endText");
 const emergencyText = document.getElementById("emergencyText");
 const state = document.getElementById("state");
 
-const introMusic = playAudio(`/antonymph/we worked so hard to leave equestria and now all i want is to go back.${"safari" in window ? "mp3" : "opus"}`);
-const vyletIntro = new Audio("/antonymph/vylet_intro.mp3");
-const hit = new Audio("/antonymph/hit.wav");
+const introMusic = playAudio(`/assets/we worked so hard to leave equestria and now all i want is to go back.${"safari" in window ? "mp3" : "opus"}`);
+const vyletIntro = new Audio("/assets/vylet_intro.mp3");
+const hit = new Audio("/assets/hit.wav");
 
 let popups = [];
 let popupState = [];
@@ -196,7 +196,7 @@ function setDisplaySizeString() {
   if (hasStarted) return;
   const {width, height, availWidth, availHeight} = screen;
   if (Math.min(...platformCorner) < 0 || platformCorner[0] > (width-availWidth) || platformCorner[1] > (height-availHeight) || Math.min(window.screenTop, window.screenLeft, height - window.screenTop, width - window.screenLeft) < -400)
-    displaySizeString.innerHTML = '<font color="red">Try moving this window to your main monitor and refresh.</font>';
+    displaySizeString.innerHTML = '<span color="red">Try moving this window to your main monitor and refresh.</span>';
   else if (availWidth == 1920 && availHeight == 1080)
     displaySizeString.innerText = "Your current display is perfect!";
   else if (availWidth == 1920 && availHeight >= 1050 && availHeight <= 1200)
@@ -208,9 +208,9 @@ function setDisplaySizeString() {
   else if (availWidth >= 1650 && availHeight >= 1000)
     displaySizeString.innerText = "Your display is weird, but it'll work.";
   else // if (availWidth <= 1650 && availHeight <= 1050)
-    displaySizeString.innerHTML = `<font color="red">Your current display is too small, you'll probably have a bad experience.</font>${window?.devicePixelRatio > 1 ? '<br><font color="yellow">Your display is using scaling, check your settings for higher resolutions.</font>' : ''}${(width >= 1650 && height >= 1000) ? '<br><font color="yellow">Your display seems big enough, but your taskbar/dock/menubar is taking up too much space.</font>' : ''}`;
+    displaySizeString.innerHTML = `<span color="red">Your current display is too small, you'll probably have a bad experience.</span>${window?.devicePixelRatio > 1 ? '<br><span color="yellow">Your display is using scaling, check your settings for higher resolutions.</span>' : ''}${(width >= 1650 && height >= 1000) ? '<br><span color="yellow">Your display seems big enough, but your taskbar/dock/menubar is taking up too much space.</span>' : ''}`;
   if (window.innerWidth > (window.outerWidth + 16))
-    displaySizeString.innerHTML += '<br><font color="yellow">You seem to be using zoom, please use 100% (globally).</font>'
+    displaySizeString.innerHTML += '<br><span color="yellow">You seem to be using zoom, please use 100% (globally).</span>'
 }
 
 /************************************************/
@@ -221,7 +221,7 @@ function setDisplaySizeString() {
 /* Spax fork update. Moved to a separate file!! */
 /************************************************/
 
-const navSound = new Audio("/antonymph/navigate.mp3");
+const navSound = new Audio("/assets/navigate.mp3");
 window.addEventListener("click", (event) => playNavSound(0.5));
 addEventListener("wheel", (event) => playNavSound(event.deltaY > 0 ? 2 : 4));
 function playNavSound(baseRate, bypass) {
@@ -246,7 +246,7 @@ function mobileMode() {
   mobileOverlay.style.display = "block";
   introText.style.display = "none";
   popupOverlay.style.display = "none";
-
+  
   const bypassMobile = document.getElementById("bypassMobile");
   bypassMobile.onclick = () => {
     mobileOverlay.style.display = "none";
@@ -258,23 +258,23 @@ function mobileMode() {
       introText.style.opacity = "1";
     }
   };
-
+  
   const mobileSlide = document.getElementById("mobileSlide");
   const mobileSlideText = document.getElementById("mobileSlideText");
   const mobileNotification = document.getElementById("mobileNotification");
   mobileOverlay.onclick = (e) => {
     e.preventDefault();
-    if (e?.srcElement?.id != "bypassMobile")
+    if (e?.target?.id != "bypassMobile")
       document.body?.requestFullscreen?.();
     navigator?.vibrate?.(64);
     mobileNotification.style.left = "-4px";
     setTimeout(()=>mobileNotification.style.left = "4px", 32);
     setTimeout(()=>mobileNotification.style.left = "0", 64);
   }
-
+  
   window.addEventListener("deviceorientation", (event) => {
     if (mobileOverlay.style.display != "block" || hasStarted) return;
-    // mobileNotification.innerText = [event.absolute, event.alpha, event.beta, event.gamma].map(e=>Math.floor(e)).join("\n");
+    //mobileNotification.innerText = [event.absolute, event.alpha, event.beta, event.gamma].map(e=>Math.floor(e)).join("\n");
     const angleX = -event.gamma;
     const angleY = -event.beta;
     if (firstAlpha == 0 && event.alpha != 0)
@@ -285,11 +285,11 @@ function mobileMode() {
     document.getElementById("gps").style.transform = `scale(0.75) rotate(${event.alpha-firstAlpha}deg)`;
     //mobileOverlay.style.transform = `scale(1.25) rotateZ(${event.alpha}deg) scale(0.8)`;
     //mobileOverlayInner.style.transform = `rotateZ(${-event.alpha}deg)`;
-    // mobileOverlayInner.style.transform = `rotateZ(${-event.alpha}deg) scale(0.8)`;
+    //mobileOverlayInner.style.transform = `rotateZ(${-event.alpha}deg) scale(0.8)`;
     mobileNotification.style.transform = `translate(${-angleX/(3*1.5)}px, ${Math.max(-22, -angleY/(3*1.5))}px)`;
-    // mobileNotification.style.transform = `rotateZ(${event.alpha}deg) rotateX(${event.beta}deg) rotateY(${event.gamma}deg)`;
+    //mobileNotification.style.transform = `rotateZ(${event.alpha}deg) rotateX(${event.beta}deg) rotateY(${event.gamma}deg)`;
   }, true);
-
+  
   mobileSlide.ontouchstart = (e) => {
     e.preventDefault();
     lastTouch = e.targetTouches[0];
@@ -313,7 +313,7 @@ function mobileMode() {
     e.preventDefault();
     const targetTouch = Array.from(e.targetTouches).find(t => t.identifier == lastTouch.identifier);
     if (!targetTouch) return;
-
+    
     const posX = Math.min(Math.max((targetTouch.clientX - lastTouch.clientX),0),204);
     try {
       if (posX != sliderClick && posX == 204) {
@@ -325,18 +325,18 @@ function mobileMode() {
         sliderClick = posX;
       }
     } catch (e) {}
-
+    
     mobileSlide.style.transform = `translateX(${posX}px)`;
     mobileSlideText.style.opacity = Math.max(0, 1 - posX/100);
   };
-
+  
   const updateMobileInfo = () => {
     if (mobileOverlay.style.display != "block" || hasStarted) return;
-
+    
     const date = getDate();
     document.getElementById('ios_tme').innerText = date.getHours() + ':' + date.getMinutes().toString().padStart(2, '0');
     document.getElementById('ios_dte').innerText = date.toLocaleDateString(undefined /*'en-US'*/, {weekday: 'long',month: 'long',day: 'numeric',});
-
+    
     if ('getBattery' in navigator)
       navigator.getBattery().then((battery) => {
         document.querySelector('#ios_prc > p').innerText = Math.floor(battery.level*100) + '%';
@@ -344,7 +344,7 @@ function mobileMode() {
         document.querySelector('#ios_ico').style.right = (22-Math.floor(15*battery.level)) + 'px'
       });
   };
-
+  
   updateMobileInfo();
   setInterval(updateMobileInfo, 1000);
 }
@@ -389,30 +389,30 @@ function renderScreenSizePreview() {
     screenSizeHasChanged = true;
     windowPosLast = [window.screenTop, window.screenLeft];
   }
-
+  
   const canvas = screenSizeCanvas;
   const ctx = screenSizeContext;
   ctx.fillStyle = "#FFF";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-
+  
   const padding = 16;
   const desiredSize = [1920, 1080];
   const screenSize = [screen.width, screen.height];
   const availSize = [screen.availWidth, screen.availHeight];
   const canvasSize = [canvas.width, canvas.height];
-
+  
   const windowSize = [window.outerWidth, window.outerHeight];
   const windowInnerSize = [window.innerWidth, window.innerHeight];
   const windowPos = [window.screenLeft, window.screenTop];
   const windowOffset = windowPos.map((e,i)=>windowSize[i]+e*2-screenSize[i]);
   const windowInnerOffset = windowOffset.map((e,i)=>e+(i ? 1 : -1)*(windowSize[i]-windowInnerSize[i])+(i ? 0 : OFF_X + platformOffset[0]));
-
+  
   const canvasScale = Math.min(...canvasSize.map((c,i) => (c-padding)/Math.max(desiredSize[i],screenSize[i])));
-
+  
   const availOffset = platformCorner.map((e,i)=>screenSize[i]-availSize[i]-e*2);
-
+  
   const tooSmall = availSize[0] < 1650 || availSize[1] < 1000;
-
+  
   const elements = [
     [
       screenSize,
@@ -465,7 +465,7 @@ function renderScreenSizePreview() {
         if (!screenSizeInfoActive) return;
         ctx.fillStyle = "#59007199";
         ctx.fillRect(...args);
-
+        
         ctx.fillStyle = "#FFF";
         ctx.font = "bold 12px monospace";
         const textPos = args.slice(0,2).map((e,i)=>e+(args[i+2]/2));
@@ -508,15 +508,13 @@ function renderScreenSizePreview() {
       },
     ],
   ];
-
+  
   for (const element of elements) {
     const scaledSize = element[0].map(e=>Math.floor(e*canvasScale));
     const scaledOff = element[2]?.map(e=>Math.floor(e*canvasScale)) || [0,0];
     element[1](ctx, [...scaledSize.map((e,i)=>Math.floor((canvasSize[i]-e+scaledOff[i])/2)), ...scaledSize]);
   }
-
   requestAnimationFrame(renderScreenSizePreview);
-
 }
 
 function getDate(){
@@ -527,7 +525,7 @@ function share() {
   navigator.share({
     title: "Antonymph",
     text: "EPIC ANTONYMPH WEB SITE!!!1",
-    url: "https://lyra.horse/antonymph/",
+    url: "https://lyra.horse/assets/",
   });
 }
 
@@ -599,7 +597,7 @@ function setCheckImage() {
     "safari": "check_safari.png",
     "ie": "check_ie.png",
   }?.[getBrowserType()] ?? "check_err.png";
-  document.getElementById("checkmain").src = "/antonymph/" + imageSrc;
+  document.getElementById("checkmain").src = "/assets/" + imageSrc;
 }
 
 function setLimitIfHighRefresh() {
@@ -652,7 +650,7 @@ function playAudio(url) {
 }
 
 function noPopups() {
-  playAudio("/antonymph/popup_blocked.mp3");
+  playAudio("/assets/popup_blocked.mp3");
   document.getElementById("popupCheckWindow").style.opacity = 1;
   const infobar = document.getElementById("infobar");
   infobar.style.top = "0px";
@@ -696,7 +694,7 @@ function getPopups() {
   popups = [0,1,2,3,4].map(e =>
     window.open("popup.html", `target-${e}`, "popup,height=200,width=180,top=32,left=32")
   );
-
+  
   popupState = [0,1,2,3,4].map(e =>
     ({
       x: -1,
@@ -744,77 +742,77 @@ const achievements = {
     "antonymph": {
         title: "Antonymph",
         description: "Watch through the entire experience",
-        icon: "/antonymph/achievement_antonymph.png",
+        icon: "/assets/achievement_antonymph.png",
     },
     "gehorse": {
         title: "GeHorse Experience",
         description: "Find Secret #1",
-        icon: "/antonymph/achievement_gehorse.png",
+        icon: "/assets/achievement_gehorse.png",
     },
     "lyrabon": {
         title: "Lyrabon",
         description: "Get a score of 35 or more",
-        icon: "/antonymph/achievement_lyrabon.png",
+        icon: "/assets/achievement_lyrabon.png",
         prerequisite: "gehorse",
         prerequisiteMessage: "Unlock Secret #1 first",
     },
     "notitg": {
         title: "Not ITG",
         description: "Hit all of the 40 notes",
-        icon: "/antonymph/achievement_notitg.png",
+        icon: "/assets/achievement_notitg.png",
         prerequisite: "gehorse",
         prerequisiteMessage: "Unlock Secret #1 first",
     },
     "congratulations": {
         title: "Congratulations?",
         description: "Find Secret #2",
-        icon: "/antonymph/achievement_congratulations.png",
+        icon: "/assets/achievement_congratulations.png",
     },
     "sam": {
         title: "Microsoft Sam",
         description: "Try a TTS voice",
-        icon: "/antonymph/achievement_sam.png",
+        icon: "/assets/achievement_sam.png",
         prerequisite: "congratulations",
         prerequisiteMessage: "Unlock Secret #2 first",
     },
     "draw": {
         title: "Wait, I can draw?",
         description: "Find Secret #3",
-        icon: "/antonymph/achievement_draw.png",
+        icon: "/assets/achievement_draw.png",
     },
     "nightcore": {
         title: "Nightcore",
         description: "Try a different speed",
-        icon: "/antonymph/achievement_nightcore.png",
+        icon: "/assets/achievement_nightcore.png",
         prerequisite: "draw",
         prerequisiteMessage: "Unlock Secret #3 first",
     },
     "artist": {
         title: "Artist",
         description: "Use a pressure-sensitive drawing tablet",
-        icon: "/antonymph/achievement_artist.png",
+        icon: "/assets/achievement_artist.png",
         prerequisite: "draw",
         prerequisiteMessage: "Unlock Secret #3 first",
     },
     "musician": {
         title: "Musician",
         description: "Watch the experience with a MIDI device attached",
-        icon: "/antonymph/achievement_musician.png",
+        icon: "/assets/achievement_musician.png",
     },
     ...(DEBUG_MODE ? {"developer": {
         title: "Developer",
         description: "Click the \"free achievement\" button in debug mode",
-        icon: "/antonymph/achievement_developer.png",
+        icon: "/assets/achievement_developer.png",
     }} : {}),
     "inspector": {
         title: "Inspector",
         description: "Accept the tracking cookies, somehow",
-        icon: "/antonymph/achievement_inspector.png",
+        icon: "/assets/achievement_inspector.png",
     },
     "hacker": {
         title: "Hacker",
         description: "Run the `getEpicAchievement()` function",
-        icon: "/antonymph/achievement_hacker.png",
+        icon: "/assets/achievement_hacker.png",
     },
 };
 
@@ -879,10 +877,9 @@ function generateAchievementsScreen() {
     e.onmouseenter = () => playNavSound(5, true);
     e.onmouseleave = () => playNavSound(7, true);
   });
-
 }
 
-const ach = new Audio("/antonymph/achievement.mp3");
+const ach = new Audio("/assets/achievement.mp3");
 function showAchievement({title, description, icon}) {
   const achievement = document.getElementById("achievement");
   achievement.style.display = "block";
@@ -907,7 +904,7 @@ function showAchievement({title, description, icon}) {
 const loadedAssets = [];
 function preloadAssets() {
   const assets = ["DeterminationSansWeb.woff","achievement.mp3","achievement_antonymph.png","achievement_artist.png","achievement_congratulations.png","achievement_developer.png","achievement_draw.png","achievement_gehorse.png","achievement_hacker.png","achievement_inspector.png","achievement_lyrabon.png","achievement_musician.png","achievement_nightcore.png","achievement_notitg.png","achievement_sam.png","aim.png","arrow.png","badger.mp4","chat-d.png","chat-f.png","chipmunk_laugh.mp3","click.mp3","click.wav","cursor.png","cursor_click.png","door-left.jpg","door-right.jpg","ds_bottom.png","ds_top.png","event_mode.png","excellent.png","fluttgirshy.png","frog_1.png","frog_2.png","frog_3.png","gangnam-style-gif.mp4","hit.wav","hoId.png","hold.png","hourglass.png","icons.png","image13_small.gif","iphone.png","iphone_slide.png","keychain.png","kitten_1.png","kitten_2a.png","kitten_2b.png","kitten_2c.png","kitten_3a.png","kitten_3b.png","kitten_4a.png","kitten_4b.png","kitten_car.png","navigate.mp3","nyan.mp4","paint.png","paint_cursor.png","paint_font.png","paint_font_mac.png","paint_txt.png","perfect.png","popup_blocked.mp3","receptor.png","sad.png","skype.png","steam.png","tada.mp3","textbox_shy.png","textbox_tacky.png","the_game.png","the_game_click.png","vylet_intro.mp3","wmm.png","wmm_bar.png","wmm_card.png","wmm_head.png","wmm_pause.png","yay.png"];
-  assets.forEach((assetName)=>fetch("/antonymph/" + assetName).then(r=>r.blob()).then((blob)=>{
+  assets.forEach((assetName)=>fetch("/assets/" + assetName).then(r=>r.blob()).then((blob)=>{
     const reader = new FileReader();
     reader.onload = (e) => loadedAssets[assetName] = e.target.result;
     reader.readAsDataURL(blob);
@@ -929,7 +926,7 @@ async function fetchToDataUri(url) {
 }
 
 let icons = [];
-(async () => icons = await Promise.all(Array(11).fill(0).map(async (v, i) => await fetchToDataUri(`/antonymph/icon_${i}.png`))))();
+(async () => icons = await Promise.all(Array(11).fill(0).map(async (v, i) => await fetchToDataUri(`/assets/icon_${i}.png`))))();
 
 let iconFrame = 0;
 setInterval(()=>{
@@ -937,7 +934,7 @@ setInterval(()=>{
   iconFrame++;
   if (iconFrame > 10) iconFrame = 0;
   const iconUrl = icons[iconFrame];
-
+  
   document.querySelector("link[rel~='icon']").href = iconUrl;
   /* I wanted to animate the favicon for all windows but it messed up the performance or something
   for (const popup of popups) {
@@ -965,7 +962,7 @@ function oneTime(index, currentBeat, desiredBeat) {
 function calculateOffsets(index, x, y) {
   try {
     const intendedSize = [1920, 1080];
-
+    
     let availableSize = [screen.availWidth, screen.availHeight];
     // fails if cross-origin
     try {
@@ -992,21 +989,20 @@ function move(index, x, y, rateLimit) {
   //if (rateLimit && Date.now() - popups[index].lastMove < rateLimitMs) return false;
   try {
     [x, y] = calculateOffsets(index, Math.floor(x), Math.floor(y));
-  popupState[index].sillyHidden = false;
-  //if (popupState[index].x !== x || popupState[index].y !== y || ignoreLimits) {
-  if (popups[index].screenLeft !== x || popups[index].screenTop !== y || ignoreLimits) {
-
-      debug_action_calls++;
-      //if (rateLimit) popups[index].lastMove = Date.now();
-      if (rateLimit) rateLimitState = 1;
-      popups[index].moveTo(x, y);
-
-    popupState[index].x = x;
-    popupState[index].y = y;
-  }
-  } catch {
-      return false;
+    popupState[index].sillyHidden = false;
+    //if (popupState[index].x !== x || popupState[index].y !== y || ignoreLimits) {
+    if (popups[index].screenLeft !== x || popups[index].screenTop !== y || ignoreLimits) {
+        debug_action_calls++;
+        //if (rateLimit) popups[index].lastMove = Date.now();
+        if (rateLimit)
+          rateLimitState = 1;
+        popups[index].moveTo(x, y);
+        popupState[index].x = x;
+        popupState[index].y = y;
     }
+  } catch {
+    return false;
+  }
   return true;
 }
 
@@ -1017,21 +1013,20 @@ function size(index, w, h, rateLimit) {
   try {
     w = Math.max(178, Math.floor(w + platformOffset[0]));
     h = Math.max(100, Math.floor(h + platformOffset[1]));
-  popupState[index].sillyHidden = false;
-  //if (popupState[index].w !== w || popupState[index].h !== h || ignoreLimits) {
-  if (popups[index].outerWidth !== w || popups[index].outerHeight !== h || ignoreLimits) {
-
+    popupState[index].sillyHidden = false;
+    //if (popupState[index].w !== w || popupState[index].h !== h || ignoreLimits) {
+    if (popups[index].outerWidth !== w || popups[index].outerHeight !== h || ignoreLimits) {
       debug_action_calls++;
       //if (rateLimit) popups[index].lastResize = Date.now();
-      if (rateLimit) rateLimitState = 1;
+      if (rateLimit)
+        rateLimitState = 1;
       popups[index].resizeTo(w, h);
-
-    popupState[index].w = w;
-    popupState[index].h = h;
-  }
-        } catch {
-      return false;
+      popupState[index].w = w;
+      popupState[index].h = h;
     }
+  } catch {
+    return false;
+  }
   return true;
 }
 
@@ -1258,7 +1253,7 @@ function selectTTS() {
   const useInstrumental = tts.value !== "vylet";
   textToSpeech = !!voiceId;
   const currentTime = mainAudio.currentTime;
-  mainAudio.src = useInstrumental ? "/antonymph/antonymph_epic_inst_cbr.mp3" : "/antonymph/antonymph_epic_cbr.mp3";
+  mainAudio.src = useInstrumental ? "/assets/antonymph_epic_inst_cbr.mp3" : "/assets/antonymph_epic_cbr.mp3";
   mainAudio.volume = textToSpeech ? vyletIntro.volume*0.5 : vyletIntro.volume;
   mainAudio.playbackRate = vyletIntro.playbackRate;
   mainAudio.currentTime = currentTime;
@@ -1274,7 +1269,7 @@ function selectTTS() {
       window.speechSynthesis.speak(utterer);
     } catch {}
   } else if (tts.value === "vylet") {
-    playAudio("/antonymph/tts.mp3");
+    playAudio("/assets/tts.mp3");
   }
 }
 
@@ -1323,7 +1318,7 @@ function setLyrics(currentBeat) {
     }
     lastLyrics = currentLyrics[1];
   }
-
+  
   const charCount = Math.floor((currentBeat - currentLyrics[0])*30);
   const urlString = "/" + currentLyrics[1].substring(0, charCount).trim().replace(/ /g, "_");
   for (let i = 0; i < 5; i++) {
@@ -1332,7 +1327,7 @@ function setLyrics(currentBeat) {
 }
 
 function tumblrChat(title, messages) {
-  const messagesHtml = messages.map(msg => msg[0] == 0 ? `<img src="/antonymph/chat-d.png" style="margin: 20px 13px 0 20px" /><span style="background:white; font-size: 15px; border-radius: 10px;padding: 8px; margin:5px 0; display: inline-block; width:50%">${msg[1]}</span><br>` : `<span style="background:white; font-size: 15px; border-radius: 10px;padding: 8px; margin-left: 90px; display: inline-block; width:50%">${msg[1]}</span><img src="/antonymph/chat-f.png" style="margin: 20px 13px 0 20px" /><br>`).join("\n");
+  const messagesHtml = messages.map(msg => msg[0] == 0 ? `<img src="/assets/chat-d.png" style="margin: 20px 13px 0 20px" /><span style="background:white; font-size: 15px; border-radius: 10px;padding: 8px; margin:5px 0; display: inline-block; width:50%">${msg[1]}</span><br>` : `<span style="background:white; font-size: 15px; border-radius: 10px;padding: 8px; margin-left: 90px; display: inline-block; width:50%">${msg[1]}</span><img src="/assets/chat-f.png" style="margin: 20px 13px 0 20px" /><br>`).join("\n");
   return `<style>.tumblrBg{transition:filter 1s;}</style><div class="tumblrBg" style="background: #D1D4F4; height: 100%; font-family: 'Comic Sans MS', cursive;filter: brightness(1);">
 <div style="background: #6A708F; width: 100%; height: 25px; color: white; font-size: 16px; padding: 15px">${title}</div>
 ${messagesHtml}
@@ -1341,14 +1336,20 @@ ${messagesHtml}
 }
 
 function notepad(text) {
-  return `<div style="background: #FFF; color: black; height: 100%; font-size: 12px; font-family: 'Arial', sans-serif;">
-<div style="width: 100%; height: 16px;  padding: 4px 6px 0; border-bottom: solid 2px #F0F0F0;"><u>F</u>ile <u>E</u>dit F<u>o</u>rmat <u>V</u>iew <u>H</u>elp</div>
-<div style="padding: 4px;">${text.replace(/\n/g, "<br>\n")}</div>
-</div>`;
+  return <>
+    <div style="background: #FFF; color: black; height: 100%; font-size: 12px; font-family: 'Arial', sans-serif;">
+      <div style="width: 100%; height: 16px;  padding: 4px 6px 0; border-bottom: solid 2px #F0F0F0;">
+        <u>F</u>ile&emsp;<u>E</u>dit&emsp;F<u>o</u>rmat&emsp;<u>V</u>iew&emsp;<u>H</u>elp
+      </div>
+      <div style="padding: 4px;">
+        {text.replace(/\n/g, "<br>\n")}
+      </div>
+    </div>
+  </>;
 }
 
 function plain(color) {
-  return `<div style="width: 100%; height: 100%; background: ${color || "#000"}"></div>`;
+  return <div style={`width: 100%; height: 100%; background: ${color || '#000'}`}></div>;
 }
 
 /* beats 0 - 24 */
@@ -1357,7 +1358,7 @@ function part1(currentBeat) {
     setBackgroundTransColor("background-color 1.5s", "#E8E9C5");
   if (oneTime(0, currentBeat, 8))
     setBackgroundTransColor("background-color 3s cubic-bezier(0,0.5,0,1)", "#174180");
-
+  
   if (currentBeat < 8) {
     try {
       popups[0].document.body.innerText = "Antonymph";
@@ -1372,18 +1373,42 @@ function part1(currentBeat) {
     }
     // mainAudio.currentTime = 40;
   }
-
+  
   if (currentBeat >= 0 && currentBeat < 8) {
-    const currentText = [
-      "<i>antonymph</i><br>music & vocals by vylet pony<font style=\"opacity:0.1\">, crazy frog, psy</font><br>produced, mixed, & mastered by vylet pony<br>written by vylet pony, voreburger, astroeden, calamarispider, sylver stripe<br>additional arranging & recording by voreburger & astroeden",
-      "lick icon by voreburger<br>flutt-gir-shy designed by voreburger",
-      "web experience<br>produced & coded by rebane2001",
-      "illustrations by<br>voreburger, mataschmata, nootaz, astroeden, syrupyyyart,<br>calamarispider, nekosnicker, bunxl, chibadeer, retromochi,<br>cassettepunk, voidmoth, galaxysquid, blairvonglitter, hazelnoods<br>stereo flier, anticularpony, huffylime, fizzlesoda, opossum stuff,<br>& wutanimations",
-      ][Math.floor(currentBeat/2)];
+    const allText = [
+      <>
+        <i>antonymph</i><br/>
+        music & vocals by vylet pony<span style="opacity: 0.1">, crazy frog, psy</span><br/>
+        produced, mixed, & mastered by vylet pony<br/>
+        written by vylet pony, voreburger, astroeden, calamarispider, sylver stripe<br/>
+        additional arranging & recording by voreburger & astroeden
+      </>,
+      <>
+        lick icon by voreburger<br/>
+        flutt-gir-shy designed by voreburger
+      </>,
+      <>
+        web experience<br/>
+        produced & coded by rebane2001
+      </>,
+      <>
+        illustrations by<br/>
+        voreburger, mataschmata, nootaz, astroeden, syrupyyyart,<br/>
+        calamarispider, nekosnicker, bunxl, chibadeer, retromochi,<br/>
+        cassettepunk, voidmoth, galaxysquid, blairvonglitter, hazelnoods<br/>
+        stereo flier, anticularpony, huffylime, fizzlesoda, opossum stuff,<br/>
+        & wutanimations
+      </>,
+      ];
+      const currentText = allText[Math.floor(currentBeat/2)];
     try {
-    popups[4].document.body.innerHTML = `<div style="width:100%;height:100%;padding: 1px 16px;background:#E8E9C5;font-family:monospace"><pre><b>${currentText}</b></pre></div>`;
-    popups[4].document.title = "Antonymph";
-  } catch{}
+      popups[4].document.body = <>
+        <div style="width: 100%; height: 100%; padding: 1px 16px; background: #E8E9C5; font-family: monospace">
+          <pre><b>{currentText}</b></pre>
+        </div>
+      </>;
+      popups[4].document.title = "Antonymph";
+    } catch {}
     size(4, 600, 200);
     //move(4, 1300, 700);
     if (currentBeat < 4)
@@ -1417,7 +1442,7 @@ function part1(currentBeat) {
       [3 + 6/16, 1],
       [3 + 9/16, -1],
       [3 + 12/16, 1],
-
+      
       [4, 1],
       [4 + 3/16, 1],
       [4 + 6/16, 1],
@@ -1453,7 +1478,7 @@ function part1(currentBeat) {
     navigatePopup(3, `https://www.openstreetmap.org/?mlat=37.6486&mlon=-122.4296#map=${Math.min(19, currentMapBeat)}/37.6486/-122.4296`, false)
     if (platformFixes.focusFix) popups[4]?.focus();
   }
-
+  
   if (oneTime(3, currentBeat, 8)) {
     restorePopup(3);
     popups[4].document.body.innerHTML = plain("#174180");
@@ -1463,7 +1488,7 @@ function part1(currentBeat) {
     size(0, 840, 250);
     move(0, (1920-840)/2, (1080-250)/2); /* center(0, true); */
   }
-
+  
   if (currentBeat >= 8 && currentBeat < 16) {
     const popupBody = popups[0].document.body;
     const first = (currentBeat < 12);
@@ -1479,38 +1504,37 @@ function part1(currentBeat) {
       size(0, ...popupSize, true);
       move(0, (1920-popupSize[0])/2, (1080-popupSize[1])/2, true); /* center(0, true); */
     }
-
+    
     sillyHide(3);
   }
-
+  
   if (oneTime(3, currentBeat, 16)) {
     setBackgroundTransColor("background-color 0s", "#174180");
     popups[4].document.body.innerHTML = plain("#174180");
   }
-
+  
   if (currentBeat >= 16 && currentBeat < 24) {
     size(0, 800, 900);
     move(0, (1920-800)/2, (1080-900)/2); /* center(0); */;
     if (navigatePopup(0, currentBeat < 20 ? "https://tumblr.com" : "https://en.wikipedia.org/wiki/Kandi_bracelet#/media/File:Kandi_for_rave.jpg"))
-        restorePopup(1, true);
+      restorePopup(1, true);
     size(1, 380, 560);
-    if (currentBeat >= 23 + 12/16) {
+    if (currentBeat >= 23 + 12/16)
       move(1, 1100, 460 + Math.floor((currentBeat*16 + 1)%2)*20);
-    } else {
+    else
       move(1, 1100, 460 + Math.floor((Math.min(23.74, currentBeat)*4)%2)*20);
-    }
-
-
+    
     try {
+      //would be fun to have a few rare messages
       const messages = [
         ...(currentBeat >= 17 ? [[1, 'hi!']] : []),
         ...(currentBeat >= 18 ? [[0, 'rawr x3']] : []),
         ...(currentBeat >= 19 ? [[1, 'omggg!!1']] : []),
         ...(currentBeat >= 21 ? [[1, 'gotta go']] : []),
         //(currentBeat >= 21.25 ? [0, 'You left the chat'] : [])
-        ]
+      ];
       popups[1].document.body.innerHTML = tumblrChat("xxflutt-gir-shy + itsdashyy327", messages);
-    } catch{}
+    } catch {}
     /*
     if (currentBeat > 22) {
       size(2, 800, 900);
@@ -1533,7 +1557,7 @@ function part2(currentBeat) {
     if (navigatePopup(1,
       (currentBeat >= 31.75 && currentBeat <= 32) ? ("https://" + "YAY-".repeat(98) + "yay") : (vyletArtUrls[Math.floor((currentBeat-24)*4)] + "?format=1200w"))
       )
-      navigatePopup(2, "/antonymph/antonypmh-noelle.gif", true)
+      navigatePopup(2, "/assets/antonypmh-noelle.gif", true)
     if (currentBeat >= 31.75 && currentBeat <= 32) {
       // setTimeout(()=>popups[2]?.alert("yay!"),1);
       sillyHide(2);
@@ -1550,7 +1574,7 @@ function part2(currentBeat) {
     }
   }
   */
-
+  
   if (oneTime(1, currentBeat, 24)) {
     restorePopup(0, true);
     sillyHide(1);
@@ -1559,44 +1583,189 @@ function part2(currentBeat) {
     popups[3].document.body.innerHTML = plain("#637");
     popups[4].document.body.innerHTML = plain("#637");
   }
-
-
+  
   if (currentBeat >= 24 && currentBeat < 31.5) {
     const currentLoveIndex = Math.max(0, Math.floor((currentBeat - (28 + 2/16))*40));
     const currentLoveText = "I think I'm falling\nin love again.....".slice(0, Math.min(currentLoveIndex, 34 + Math.floor(currentBeat*6*4)%6)).replace("\n", "<br>");
-    const coinGenerator = `<div style="width:100%;height:100%;background:#EEE;font-family: sans-serif;color: #777;box-shadow: 1px 1px 30px #939393 inset;"><div style="width:50%;float: left;"><form style="padding: 20px;"><span>Penguin Username:</span><br>
-<input type="text" value="USERNAME" disabled="disabled"><br><br><span>Penguin Password:</span><br>
-<input type="password" value="hunter2" disabled="disabled"><br><br><span>Coin Amount:</span><br><select disabled="disabled"><option>15,000 coins</option></select><br><br><button disabled="disabled">Generate Coins</button></form></div><div style="width: 50%;float: right;display: flex;flex-direction: column;align-items: center;justify-content: center;height: 100%;transform: translate(-24px, 13px);"><span style="
-  text-align: center;
-">We are generating your<br>epic penguin coins...<br><br>Please wait...<br><br></span>
-<div style="width: 208px;height: 13px;background: repeating-linear-gradient(-60deg, #fff,  #fff 8px,#ddd 9px, #ddd 17px, #fff 18px);border: 1px #999 solid;border-radius: 4px;box-shadow: 1px 1px 7px #888 inset;background-position-x: -16px;"></div><br><br></div></div>`.replace("USERNAME", "biscuit327");
-    const flash = `<div id="bg" style=" width: calc(100% + 32px); height: calc(100% + 32px); background: repeating-linear-gradient(-45deg, #484848,  #484848 16px, #3E3E3E 16px, #3E3E3E 32px); position: absolute; top: 0; left: 0; z-index: -1;"></div>
-      <img src="/antonymph/sad.png" id="sad" style="position: absolute;left: 220px;top: 130px;z-index: 2;filter: drop-shadow(0px 0px 3px #0005);">
-      <div id="fg" style="width: 100%; height: 100%; position: absolute; top: 170px; left: 0; z-index: 1; text-align: center;line-height: 4px;font-size: 12px;font-family: sans-serif;color: white;text-shadow: 1px 1px 3px #0006">
+    const coinGenerator = <>
+      <div style="
+        width: 100%;
+        height: 100%;
+        background: #EEE;
+        font-family: sans-serif;
+        color: #777;
+        box-shadow: 1px 1px 30px #939393 inset;
+      ">
+        <div style="width: 50%; float: left;">
+          <form style="padding: 20px;">
+            <span>Penguin Username:</span><br/>
+            <input type="text" value="biscuit327" disabled="disabled"/><br/>
+            <br/>
+            <span>Penguin Password:</span><br/>
+            <input type="password" value="hunter2" disabled="disabled"/><br/>
+            <br/>
+            <span>Coin Amount:</span><br/>
+            <select disabled="disabled">
+              <option>15,000 coins</option>
+            </select><br/>
+            <br/>
+            <button disabled="disabled">Generate Coins</button>
+          </form>
+        </div>
+        <div style="
+          width: 50%;
+          float: right;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
+          transform: translate(-24px, 13px);
+        ">
+          <span style="text-align: center;">
+            We are generating your<br/>
+            epic penguin coins...<br/>
+            <br/>
+            Please wait...<br/>
+            <br/>
+          </span>
+          <div style="
+            width: 208px;
+            height: 13px;
+            background: repeating-linear-gradient(
+              -60deg,
+              #fff,
+              #fff 8px,
+              #ddd 9px,
+              #ddd 17px,
+              #fff 18px
+            );
+            border: 1px #999 solid;
+            border-radius: 4px;
+            box-shadow: 1px 1px 7px #888 inset;
+            background-position-x: -16px;
+          "></div>
+          <br/>
+          <br/>
+        </div>
+      </div>
+    </>;
+    const flash = <>
+      <div id="bg" style="
+        width: calc(100% + 32px);
+        height: calc(100% + 32px);
+        background: repeating-linear-gradient(
+          -45deg,
+          #484848,
+          #484848 16px,
+          #3E3E3E 16px,
+          #3E3E3E 32px
+        );
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+      "></div>
+      <img src="/assets/sad.png" id="sad" style="
+        position: absolute;
+        left: 220px;
+        top: 130px;
+        z-index: 2;
+        filter: drop-shadow(0px 0px 3px #0005);
+      "/>
+      <div id="fg" style="
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 170px;
+        left: 0;
+        z-index: 1;
+        text-align: center;
+        line-height: 4px;
+        font-size: 12px;
+        font-family: sans-serif;
+        color: white;
+        text-shadow: 1px 1px 3px #0006;
+      ">
       <p>The Adobe Flash plugin has crashed.</p>
       <p><u>Reload the page</u> to try again.</p>
-      <br><br><br><br><br><br>
+      <br/><br/><br/><br/><br/><br/>
       <p>No report available.</p>
-      </div>`;
-    const toolbarSeparator = () => `<div class="component" style="width: 1px;height: 16px;margin: 2px;display: inline-block"></div>`;
-    const toolbarContainer = (content) => `<div class="component" style="width: calc(100% - 2px);height: 22px;font-family: sans-serif;font-size: 12px; z-index: 4">${toolbarSeparator()}${content}<span class="arrow">»</span></div>`;
-    const toolbarTextbox = (width) => `<div class="textBox"><div style="width: ${width}px"></div></div>`;
-    const toolbarText = (content) => `<span style="display: inline-block;transform: translateY(-7px); margin: 2px">${content}</span>`;
+      </div>
+    </>;
+    const toolbarSeparator = () => <>
+      <div class="component" style="
+        width: 1px;
+        height: 16px;
+        margin: 2px;
+        display: inline-block;
+      "></div>
+    </>;
+    const toolbarContainer = (content) => <>
+      <div class="component" style="
+        width: calc(100% - 2px);
+        height: 22px;
+        font-family: sans-serif;
+        font-size: 12px;
+        z-index: 4;
+      ">
+        {toolbarSeparator()}
+        {content}
+        <span class="arrow">»</span>
+      </div>
+    </>;
+    const toolbarTextbox = (width) => <>
+      <div class="textBox">
+        <div style={`width: ${width}px;`}>
+        </div>
+      </div>
+    </>;
+    const toolbarText = (content) => <span style="display: inline-block; transform: translateY(-7px); margin: 2px">{content}</span>;
     const toolbarIcon = (index, mr) => `<div class="icon" style="background-position-x: -${index*22}px; margin-right: ${mr ?? 0}px"></div>`;
     const toolbarButton = (iconIndex, content) => `${toolbarIcon(iconIndex, -2)}${toolbarText(content)}`
-    popups[2].document.body.innerHTML = `<style>
-    .component {background: #D4D0C8;border-top: 1px #FFF solid;border-left: 1px #FFF solid;border-bottom: 1px #808080 solid;border-right: 1px #808080 solid;}
-    .textBox { margin: 2px; border-top: 1px #808080 solid;border-left: 1px #808080 solid;border-bottom: 1px #FFFFFF solid;border-right: 1px #FFFFFF solid; display: inline-block }
-    .textBox > div { height: 14px;background: white;border-top: 1px #404040 solid;border-left: 1px #404040 solid;border-bottom: 1px #D4D0C8 solid;border-right: 1px #D4D0C8 solid; }
-    .arrow { right: 4px; color: black; font-weight: bold; position: absolute; }
-    .icon { width: 22px; height: 22px; background: url(/antonymph/icons.png); display: inline-block; };
-    </style>
-    ${currentBeat >= 24.25 ? toolbarContainer(
+      popups[2].document.body.innerHTML = <style>{`
+        .component {
+          background: #D4D0C8;
+          border-top: 1px #FFF solid;
+          border-left: 1px #FFF solid;
+          border-bottom: 1px #808080 solid;
+          border-right: 1px #808080 solid;
+        }
+        .textBox {
+          margin: 2px;
+          border-top: 1px #808080 solid;
+          border-left: 1px #808080 solid;
+          border-bottom: 1px #FFF solid;
+          border-right: 1px #FFF solid;
+          display: inline-block;
+        }
+        .textBox > div {
+          height: 14px;
+          background: white;
+          border-top: 1px #404040 solid;
+          border-left: 1px #404040 solid;
+          border-bottom: 1px #D4D0C8 solid;
+          border-right: 1px #D4D0C8 solid;
+        }
+        .arrow {
+          right: 4px;
+          color: black;
+          font-weight: bold;
+          position: absolute;
+        }
+        .icon {
+          width: 22px;
+          height: 22px;
+          background: url(/assets/icons.png);
+          display: inline-block;
+        }
+      `}</style>
+    {currentBeat >= 24.25 ? toolbarContainer(
       toolbarIcon(9)+ toolbarIcon(10) + toolbarTextbox(80)
       + (currentBeat >= 24 + 6/16 ? toolbarButton(12, "The") : '')
       + (currentBeat >= 24 + 8/16 ? toolbarButton(13, currentBeat >= 24 + 12/16 ? "Antonymph" : "Anto") : '')
     ) : ''}
-    ${currentBeat >= 25 ? toolbarContainer(
+    {currentBeat >= 25 ? toolbarContainer(
       `<span style="display: inline-block;transform: translateY(-7px);font-family: &quot;Arial Black&quot;, sans-serif;font-size: 11px;font-weight: bold;padding: 4px;"><font style="color: #929598;">of</font><font style="font-style: italic;color: #0c57ba;padding-right: 1px;">${currentBeat >= 25 + 2/16 ? 'the' : ''}</font><font style="color: #5b5a5b;">${currentBeat >= 25 + 4/16 ? 'in' : ''}${currentBeat >= 25 + 6/16 ? 'ter' : ''}${currentBeat >= 25 + 8/16 ? 'net' : ''}</font></span>`
       + (currentBeat >= 25 + 12/16 ? toolbarIcon(7) + toolbarTextbox(128) : '')
       + (currentBeat >= 25 + 13/16 ? toolbarButton(8, "Still") : '')
@@ -1604,17 +1773,47 @@ function part2(currentBeat) {
       + (currentBeat >= 26 + 4/16 ? toolbarButton(1, "Up") : '')
       + (currentBeat >= 26 + 6/16 ? toolbarButton(2, "The") : '')
     ) : ''}
-    ${currentBeat >= 26 + 8/16 ? toolbarContainer(
-      `<span style="display: inline-block;transform: translateY(-6px);font-family: serif;font-size: 14px;font-weight: bold;filter: drop-shadow(0 1px 1px #0008);"><font style="color: #144ceb;">V</font><font style="color: #db222d;">i</font><font style="color: #e3a005;">r</font><font style="color: #0c3ad8;">u</font>${currentBeat >= 26 + 11/16 ? '<font style="color: #00a70d;">s</font><font style="color: #ef2832;">e</font><font style="color: #e3a105;">s</font>' : ''}</span> ` + (currentBeat >= 27 ? toolbarSeparator() : '')
-      + (currentBeat >= 27 + 2/16 ? toolbarButton(11, "That") + toolbarTextbox(333) : '')
+    {currentBeat >= 26 + 8/16 ? toolbarContainer(<>
+      <span style="
+        display: inline-block;
+        transform: translateY(-6px);
+        font-family: serif;
+        font-size: 14px;
+        font-weight: bold;
+        filter: drop-shadow(0 1px 1px #0008);
+      ">
+        <span style="color: #144ceb;">V</span>
+        <span style="color: #db222d;">i</span>
+        <span style="color: #e3a005;">r</span>
+        <span style="color: #0c3ad8;">u</span>
+        {currentBeat >= 26 + 11/16 ? <>
+          <span style="color: #00a70d;">s</span>
+          <span style="color: #ef2832;">e</span>
+          <span style="color: #e3a105;">s</span>
+        </> : <></>}
+      </span>
+      {currentBeat >= 27 ? toolbarSeparator() : <></>}
+      {currentBeat >= 27 + 2/16 ? toolbarButton(11, "That") + toolbarTextbox(333) : <></>}</>
     ) : ''}
-    ${currentBeat >= 27 + 4/16 ? toolbarContainer(
+    {currentBeat >= 27 + 4/16 ? toolbarContainer(
       toolbarIcon(3) + toolbarIcon(4) + toolbarTextbox(165)
       + (currentBeat >= 27 + 6/16 ? toolbarSeparator() + toolbarButton(6, "Had") + toolbarIcon(7) : '')
       + (currentBeat >= 27 + 8/16 ? toolbarButton(5, "Left") + toolbarIcon(7) : '')
     ) : ''}
-    ${currentBeat >= 28 ? `<img src="/antonymph/image13_small.gif" style="image-rendering: pixelated;width: 400px; height: 260px;"><p style="position: absolute;top: 131px;left: 332px;font-family: serif;color: black;">${currentLoveText}</p>` : flash}`;
-
+    {currentBeat >= 28 ? <>
+      <img src="/assets/image13_small.gif" style="
+        image-rendering: pixelated;
+        width: 400px;
+        height: 260px;
+      "/><p style="
+        position: absolute;
+        top: 131px;
+        left: 332px;
+        font-family: serif;
+        color: black;
+      ">{currentLoveText}</p>
+    </> : flash};
+    
     const progress = (currentBeat*4)%1;
     const bgOffset = Math.sqrt(32*32/2)*Math.pow(progress, 0.5);
     if (currentBeat < 28) {
@@ -1623,7 +1822,7 @@ function part2(currentBeat) {
     }
     move(2, (1920 - 480)/2, (1080 - 360)/2);
     size(2, 480 + OFF_X, 360 - 4 + OFF_Y);
-
+    
     if (currentBeat >= 26 && currentBeat < 31.5) {
       popups[4].document.body.innerHTML = coinGenerator.replace("-16", Math.sqrt(18*18*2/3)*currentBeat*4);
       move(4, 280 + Math.floor((currentBeat*8)%2)*16, 640 - Math.floor((currentBeat*8)%2)*16);
@@ -1631,30 +1830,27 @@ function part2(currentBeat) {
     }
     if (currentBeat >= 27.9 && currentBeat < 31.5) {
       const heartColors = ["F4ABBA", "DD2E44", "F4900C", "FDCB59", "77B256", "5EAFEB", "AB8ED6"]
-                       ?? ["F4ABBA", "DD2E44", "F4900C", "FDCB59", "77B256", "89C9F9", "5EAFEB", "AB8ED6", "31373D", "99AAB5", "E7E8E8", "C1694F"];
+                        ?? ["F4ABBA", "DD2E44", "F4900C", "FDCB59", "77B256", "89C9F9", "5EAFEB", "AB8ED6", "31373D", "99AAB5", "E7E8E8", "C1694F"];
       const heartSVG = `<svg style="background: #637" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36"><path fill="#AA8ED6" d="M35.885 11.833c0-5.45-4.418-9.868-9.867-9.868-3.308 0-6.227 1.633-8.018 4.129-1.791-2.496-4.71-4.129-8.017-4.129-5.45 0-9.868 4.417-9.868 9.868 0 .772.098 1.52.266 2.241C1.751 22.587 11.216 31.568 18 34.034c6.783-2.466 16.249-11.447 17.617-19.959.17-.721.268-1.469.268-2.242z"/></svg>`.replace("#AA8ED6", `#${heartColors[Math.floor(Math.max(currentBeat-0.01,28.25)*4) % heartColors.length]}`);
       const mult = ((currentBeat*4+0.5) % 2 > 1) ? 1 : -1;
       const s1ze = [200 + OFF_X, 200 + OFF_Y];
       const hiddenWindow = (currentBeat < 28.4825) ? (mult === 1 ? 3 : 0) : -1;
       popups[0].document.body.innerHTML = heartSVG;
       popups[3].document.body.innerHTML = heartSVG;
-      if (hiddenWindow === 0) {
+      if (hiddenWindow === 0)
         move(0, 300, 650, true);
-      } else {
+      else
         move(0, (1920 - s1ze[0])/2 + Math.sin(currentBeat*4*Math.PI)*360*mult, (1080 - s1ze[1])/2 + Math.cos(currentBeat*Math.PI)*240*mult, true);
-      }
-      if (hiddenWindow === 3) {
+      if (hiddenWindow === 3)
         move(3, 300, 650, true);
-      } else {
+      else
         move(3, (1920 - s1ze[0])/2 - Math.sin(currentBeat*4*Math.PI)*360*mult, (1080 - s1ze[1])/2 - Math.cos(currentBeat*Math.PI)*240*mult, true);
-      }
       size(0, ...s1ze);
       size(3, ...s1ze);
-    } else {
+    } else
       sillyHide(0);
-    }
   }
-
+  
   if (oneTime(0, currentBeat, 31.5)) {
     sillyHide(0);
     sillyHide(1);
@@ -1663,85 +1859,123 @@ function part2(currentBeat) {
     sillyHide(4);
     setBackgroundTransColor("background-color 0s", "#FAF5AB");
   }
-
+  
   if (oneTime(0, currentBeat, 31.75)) {
     size(1, 1280 + OFF_X, 720 + OFF_Y);
     move(1, (1920 - 1280 - OFF_X)/2, (1080 - 720 - OFF_Y)/2);
     navigatePopup(1, "https://" + "YAY-".repeat(98) + "yay");
-    popups[2].document.body.innerHTML = `<img style="width:100%;height:100%;background:#F3E488" src="/antonymph/yay.png" />`;
+    popups[2].document.body.innerHTML = `<img style="width:100%;height:100%;background:#F3E488" src="/assets/yay.png" />`;
     size(2, 500 + OFF_X, 370 + OFF_Y);
     move(2, (1920 - 500 - OFF_X)/2 - 20, (1080 - 370 - OFF_Y)/2);
   }
-
+  
   if (currentBeat >= 31.75 && currentBeat < 32) {
     size(2, 500 + OFF_X, 370 + OFF_Y);
     move(2, (1920 - 500 - OFF_X)/2 + ((currentBeat*32)%2 >= 1 ? 20 : -20), (1080 - 370 - OFF_Y)/2);
   }
-
+  
   if (oneTime(0, currentBeat, 32)) {
     restorePopup(1);
     sillyHide(2);
     sillyHide(3);
     sillyHide(4);
-    popups[0].document.body.innerHTML = `
-<svg viewBox="0 0 512 512" id="gay" style="transform: scale(4) rotate(0deg); height: 100%; left: 0; right: 0; margin: 0 auto; position: absolute;filter: sepia(0.5);">
-<g><polygon fill="#FEFF00" points="260,258 463.8,-94.9 667.5,258"></polygon>
- <polygon fill="#0A7324" points="260,258 667.5,258 463.8,610.9"></polygon>
- <polygon fill="#005CFF" points="260,258 463.8,610.9 56.2,610.9"></polygon>
- <polygon fill="#730073" points="260,258 56.2,610.9 -147.5,258"></polygon>
- <polygon fill="#FE0000" points="260,258 -147.5,258 56.2,-94.9"></polygon>
- <polygon fill="#FE7426" points="260,258 56.2,-94.9 463.8,-94.9"></polygon></g>
-<g><polygon fill="#FEFF00" points="256,256 459.8,-96.9 663.5,256"></polygon>
- <polygon fill="#0A7324" points="256,256 663.5,256 459.8,608.9"></polygon>
- <polygon fill="#005CFF" points="256,256 459.8,608.9 52.2,608.9"></polygon>
- <polygon fill="#730073" points="256,256 52.2,608.9 -151.5,256"></polygon>
- <polygon fill="#FE0000" points="256,256 -151.5,256 52.2,-96.9"></polygon>
- <polygon fill="#FE7426" points="256,256 52.2,-96.9 459.8,-96.9"></polygon></g>
-</svg><img id="antonymph" style="position: absolute; height: 100%; left: 0; right: 0; margin: 0 auto; bottom: 0;z-index: 1; mix-blend-mode: overlay;" src="https://derpicdn.net/img/view/2021/8/16/2679669.gif"></img>`;
-    popups[2].document.body.innerHTML = `<div style="width: 100%; height: 100%; background: #fe7426; font-family: Impact; font-size: 140px; padding: 0 18px; color: white; -webkit-text-stroke-width: 4px; -webkit-text-stroke-color: black; line-height: 157px; letter-spacing: -5px; white-space: nowrap"><span id="text">Don't care you think it's cringe</span></div>`;
-    popups[3].document.body.innerHTML = `<div style="width: 100%; height: 100%; background: #feff00; font-family: Impact; font-size: 148px; padding: 0 16px; color: white; -webkit-text-stroke-width: 4px; -webkit-text-stroke-color: black; line-height: 160px; white-space: nowrap"><span id="text">BECAUSE ITS NOT YOUR LIFE</span></div>`;
+    popups[0].document.body.innerHTML = <>
+      <svg viewBox="0 0 512 512" id="gay" style="
+        transform: scale(4) rotate(0deg);
+        height: 100%;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        position: absolute;
+        filter: sepia(0.5);
+      ">
+        <g>
+          <polygon fill="#FEFF00" points="260,258 463.8,-94.9 667.5,258"></polygon>
+          <polygon fill="#0A7324" points="260,258 667.5,258 463.8,610.9"></polygon>
+          <polygon fill="#005CFF" points="260,258 463.8,610.9 56.2,610.9"></polygon>
+          <polygon fill="#730073" points="260,258 56.2,610.9 -147.5,258"></polygon>
+          <polygon fill="#FE0000" points="260,258 -147.5,258 56.2,-94.9"></polygon>
+          <polygon fill="#FE7426" points="260,258 56.2,-94.9 463.8,-94.9"></polygon>
+        </g>
+        <g>
+          <polygon fill="#FEFF00" points="256,256 459.8,-96.9 663.5,256"></polygon>
+          <polygon fill="#0A7324" points="256,256 663.5,256 459.8,608.9"></polygon>
+          <polygon fill="#005CFF" points="256,256 459.8,608.9 52.2,608.9"></polygon>
+          <polygon fill="#730073" points="256,256 52.2,608.9 -151.5,256"></polygon>
+          <polygon fill="#FE0000" points="256,256 -151.5,256 52.2,-96.9"></polygon>
+          <polygon fill="#FE7426" points="256,256 52.2,-96.9 459.8,-96.9"></polygon>
+        </g>
+      </svg>
+      <img id="antonymph" style="
+        position: absolute;
+        height: 100%;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        bottom: 0;
+        z-index: 1;
+        mix-blend-mode: overlay;
+      "
+      src="https://derpicdn.net/img/view/2021/8/16/2679669.gif"
+      />
+    </>;
+    popups[2].document.body.innerHTML = <div style="width: 100%; height: 100%; background: #fe7426; font-family: Impact; font-size: 140px; padding: 0 18px; color: white; -webkit-text-stroke-width: 4px; -webkit-text-stroke-color: black; line-height: 157px; letter-spacing: -5px; white-space: nowrap"><span id="text">Don't care you think it's cringe</span></div>;
+    popups[3].document.body.innerHTML = <div style="width: 100%; height: 100%; background: #feff00; font-family: Impact; font-size: 148px; padding: 0 16px; color: white; -webkit-text-stroke-width: 4px; -webkit-text-stroke-color: black; line-height: 160px; white-space: nowrap"><span id="text">BECAUSE ITS NOT YOUR LIFE</span></div>;
     // lolface vector recreation, feel free to use :)
-    popups[4].document.body.innerHTML = `<div style="position:absolute; z-index: 1; top: 0; left: 0; width: 100%; height: 100%;background: #FE0000" id="coverup"></div><svg id="lol" style="height: 100%; width: 100%;background: #c6efa1" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
- viewBox="0 0 512 512" xml:space="preserve">
-<style type="text/css">
-.st0{fill:#FFDD4D;stroke:#000000;stroke-width:10;}
-.st1{fill:#FFFFFF;}
-.st2{fill:#7F1943;}
-.st3{fill:#FFC0E3;}
-.st4{fill:none;stroke:#000000;stroke-width:10;}
-</style>
-<circle id="Pancake" class="st0" cx="256.3" cy="256.3" r="238.2"/>
-<g id="Fills">
-<path class="st1" d="M187.9,197.2c0,14.6-4.4,28-11.7,38.8c-60.2,0-58.2,0-95.5,0C73.3,225.2,69,211.7,69,197.2
-  c0-35.9,26.6-65.1,59.5-65.1S187.9,161.2,187.9,197.2z"/>
-<path class="st1" d="M400,209.6c0,9.3-1.4,18.2-4,26.4c-42,0-93-1.7-127.5-1.7c-2.3-7.8-3.5-16.1-3.5-24.7
-  c0-42.8,30.2-77.4,67.5-77.4S400,166.8,400,209.6z"/>
-<path class="st2" d="M101,291c9,217,335,200,288.7,0H80.4"/>
-</g>
-<g id="Inner">
-<path d="M147,139l22.8,11.5L181,174C158,212,105,165,147,139z"/>
-<path d="M354,139l22.8,11.5L388,174C365,212,312,165,354,139z"/>
-<path class="st3" d="M197.5,435.1c28.1,11.9,58.9,14.7,92,10c27.3-5.7,51.7-18.4,73.6-36.8C341,353,221,339,197.5,435.1z"/>
-</g>
-<g id="Lines">
-<path class="st4" d="M187.9,197.2c0,14.6-4.4,28-11.7,38.8c-60.2,0-58.2,0-95.5,0C73.3,225.2,69,211.7,69,197.2
-  c0-35.9,26.6-65.1,59.5-65.1S187.9,161.2,187.9,197.2z"/>
-<path class="st4" d="M400,209.6c0,9.3-1.4,18.2-4,26.4c-42,0-93-1.7-127.5-1.7c-2.3-7.8-3.5-16.1-3.5-24.7
-  c0-42.8,30.2-77.4,67.5-77.4S400,166.8,400,209.6z"/>
-<path class="st4" d="M101,291c9,217,335,200,288.7,0H80.4"/>
-</g>
-</svg>`;
+    // might move the vector to a separate file
+    popups[4].document.body.innerHTML = <>
+      <div style="position: absolute; z-index: 1; top: 0; left: 0; width: 100%; height: 100%; background: #fe0000;" id="coverup"></div>
+      <svg id="lol" style="height: 100%; width: 100%; background: #c6efa1;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" xml:space="preserve">
+        <style type="text/css">{`
+          .st0 {
+            fill: #ffdd4d;
+            stroke: #000000;
+            stroke-width: 10;
+          }
+          .st1 {
+            fill: #ffffff;
+          }
+          .st2 {
+            fill: #7f1943;
+          }
+          .st3 {
+            fill: #ffc0e3;
+          }
+          .st4 {
+            fill: none;
+            stroke: #000000;
+            stroke-width: 10;
+          }
+        `}</style>
+        <circle id="Pancake" class="st0" cx="256.3" cy="256.3" r="238.2" />
+        <g id="Fills">
+          <path class="st1" d="M187.9,197.2c0,14.6-4.4,28-11.7,38.8c-60.2,0-58.2,0-95.5,0C73.3,225.2,69,211.7,69,197.2c0-35.9,26.6-65.1,59.5-65.1S187.9,161.2,187.9,197.2z" />
+          <path class="st1" d="M400,209.6c0,9.3-1.4,18.2-4,26.4c-42,0-93-1.7-127.5-1.7c-2.3-7.8-3.5-16.1-3.5-24.7c0-42.8,30.2-77.4,67.5-77.4S400,166.8,400,209.6z" />
+          <path class="st2" d="M101,291c9,217,335,200,288.7,0H80.4" />
+        </g>
+        <g id="Inner">
+          <path d="M147,139l22.8,11.5L181,174C158,212,105,165,147,139z" />
+          <path d="M354,139l22.8,11.5L388,174C365,212,312,165,354,139z" />
+          <path class="st3" d="M197.5,435.1c28.1,11.9,58.9,14.7,92,10c27.3-5.7,51.7-18.4,73.6-36.8C341,353,221,339,197.5,435.1z" />
+        </g>
+        <g id="Lines">
+          <path class="st4" d="M187.9,197.2c0,14.6-4.4,28-11.7,38.8c-60.2,0-58.2,0-95.5,0C73.3,225.2,69,211.7,69,197.2c0-35.9,26.6-65.1,59.5-65.1S187.9,161.2,187.9,197.2z" />
+          <path class="st4" d="M400,209.6c0,9.3-1.4,18.2-4,26.4c-42,0-93-1.7-127.5-1.7c-2.3-7.8-3.5-16.1-3.5-24.7c0-42.8,30.2-77.4,67.5-77.4S400,166.8,400,209.6z" />
+          <path class="st4" d="M101,291c9,217,335,200,288.7,0H80.4" />
+        </g>
+      </svg>
+    </>;
   }
-
+  
   if (oneTime(1, currentBeat, 34)) {
-    popups[1].document.body.innerHTML = `<img style="width:100%;height:100%" src="/antonymph/fluttgirshy.png" />`;
+    popups[1].document.body.innerHTML = <img style="width:100%; height:100%;" src="/assets/fluttgirshy.png" />;
   }
-
+  
   if (oneTime(0, currentBeat, 36)) {
     popups[0].document.getElementById("antonymph").style.display = "none";
     popups[0].document.getElementById("gay").style.filter = "";
   }
-
+  
   if (currentBeat >= 32 && currentBeat < 40) {
     const currentColor = ["#FEFF00", "#0A7324", "#005CFF", "#730073", "#FE0000", "#FE7426"][Math.floor((currentBeat*4-2)%6)];
     const coverup = popups[4]?.document?.getElementById("coverup");
@@ -1749,7 +1983,7 @@ function part2(currentBeat) {
       setBackgroundTransColor("background-color 0s", currentColor);
       if (coverup) coverup.style.background = currentColor;
     }
-
+    
     size(0, 1680, 1000);
     move(0, (1920-(1680 + OFF_X))/2, (1080-1000)/2);
     if (currentBeat >= 36) {
@@ -1759,10 +1993,10 @@ function part2(currentBeat) {
     } else {
       sillyHide(1);
     }
-
+    
     const text1 = popups[2].document.getElementById("text");
     const text2 = popups[3].document.getElementById("text");
-
+    
     if (currentBeat >= 37.875) {
       const words = [
         [37 + 14/16, "Don't"],
@@ -1798,16 +2032,16 @@ function part2(currentBeat) {
       if (coverup) coverup.style.display = "none";
       // popups[4].document.getElementById("lol").style.background = textFlashColor;
     }
-
+    
     // We have to do it this way because a CSS animation makes the SVG blurry
     const gayBackground = popups[0]?.document?.getElementById("gay");
     if (gayBackground)
       gayBackground.style.transform = `scale(4) rotate(${(Math.min(39.5,currentBeat)*360/1.5)%360}deg)`;
   }
-
+  
   if (oneTime(4, currentBeat, 39))
     playPatternWithOffset(0, beatToMs(1 - (currentBeat - 39)));
-
+  
   if (oneTime(0, currentBeat, 40)) {
     restorePopup(0, true);
     restorePopup(1, true);
@@ -1815,7 +2049,7 @@ function part2(currentBeat) {
     setBackgroundTransColor("background-color 0s", "#1A1721");
     popups[4].document.body.innerHTML = plain("#1A1721");
   }
-
+  
   if (currentBeat >= 40 && currentBeat < 41) {
     sillyHide(0);
     sillyHide(1);
@@ -1836,7 +2070,7 @@ function part3(currentBeat) {
       midi?.outputs?.forEach(e=>{if (!e.name.includes("Midi Through Port"))unlockAchievement("musician");})
     } catch {}
   }
-
+  
   if (currentBeat >= 41 && currentBeat < 46) {
     size(2, 380, 560);
     move(2, 1250, 460 + Math.floor((currentBeat*4)%2)*20);
@@ -1857,20 +2091,20 @@ function part3(currentBeat) {
       navigatePopup(0, "https://www.youtube.com/embed/ah7hxQIuwD8?autoplay=1&mute=1", false);
     }
   }
-
+  
   if (oneTime(0, currentBeat, 43)) {
     popups[4].document.body.innerHTML = plain("#D6A8FF");
     setBackgroundTransColor("background-color 0s", "#D6A8FF");
   }
-
+  
   if (oneTime(0, currentBeat, 45)) {
     // setBackgroundTransColor("background-color 0s", "#82A4A3"); // #82A4A3
   }
-
+  
   if (oneTime(0, currentBeat, 47)) {
     // setBackgroundTransColor("background-color 0s", "#685369");
   }
-
+  
   if (oneTime(2, currentBeat, 45)) {
     popups[2].document.body.innerHTML = `<style>
 #ios {
@@ -1911,28 +2145,28 @@ function part3(currentBeat) {
 </style>
 
 <div id="ios">
-<img class="ios_abs" src="/antonymph/iphone.png" onload="setTimeout(()=>{document.getElementById('ios').style.filter = 'saturate(1) brightness(1)'}, 16);const ios_tme = document.getElementById('ios_tme');const ios_dte = document.getElementById('ios_dte');const date = window.opener.getDate();ios_tme.innerText = date.getHours() + ':' + date.getMinutes().toString().padStart(2, '0');ios_dte.innerText = date.toLocaleDateString(undefined /*'en-US'*/, {weekday: 'long',month: 'long',day: 'numeric',});if ('getBattery' in navigator)navigator.getBattery().then((battery) => {document.querySelector('#ios_prc > p').innerText = Math.floor(battery.level*100) + '%';document.querySelector('#ios_ico').style.width = Math.floor(15*battery.level) + 'px'});" style="z-index: 1;" />
+<img class="ios_abs" src="/assets/iphone.png" onload="setTimeout(()=>{document.getElementById('ios').style.filter = 'saturate(1) brightness(1)'}, 16);const ios_tme = document.getElementById('ios_tme');const ios_dte = document.getElementById('ios_dte');const date = window.opener.getDate();ios_tme.innerText = date.getHours() + ':' + date.getMinutes().toString().padStart(2, '0');ios_dte.innerText = date.toLocaleDateString(undefined /*'en-US'*/, {weekday: 'long',month: 'long',day: 'numeric',});if ('getBattery' in navigator)navigator.getBattery().then((battery) => {document.querySelector('#ios_prc > p').innerText = Math.floor(battery.level*100) + '%';document.querySelector('#ios_ico').style.width = Math.floor(15*battery.level) + 'px'});" style="z-index: 1;" />
 <div class="ios_abs ios_txt" style="top: -50px; font-size: 66px;"><p id="ios_tme"></p></div>
 <div class="ios_abs ios_txt" style="top: 68px; font-size: 18px;"><p id="ios_dte"></p></div>
 <p class="ios_abs" id="ios_unl" style="left: 136px; top: 400px; z-index: 2;">slide to unlock</p>
-<img class="ios_abs" id="ios_sld" src="/antonymph/iphone_slide.png" style="left: 46px /*250px*/; top: 416px; z-index: 3;" />
+<img class="ios_abs" id="ios_sld" src="/assets/iphone_slide.png" style="left: 46px /*250px*/; top: 416px; z-index: 3;" />
 <div class="ios_abs" id="ios_ico" style="left: 342px;top: 7px;background: #C7C7C7;width: 15px;height: 6px;z-index: 3;"></div>
 <div class="ios_abs ios_txt" id="ios_prc"><p>100%</p></div>
 </div>`;
   }
-
+  
   if (oneTime(2, currentBeat, 45.75)) {
     popups[2].document.getElementById("ios_sld").style.left = "250px";
     popups[2].document.getElementById("ios_unl").style.opacity = 0;
     popups[2].document.getElementById("ios").style.filter = "saturate(1) brightness(0)";
   }
-
+  
   if (oneTime(2, currentBeat, 46.25)) {
-    popups[2].document.body.innerHTML = `<style>#ds{transition:filter 0.5s;filter:saturate(0) brightness(0);image-rendering: pixelated;}</style><img src="/antonymph/ds_top.png" id="ds" onload="setTimeout(()=>{document.getElementById('ds').style.filter =   'saturate(1) brightness(1)'}, 16);" />`;
-    popups[1].document.body.innerHTML = `<style>#ds{transition:filter 0.5s;filter:saturate(0) brightness(0);image-rendering: pixelated;}</style><img src="/antonymph/ds_bottom.png" id="ds" onload="setTimeout(()=>{document.getElementById('ds').style.filter  = 'saturate(1) brightness(1)'}, 16);" />`;
-    popups[3].document.body.innerHTML = `<img style="width:100%;height:100%" src="/antonymph/keychain.png" />`;
+    popups[2].document.body.innerHTML = `<style>#ds{transition:filter 0.5s;filter:saturate(0) brightness(0);image-rendering: pixelated;}</style><img src="/assets/ds_top.png" id="ds" onload="setTimeout(()=>{document.getElementById('ds').style.filter =   'saturate(1) brightness(1)'}, 16);" />`;
+    popups[1].document.body.innerHTML = `<style>#ds{transition:filter 0.5s;filter:saturate(0) brightness(0);image-rendering: pixelated;}</style><img src="/assets/ds_bottom.png" id="ds" onload="setTimeout(()=>{document.getElementById('ds').style.filter  = 'saturate(1) brightness(1)'}, 16);" />`;
+    popups[3].document.body.innerHTML = `<img style="width:100%;height:100%" src="/assets/keychain.png" />`;
   }
-
+  
   if (currentBeat >= 46 && currentBeat < 48) {
     const progress = easeOutCubic(Math.min(1,2*(currentBeat-46)));
     size(2, 380, 560 - 280 * progress, true);
@@ -1945,17 +2179,17 @@ function part3(currentBeat) {
       // move(3, 1250 + 264, 360 + Math.sin(Math.PI*(0.4+((currentBeat*4)%2)))*20, true);
     }
   }
-
+  
   if (oneTime(4, currentBeat, 47))
     playPatternWithOffset(1, beatToMs(1 - (currentBeat - 47)));
-
+  
   // if (oneTime(4, currentBeat, 72.75)) skypeVideo.requestPictureInPicture();
   // if (oneTime(4, currentBeat, 73.25)) document.exitPictureInPicture();
-
+  
   if (oneTime(0, currentBeat, 48.625)) {
     setBackgroundTransColor("background-color 0s", "#1A1721");
   }
-
+  
   if (currentBeat >= 48.625 && currentBeat < 49) {
     focusPopup(4);
     const lifeColors = [
@@ -1974,17 +2208,17 @@ function part3(currentBeat) {
       popups[4].document.body.innerHTML = `<h1 style="font-family: arial, sans-serif;font-size: 90px;color: ${lifeColors[offset]}">sing a song about life</h1>`;
     } catch {}
   }
-
+  
   if (oneTime(1, currentBeat, 48.5)) {
     navigatePopup(0, "https://docs.google.com/spreadsheets/d/1KYNQqGmZVaHlDRM9bd42tOmgu4T50D3r5z87aluLwao/edit#gid=0&range=A1", true);
   }
-
+  
   if (oneTime(0, currentBeat, 49)) {
     setBackgroundTransColor("background-color 0s", "#FFFFF0");
     popups[2].document.body.innerHTML = plain("#e43e2f");
     popups[4].document.body.innerHTML = plain("#FFFFF0");
   }
-
+  
   if (oneTime(1, currentBeat, 49)) {
     //sillyHide(1);
     sillyHide(2);
@@ -2004,7 +2238,7 @@ function part3(currentBeat) {
     move(1, 96 + 482, 480 + 266);
     size(1, 180 + OFF_X, 180 + OFF_Y);
   }
-
+  
   if (currentBeat >= 49 && currentBeat < 50.75) {
     const beatFrame = Math.floor(beatToMs(currentBeat-49)/(1000/60));
     let canvas = popups[1]?.document?.getElementById('paint');
@@ -2091,7 +2325,7 @@ function part3(currentBeat) {
       popups[1].window.lastFrame = frame;
     }
   }
-
+  
   if (currentBeat >= 50.75 && currentBeat < 52.375) {
     size(1, popups[1].window.currentArea[2] + OFF_X - 134*[
       [50.75, 0],
@@ -2106,12 +2340,12 @@ function part3(currentBeat) {
     const epicText = `I've fallen in love with life\nand I don't know if I'm worried\nabout what happens next`;
     popups[1].document.getElementById("fallen").innerText = epicText.slice(0, epicText.length*(currentBeat-50.75));
   }
-
+  
   if (oneTime(1, currentBeat, 52.375)) {
     sillyHide(1);
     popups[1].document.body.innerHTML = plain();
   }
-
+  
   if (currentBeat >= 48.75 && currentBeat < 56.75) {
     const time2cell = [
         [0, "A1"],
@@ -2171,25 +2405,25 @@ function part3(currentBeat) {
     ];
     navigatePopup(0, "https://docs.google.com/spreadsheets/d/1KYNQqGmZVaHlDRM9bd42tOmgu4T50D3r5z87aluLwao/edit#gid=0&range=" + time2cell.filter(l => l[0] <= currentBeat).at(-1)[1], false);
   }
-
+  
   if (oneTime(0, currentBeat, 54.75)) {
     setBackgroundTransColor("background-color 1.5s", "#000");
   }
-
+  
   if (oneTime(0, currentBeat, 55)) {
     popups[4].document.body.innerHTML = plain("#000");
   }
-
+  
   if (oneTime(0, currentBeat, 56)) {
     setBackgroundTransColor("background-color 0s", "#e43e2f");
     // setBackgroundTransColor("background-color 1s cubic-bezier(0,0.5,0,1)", "#e43e2f");
   }
-
+  
   if (oneTime(0, currentBeat, 56.75)) {
     restorePopup(0);
     sillyHide(0);
   }
-
+  
   //if (oneTime(3, currentBeat, 54.75)) {
   if (oneTime(3, currentBeat, 56)) {
     popups[3].document.body.innerHTML = notepad("");
@@ -2233,19 +2467,18 @@ function part4(currentBeat) {
     // focusPopup(3);
     // focusPopup(4);
   }
-
-  if (oneTime(0, currentBeat, 57)) {
+  
+  if (oneTime(0, currentBeat, 57))
     for (let i = 0; i < 3; i++)
-      popups[i].document.body.innerHTML = `<img style="width:100%;height:100%" src="/antonymph/frog_${i+1}.png" />`;
-  }
-
+      popups[i].document.body.innerHTML = <img style="width:100%;height:100%" src={`/assets/frog_${i+1}.png`} />;
+      
   if (currentBeat >= 57 && currentBeat < 64) {
     const progress = easeOutCubic(Math.min(1, currentBeat - 57) - Math.max(currentBeat - 63, 0));
     for (let i = 0; i < 3; i++) {
       move(i, Math.sin(currentBeat*Math.PI + i )*400*progress + 1000, Math.cos(currentBeat*Math.PI + i*1.5)*300*progress + 440, true);
       size(i, 100, 200, true);
     }
-
+    
     if (currentBeat >= 63) {
       size(3, 600*progress + 100*(1-progress), 200, true);
       size(4, 600*progress + 100*(1-progress), 200, true);
@@ -2253,7 +2486,7 @@ function part4(currentBeat) {
       move(4, 150*progress + 1000*(1-progress), 700*progress + 440*(1-progress), true);
     }
   }
-
+  
   if (oneTime(0, currentBeat, 64)) {
     // restorePopup(0, true);
     sillyHide(0);
@@ -2266,11 +2499,11 @@ function part4(currentBeat) {
     focusPopup(2);
     focusPopup(3);
     focusPopup(4);
-    popups[0].document.body.innerHTML = '<video style="width:100%;height:100%" src="/antonymph/gangnam-style-gif.mp4" muted autoplay loop disableRemotePlayback />';
-    popups[1].document.body.innerHTML = '<img style="width:100%;height:100%" src="/antonymph/door-left.jpg" />';
-    popups[2].document.body.innerHTML = '<img style="width:100%;height:100%" src="/antonymph/door-right.jpg" />';
+    popups[0].document.body.innerHTML = <video style="width:100%;height:100%" src="/assets/gangnam-style-gif.mp4" muted autoplay loop disableRemotePlayback />;
+    popups[1].document.body.innerHTML = <img style="width:100%;height:100%" src="/assets/door-left.jpg" />;
+    popups[2].document.body.innerHTML = <img style="width:100%;height:100%" src="/assets/door-right.jpg" />;
   }
-
+  
   if (currentBeat >= 64.75 && currentBeat < 66.75) {
     const doorsOpen = Math.min(1, currentBeat - 64.75) - Math.max(currentBeat - 66, 0)/0.75;
     move(0, (1920-514)/2, (1080-354)/2); /* center(0); */
@@ -2282,14 +2515,14 @@ function part4(currentBeat) {
     move(1, 1920/2 - 155 - 120*doorsOpen, 1080/2 - 354/2, true);
     move(2, 1920/2 + 120*doorsOpen, 1080/2 - 354/2, true);
   }
-
+  
   if (currentBeat >= 66.75 && currentBeat < 67) {
     setBackgroundTransColor("background-color 0s", "#000");
     sillyHide(0);
     sillyHide(1);
     sillyHide(2);
   }
-
+  
   const kittens = [
       [
         [7, "kitten_1.png", 103, 184, false], // 9
@@ -2323,14 +2556,13 @@ function part4(currentBeat) {
       ],
       [
         [1, "kitten_car.png", 397, 224, false],
-      ],
+      ]
     ];
-
-  if (oneTime(0, currentBeat, 66.75)) {
+  
+  if (oneTime(0, currentBeat, 66.75))
     for (let i = 0; i < 5; i++)
-      popups[i].document.body.innerHTML = `<img id="kitten" style="width:100%;height:100%;image-rendering: pixelated;" src="/antonymph/${kittens[i][0][1]}" />`;
-  }
-
+      popups[i].document.body = <img id="kitten" style="width:100%;height:100%;image-rendering: pixelated;" src="/assets/${kittens[i][0][1]}" />;
+  
   if (currentBeat >= 67 && currentBeat < 72.25) {
     const imageFrame = Math.floor((currentBeat - 67)*64);
     const currentBackground = `rgb(${["0,173,195","254,254,254","0,130,196","255,115,250","0,173,195","0,130,196","0,166,87","253,143,0","139,187,142","0,83,143","139,184,90","0,130,196","255,106,90"][Math.floor((currentBeat-67)*2)]})`;
@@ -2355,7 +2587,7 @@ function part4(currentBeat) {
           break;
         }
       }
-      const imgSrc = `/antonymph/${img[1]}`;
+      const imgSrc = `/assets/${img[1]}`;
       if (kitten.src != imgSrc)
         kitten.src = imgSrc;
       kitten.style.transform = img[4] ? "scaleX(-1)" : "";
@@ -2381,7 +2613,7 @@ function part4(currentBeat) {
       } else {
         for (let i = 0; i < 5; i++) {
           try {
-            popups[i].document.body.innerHTML = `<img id="kitten" style="width:100%;height:100%;image-rendering: pixelated;" src="/antonymph/${kittens[i][0][1]}" />`;
+            popups[i].document.body = <img id="kitten" style="width:100%;height:100%;image-rendering: pixelated;" src="/assets/${kittens[i][0][1]}" />;
           } catch {}
         }
       }
@@ -2393,97 +2625,105 @@ function part4(currentBeat) {
     }
   }
   if (oneTime(0, currentBeat, 72.5)) {
-    popups[0].document.body.innerHTML = `
-    <style>
-      @font-face{
-        font-family: "sans undertale";
-        src: url("/antonymph/DeterminationSansWeb.woff");
-      }
-      .transTrans {
-        transition: transform 0.25s;
-      }
-      .perfectTrans {
-        transition: opacity 0.5s;
-      }
-      #scoreContainer {
-        width: 100%;
-        position: absolute;
-        top: 385px;
-        left: 0;
-        text-align: center;
-        z-index: 4;
-      }
-      #score {
-        color: white;
-        font-size:96px;
-        font-family: "sans undertale", monospace;
-      }
-      #excellent {
-        position:absolute;
-        /* top:370px; */
-        top: 35px;
-        left:405px;
-        z-index: 4;
-        transform: scale(1.8) rotate(0deg);
-      }
-      #steam {
-        transition: bottom 0.5s;
-      }
-      .geforce {
-        position:absolute;
-        width: 300px;
-        height: 90px;
-        top: 100px;
-        right: -300px;
-        z-index: 4;
-        transition: right 0.5s;
-        color: white;
-        font-family: sans-serif;
-      }
-      #geforceCube {
-        position:absolute;
-        width: 56px;
-        height: 56px;
-        top: 17px;
-        left: 14px;
-        background: #1E1E1E;
-      }
-    </style>
-    <div style="width:100%;height:100%;background:#66160B;"></div>
-    <div class="perfectTrans" id="event" style="width:100%;height:100%;background: no-repeat center url(/antonymph/event_mode.png) #000;position:absolute;top:0;left:0;z-index: 99;opacity: 1;"></div>
-    <img src="/antonymph/receptor.png" class="receptor" id="r0" style="position:absolute;top:100px;left:80px;z-index: 2; transform: rotate(270deg);" />
-    <img src="/antonymph/receptor.png" class="receptor" id="r1" style="position:absolute;top:100px;left:280px;z-index: 2; transform: rotate(180deg);" />
-    <img src="/antonymph/receptor.png" class="receptor" id="r2" style="position:absolute;top:100px;left:480px;z-index: 2; transform: rotate(0deg);" />
-    <img src="/antonymph/receptor.png" class="receptor" id="r3" style="position:absolute;top:100px;left:680px;z-index: 2; transform: rotate(90deg);" />
-    <img src="/antonymph/perfect.png" class="perfect" id="p0" style="position:absolute;top:24px;left:4px;z-index: 5; transform: rotate(270deg); opacity: 0;" />
-    <img src="/antonymph/perfect.png" class="perfect" id="p1" style="position:absolute;top:24px;left:204px;z-index: 5; transform: rotate(180deg); opacity: 0;" />
-    <img src="/antonymph/perfect.png" class="perfect" id="p2" style="position:absolute;top:24px;left:404px;z-index: 5; transform: rotate(0deg); opacity: 0;" />
-    <img src="/antonymph/perfect.png" class="perfect" id="p3" style="position:absolute;top:24px;left:604px;z-index: 5; transform: rotate(90deg); opacity: 0;" />
-    <img src="/antonymph/steam.png" id="steam" style="position:absolute;bottom:-70px;right:0;z-index: 5;" />
-    <div class="geforce" id="geforcegreen" style="background:#5CBB24;z-index: 3"></div>
-    <div class="geforce" id="geforce" style="background:black">
-      <div id="geforceCube"><img src="/antonymph/arrow.png" style="width:100%;height:100%;filter: hue-rotate(84deg);transform: scale(0.9);" /></div>
-      <p style="margin-left: 83px; margin-top: 19px">Press Alt+z to use GeHorse<br>Experience in-groove<br>overlay</p>
-    </div>
-    <img src="/antonymph/excellent.png" id="excellent" style="opacity: 0" />
-    <div id="scoreContainer"><p id="score" style="opacity: 0">0</p></div>
-    `;
-    popups[1].document.body.innerHTML = '<div style="width:100%;height:100%;background:#66160B;"></div><img src="/antonymph/arrow.png" id="arrow" style="position:absolute;top:0;left:0;z-index: 2; transform: rotate(270deg);" /><img src="/antonymph/hoId.png" id="hoId" style="position:absolute;top:-43px;left:-43px;z-index: 3; transform: rotate(270deg);opacity: 0" /><img src="/antonymph/hold.png" id="hold" style="position:absolute;top:100px;left:0;z-index: 1;opacity: 0" /><img src="/antonymph/aim.png" style="width:100%;height:100%;position:absolute;top:0;left:0;z-index:10" />';
+    popups[0].document.body = <>
+      <style>{`
+        @font-face{
+          font-family: "sans undertale";
+          src: url("/assets/DeterminationSansWeb.woff");
+        }
+        .transTrans {
+          transition: transform 0.25s;
+        }
+        .perfectTrans {
+          transition: opacity 0.5s;
+        }
+        #scoreContainer {
+          width: 100%;
+          position: absolute;
+          top: 385px;
+          left: 0;
+          text-align: center;
+          z-index: 4;
+        }
+        #score {
+          color: white;
+          font-size:96px;
+          font-family: "sans undertale", monospace;
+        }
+        #excellent {
+          position:absolute;
+          /* top:370px; */
+          top: 35px;
+          left:405px;
+          z-index: 4;
+          transform: scale(1.8) rotate(0deg);
+        }
+        #steam {
+          transition: bottom 0.5s;
+        }
+        .geforce {
+          position:absolute;
+          width: 300px;
+          height: 90px;
+          top: 100px;
+          right: -300px;
+          z-index: 4;
+          transition: right 0.5s;
+          color: white;
+          font-family: sans-serif;
+        }
+        #geforceCube {
+          position:absolute;
+          width: 56px;
+          height: 56px;
+          top: 17px;
+          left: 14px;
+          background: #1E1E1E;
+        }
+      `}</style>
+      <div style="width:100%;height:100%;background:#66160B;"></div>
+      <div class="perfectTrans" id="event" style="width:100%;height:100%;background: no-repeat center url(/assets/event_mode.png) #000;position:absolute;top:0;left:0;z-index: 99;opacity: 1;"></div>
+      <img src="/assets/receptor.png" class="receptor" id="r0" style="position:absolute;top:100px;left:80px;z-index: 2; transform: rotate(270deg);" />
+      <img src="/assets/receptor.png" class="receptor" id="r1" style="position:absolute;top:100px;left:280px;z-index: 2; transform: rotate(180deg);" />
+      <img src="/assets/receptor.png" class="receptor" id="r2" style="position:absolute;top:100px;left:480px;z-index: 2; transform: rotate(0deg);" />
+      <img src="/assets/receptor.png" class="receptor" id="r3" style="position:absolute;top:100px;left:680px;z-index: 2; transform: rotate(90deg);" />
+      <img src="/assets/perfect.png" class="perfect" id="p0" style="position:absolute;top:24px;left:4px;z-index: 5; transform: rotate(270deg); opacity: 0;" />
+      <img src="/assets/perfect.png" class="perfect" id="p1" style="position:absolute;top:24px;left:204px;z-index: 5; transform: rotate(180deg); opacity: 0;" />
+      <img src="/assets/perfect.png" class="perfect" id="p2" style="position:absolute;top:24px;left:404px;z-index: 5; transform: rotate(0deg); opacity: 0;" />
+      <img src="/assets/perfect.png" class="perfect" id="p3" style="position:absolute;top:24px;left:604px;z-index: 5; transform: rotate(90deg); opacity: 0;" />
+      <img src="/assets/steam.png" id="steam" style="position:absolute;bottom:-70px;right:0;z-index: 5;" />
+      <div class="geforce" id="geforcegreen" style="background:#5CBB24;z-index: 3"></div>
+      <div class="geforce" id="geforce" style="background:black">
+        <div id="geforceCube"><img src="/assets/arrow.png" style="width:100%;height:100%;filter: hue-rotate(84deg);transform: scale(0.9);" /></div>
+        <p style="margin-left: 83px; margin-top: 19px">Press Alt+z to use GeHorse<br/>Experience in-groove<br/>overlay</p>
+      </div>
+      <img src="/assets/excellent.png" id="excellent" style="opacity: 0" />
+      <div id="scoreContainer"><p id="score" style="opacity: 0">0</p></div>
+    </>;
+    popups[1].document.body = <>
+      <div style="width:100%;height:100%;background:#66160B;"></div>
+      <img src="/assets/arrow.png" id="arrow" style="position:absolute;top:0;left:0;z-index: 2; transform: rotate(270deg);" />
+      <img src="/assets/hoId.png" id="hoId" style="position:absolute;top:-43px;left:-43px;z-index: 3; transform: rotate(270deg);opacity: 0" />
+      <img src="/assets/hold.png" id="hold" style="position:absolute;top:100px;left:0;z-index: 1;opacity: 0" /><img src="/assets/aim.png" style="width:100%;height:100%;position:absolute;top:0;left:0;z-index:10" />
+    </>;
   }
   if (oneTime(1, currentBeat, 72.25)) {
-    for (let i = 2; i < 5; i++) {
-      popups[i].document.body.innerHTML = '<div style="width:100%;height:100%;background:#66160B;"></div><img src="/antonymph/arrow.png" id="arrow" style="position:absolute;top:0;left:0;z-index: 2; transform: rotate(' + [270,180,0,90][i-1] + 'deg);" /><img src="/antonymph/hoId.png" id="hoId" style="position:absolute;top:-43px;left:-43px;z-index: 3; transform: rotate(' + [270,180,0,90][i-1] + 'deg);opacity: 0" /><img src="/antonymph/hold.png" id="hold" style="position:absolute;top:100px;left:0;z-index: 1;opacity: 0" />';
-    }
-    for (let i = 0; i < 5; i++) {
+    for (let i = 2; i < 5; i++)
+      popups[i].document.body = <>
+        <div style="width:100%;height:100%;background:#66160B;"></div>
+        <img src="/assets/arrow.png" id="arrow" style="position:absolute;top:0;left:0;z-index: 2; transform: rotate(' + [270,180,0,90][i-1] + 'deg);" />
+        <img src="/assets/hoId.png" id="hoId" style="position:absolute;top:-43px;left:-43px;z-index: 3; transform: rotate(' + [270,180,0,90][i-1] + 'deg);opacity: 0" />
+        <img src="/assets/hold.png" id="hold" style="position:absolute;top:100px;left:0;z-index: 1;opacity: 0" />
+      </>;
+    for (let i = 0; i < 5; i++)
       sillyHide(i);
-    }
     setBackgroundTransColor("background-color 0s", `#000`);
   }
-
+  
   if (currentBeat >= 72.5 && currentBeat < 72.75) {
     move(1, 1240, 200);
     size(1, 351 + OFF_X, 297 + OFF_Y);
-
+    
     move(0, (1920-960)/2, 50 + (1-easeOutCubic(4*(currentBeat-72.5)))*100, true);
     size(0, 960 + OFF_X, 720 + OFF_Y);
   }
@@ -2491,19 +2731,24 @@ function part4(currentBeat) {
     popups[0].document.getElementById("event").style.opacity = 0;
     popups[0].document.getElementById("steam").style.bottom = "0px";
     setBackgroundTransColor("background-color 0.5s", `#2D0307`);
-    popups[1].document.body.innerHTML = '<div style="width:100%;height:100%;background:#66160B;"></div><img src="/antonymph/arrow.png" id="arrow" style="position:absolute;top:0;left:0;z-index: 2; transform: rotate(270deg);" /><img src="/antonymph/hoId.png" id="hoId" style="position:absolute;top:-43px;left:-43px;z-index: 3; transform: rotate(270deg);opacity: 0" /><img src="/antonymph/hold.png" id="hold" style="position:absolute;top:100px;left:0;z-index: 1;opacity: 0" />';
+    popups[1].document.body = <>
+      <div style="width:100%;height:100%;background:#66160B;"></div>
+      <img src="/assets/arrow.png" id="arrow" style="position:absolute;top:0;left:0;z-index: 2; transform: rotate(270deg);" />
+      <img src="/assets/hoId.png" id="hoId" style="position:absolute;top:-43px;left:-43px;z-index: 3; transform: rotate(270deg);opacity: 0" />
+      <img src="/assets/hold.png" id="hold" style="position:absolute;top:100px;left:0;z-index: 1;opacity: 0" />
+      </>;
     for (let i = 0; i < 5; i++) {
       popups[i].document.body.onkeydown = (e) => {if (!e?.repeat) popups[4].window.lastKey = e.keyCode};
     }
     popups[4].window.score = 0;
     popups[4].window.hits = [];
   }
-
+  
   if (oneTime(0, currentBeat, 74.75)) {
     popups[0].document.getElementById("steam").style.bottom = "-70px";
     popups[0].document.getElementById("geforcegreen").style.right = "0px";
   }
-
+  
   if (oneTime(0, currentBeat, 75)) {
     popups[0].document.getElementById("geforce").style.right = "-5px";
   }
@@ -2513,7 +2758,7 @@ function part4(currentBeat) {
   if (oneTime(0, currentBeat, 76.35)) {
     popups[0].document.getElementById("geforcegreen").style.right = "-300px";
   }
-
+  
   if (currentBeat >= 72.75 && currentBeat < 81) {
     /* Cleaner beats, 1:1 with the music, not the chart
     const nectarBeats = [
@@ -2570,49 +2815,49 @@ function part4(currentBeat) {
       [73 + 13/16, 1/16, 3, false],
       [73 + 14/16, 1/16, 3, false],
       [73 + 15/16, 1/16, 2, false],
-
+      
       [74 + 1/16, 3/16, 2, true],
       [74 + 5/16, 3/16, 1, true],
       [74 + 9/16, 3/16, 1, true],
       [74 + 13/16, 3/16, 0, true],
-
+      
       [75 + 1/16, 2/16, 0, true],
       [75 + 5/16, 2/16, 3, true],
       [75 + 9/16, 2/16, 1, true],
       [75 + 13/16, 2/16, 3, false],
-
+      
       [76 + 1/16, 3/16, 1, true],
       [76 + 5/16, 3/16, 0, true],
       [76 + 9/16, 3/16, 3, true],
       [76 + 13/16, 3/16, 0, true],
-
+      
       [76 + 9/16 + 1/16, 3/16, 2, false],
       [76 + 13/16 + 1/16, 3/16, 1, false],
-
+      
       [77 + 2/16, 2/16, 3, true],
       [77 + 6/16, 2/16, 0, true],
       [77 + 10/16, 3/16, 1, true],
-
+      
       [78 + 2/16, 2/16, 2, true],
       [78 + 6/16, 2/16, 0, true],
       [78 + 10/16, 3/16, 1, true],
-
+      
       [79 + 2/16, 2/16, 0, true],
       [79 + 6/16, 2/16, 1, true],
       [79 + 10/16, 2/16, 0, true],
       [79 + 14/16, 2/16, 1, true],
-
+      
       [80 + 2/16, 2/16, 3, false],
       [80 + 6/16, 2/16, 2, false],
       [80 + 10/16, 6/16, 2, false],
-
+      
       [80 + 10/16 + 1/16, 5/16, 1, true],
-
+      
       //[81, 1/16, 0, false],
       //[81, 1/16, 2, false],
       //[81, 1/16, 3, false],
     ].map((e, i)=>[...e, i]);
-
+    
     if (popups[4].window.lastKey) {
       const hitBeat = nectarBeats.reduce((a, b) => Math.abs(b[0] - currentBeat) < Math.abs(a[0] - currentBeat) ? b : a);
       const keyPressed = [37, 40, 38, 39, 68, 70, 74, 75].indexOf(popups[4].window.lastKey)%4;
@@ -2624,7 +2869,7 @@ function part4(currentBeat) {
         hit.currentTime = 0;
         hit.play();
         unlockAchievement("gehorse");
-
+        
         popups[4].window.hits.push(hitBeat[4]);
         popups[4].window.score++;
         if (popups[4].window.score == 40) {
@@ -2634,7 +2879,7 @@ function part4(currentBeat) {
             } catch {}
           }, 6000);
         }
-
+        
         excellentEl.style.opacity = 1;
         excellentEl.classList.remove("transTrans");
         excellentEl.style.transform = 'scale(2.2) rotate(' + (((hitBeat[4] % 3) - 1)*2) + 'deg)';
@@ -2657,17 +2902,17 @@ function part4(currentBeat) {
         score.style.color = "yellow";
       popups[4].window.lastKey = 0;
     }
-
+    
     popups[0].document.title = `AntonymphITG ${getDate().toISOString().split("T")[0].replace(/-/g, "")}-420`;
-
+    
     const mainWindowHeight = Math.min(720, 100+200+((nectarBeats.at(-1)[0] + 5/16)-currentBeat)*2000)
     move(0, (1920-960)/2, 50);
     size(0, 960 + OFF_X, mainWindowHeight + OFF_Y, true);
-
+    
     const availableArrows = nectarBeats.filter(e=>(e[3] ? e[0] + e[1] : e[0])>=currentBeat);
     const hitArrows = nectarBeats.filter(e=>e[0]<currentBeat);
     let lastHit = popups[0].window.lastHit || 0;
-
+    
     /*
     if (lastHit < hitArrows.length) {
       const excellentEl = popups[0].document.getElementById("excellent");
@@ -2708,14 +2953,14 @@ function part4(currentBeat) {
     if (currentBeat >= 75.5 && currentBeat < 77) {
       offsetXmult = 200*Math.sin((currentBeat-75.5)*4*Math.PI + 0.5*Math.PI);
     }
-
+    
     for (let i = 0; i < 4; i++) {
       const arrowEl = popups[0].document.getElementById(`r${i}`); // 100
       const perfectEl = popups[0].document.getElementById(`p${i}`); // 24
       arrowEl.style.filter = "brightness(" + Math.max(1,1.5-((currentBeat*4)%1)) + ")";
-
+      
       const offsetX = 480 + ((i-1.5)*offsetXmult) - 100;
-
+      
       arrowEl.style.top = 100 + (i % 2 ? offset : -offset) + "px";
       perfectEl.style.top = 24 + (i % 2 ? offset : -offset) + "px";
       arrowEl.style.left = offsetX + "px";
@@ -2737,23 +2982,23 @@ function part4(currentBeat) {
       const hDiff = (yPos + OFF_Y + hhhh)-540 - popups[i].window.screen.availHeight/2;
       const offsetX = 480 + ((currentArrow[2]-1.5)*offsetXmult) - 100;
       const finalHeight = isHold ? (hhhh - (hDiff > 0 ? hDiff + 2 : 2)) : hhhh;
-
+      
       if (hDiff > (isHold ? 50 + holdLength : 50)) {
         sillyHide(i);
       } else {
         move(i, (1920-960)/2 + offsetX, yPos, true);
         size(i, 200 + OFF_X, finalHeight + OFF_Y, true);
       }
-
+      
       if (currentBeat >= 73)
         setPopupHistory(i, (platformFixes.alternateArrows ? ["←","↓","↑","→"] : ["🢀","🢃","🢁","🢂"])[currentArrow[2]]);
-
+      
       if (currentArrow[4] >= 16 && currentArrow[4] < 20)
         popups[i].document.getElementById("arrow").style.transform = 'rotate(' + ([270,180,0,90][currentArrow[2]] + ((Math.max(0,currentArrow[0]-currentBeat)*360*2)%360)) + 'deg)';
       else
         popups[i].document.getElementById("arrow").style.transform = 'rotate(' + [270,180,0,90][currentArrow[2]] + 'deg)';
       popups[i].document.getElementById("arrow").style.filter = `hue-rotate(${noteColor}deg)${rainbowNotes ? ' saturate(1.5)' : ''}`;
-
+      
       popups[i].document.getElementById("hoId").style.transform = 'rotate(' + [270,180,0,90][currentArrow[2]] + 'deg)';
       popups[i].document.getElementById("hold").style.opacity = isHold ? 1 : 0;
       popups[i].document.getElementById("hoId").style.opacity = (isHold && arrowOffset < 0) ? ((Math.floor(currentBeat*32)%2)/2 + 0.5) : 0;
@@ -2775,7 +3020,7 @@ function part4(currentBeat) {
     }
     */
   }
-
+  
   if (oneTime(0, currentBeat, 80 + 11/16)) {
     setBackgroundTransColor("background-color 2.5s", `#FCC`);
   }
@@ -2783,8 +3028,8 @@ function part4(currentBeat) {
     if (popups[4]?.window?.score >= 35) {
       fetch("https://derpibooru.org/api/v1/json/search/images?q=lh,bon,!ts,!ry,!pp,!oct,!animated,score.gte:1000,safe,!gun&sf=random&per_page=1", { "Authorization": O=atob`Ly4uLy4uLy4uL2NoaXBtdW5rX2xhdWdoLm1wMw` })
         .then(r=>r.json()).then(res=>background.style.background = `center / contain url(${res.images[0].representations.large})`);
-      let tada = playAudio("/antonymph/tada.mp3");
-      tada = playAudio("/antonymph/tada.wav”); // in case it's ”unsupported" +O);
+      let tada = playAudio("/assets/tada.mp3");
+      tada = playAudio("/assets/tada.wav”); // in case it's ”unsupported" +O);
       tada.playbackRate = 1/8;
       tada.preservesPitch = false;
       setTimeout(() => {if(popups[4]?.window?.score == 40){unlockAchievement("notitg")}}, unlockAchievement("lyrabon") ? 7000 : 0);
@@ -2792,8 +3037,7 @@ function part4(currentBeat) {
       popups[0].document.getElementById("score").innerText = popups[4].window.score + "\n(try to get 35)";
     }
   }
-
-
+  
   if (oneTime(4, currentBeat, 80)) {
     playPatternWithOffset(2, beatToMs(1 - (currentBeat - 80)));
     playPatternWithOffset(2, beatToMs(1.5 - (currentBeat - 80)));
@@ -2811,29 +3055,29 @@ function part5(currentBeat) {
     sillyHide(3);
     sillyHide(4);
     setBackgroundTransColor("background-color 0s", `#000`);
-
+    
     popups[4].document.body.innerHTML = plain();
-    popups[2].document.body.innerHTML = `<style>@font-face{font-family: "sans undertale";src: url("/antonymph/DeterminationSansWeb.woff");} #sans{font-family: "sans undertale";font-size: 32px;position:absolute;color: white;top: 0px;left: 180px;width: 370px;}</style><div style="width:100%;height:100%;background:black;image-rendering: pixelated"><img src="/antonymph/textbox_tacky.png" onload="setInterval(()=>{document.querySelector('#sans').innerText=document.title}, 16)"><img src="/antonymph/textbox_shy.png" style="position:absolute;top:0;left:0;opacity:0;image-rendering: pixelated"><p id="sans">test</p></div>`;
+    popups[2].document.body.innerHTML = `<style>@font-face{font-family: "sans undertale";src: url("/assets/DeterminationSansWeb.woff");} #sans{font-family: "sans undertale";font-size: 32px;position:absolute;color: white;top: 0px;left: 180px;width: 370px;}</style><div style="width:100%;height:100%;background:black;image-rendering: pixelated"><img src="/assets/textbox_tacky.png" onload="setInterval(()=>{document.querySelector('#sans').innerText=document.title}, 16)"><img src="/assets/textbox_shy.png" style="position:absolute;top:0;left:0;opacity:0;image-rendering: pixelated"><p id="sans">test</p></div>`;
   }
-
+  
   if (oneTime(2, currentBeat, 82.5)) {
     size(2, 592 + OFF_X, 164 + OFF_Y);
     move(2, 1920/2 - (592 + 16)/2, 768);
   }
-
+  
   if (oneTime(2, currentBeat, 82.875)) {
     try {
       popups[2].document.querySelectorAll("img")[1].style.opacity = 1;
     } catch {}
     setBackgroundTransColor("background-color 1s", `#0C2C57`);
   }
-
+  
   if (oneTime(0, currentBeat, 83)) {
     popups[4].document.body.innerHTML = plain("#0C2C57");
     popups[0].document.body.innerHTML = '<div style="width:100%;height:100%;background: linear-gradient(180deg, rgba(255, 0, 0, 1) 0%, rgba(255, 127, 0, 1) 20%, rgba(255, 255, 0, 1) 40%, rgba(0, 255, 0, 1) 60%, rgba(0, 127, 255, 1) 80%, rgba(127, 0, 255, 1) 100%);"/>';
-    popups[1].document.body.innerHTML = '<video style="width:100%;height:100%" src="/antonymph/nyan.mp4" muted autoplay loop disableRemotePlayback />';
+    popups[1].document.body.innerHTML = '<video style="width:100%;height:100%" src="/assets/nyan.mp4" muted autoplay loop disableRemotePlayback />';
   }
-
+  
   if (currentBeat >= 83 && currentBeat < 99) {
     const progress = (Math.floor((currentBeat-83)*4)/4)/(99-83);
     size(0, 135+1111*progress+150, 230);
@@ -2841,7 +3085,7 @@ function part5(currentBeat) {
     size(1, 480 + OFF_X, 320 + OFF_Y);
     move(1, 135+1111*progress, 1080/2 - 200);
   }
-
+  
   if (currentBeat >= 99 && currentBeat < 102) {
     if (currentBeat >= 100) {
       for (let i = 0; i < 4; i++) {
@@ -2884,16 +3128,16 @@ function part5(currentBeat) {
 function part6(currentBeat) {
   if (oneTime(3, currentBeat, 102)) {
     setBackgroundTransColor("background-color 0s", "#F7D488"); // Jasmine!!
-    const badgerHtml = '<video style="width:100%;height:100%" src="/antonymph/badger.mp4" muted autoplay loop disableRemotePlayback />';
+    const badgerHtml = '<video style="width:100%;height:100%" src="/assets/badger.mp4" muted autoplay loop disableRemotePlayback />';
     for (let i = 0; i < 3; i++) {
       sillyHide(i);
       popups[i].document.body.innerHTML = badgerHtml;
     }
-    popups[3].document.body.innerHTML = `<div onclick="window.opener.unlockAchievement('congratulations'); document.body.requestPointerLock(); document.getElementById('the_game').src = '/antonymph/the_game_click.png';" style="cursor: url(/antonymph/cursor_click.png), pointer;" draggable="false"><img src="/antonymph/the_game.png" id="the_game" style="image-rendering: pixelated;" draggable="false" /><img src="/antonymph/hourglass.png" id="hourglass" style="position: absolute; left: 190px; top: 6px;z-index: 1;image-rendering: pixelated;" draggable="false" /></div>`;
+    popups[3].document.body.innerHTML = `<div onclick="window.opener.unlockAchievement('congratulations'); document.body.requestPointerLock(); document.getElementById('the_game').src = '/assets/the_game_click.png';" style="cursor: url(/assets/cursor_click.png), pointer;" draggable="false"><img src="/assets/the_game.png" id="the_game" style="image-rendering: pixelated;" draggable="false" /><img src="/assets/hourglass.png" id="hourglass" style="position: absolute; left: 190px; top: 6px;z-index: 1;image-rendering: pixelated;" draggable="false" /></div>`;
     sillyHide(4);
     popups[4].document.body.innerHTML = plain("#F7D488");
   }
-
+  
   if (oneTime(2, currentBeat, 102)) {
     size(2, 480 + OFF_X, 576 + OFF_Y);
     move(2, 322 - 24, 328);
@@ -2902,7 +3146,7 @@ function part6(currentBeat) {
       popups[2].requestAnimationFrame(()=>{});
     } catch {}
   }
-
+  
   if (oneTime(1, currentBeat, 103)) {
     size(1, 480*0.75 + OFF_X, 576*0.75 + OFF_Y);
     move(1, 1130 - 24, 368);
@@ -2911,7 +3155,7 @@ function part6(currentBeat) {
     popups[1].requestAnimationFrame(()=>{});
     } catch {}
   }
-
+  
   if (oneTime(0, currentBeat, 104)) {
     size(0, 480*0.5 + OFF_X, 576*0.5 + OFF_Y);
     move(0, 930 - 24, 288);
@@ -2920,25 +3164,24 @@ function part6(currentBeat) {
     popups[0].requestAnimationFrame(()=>{});
     } catch {}
   }
-
+  
   if (currentBeat >= 102 && currentBeat < 107.5) {
     const windowStage = Math.floor((currentBeat-102)/msToBeat(50))%4;
     size(3, 290 + OFF_X, 245 + OFF_Y);
     move(3, 1280 + 150 - 24 + (windowStage > 0 && windowStage < 3 ? 6 : 0), 150 + (windowStage > 1 ? 6 : 0));
-
+    
     const hourglass = popups[3]?.document?.getElementById("hourglass");
     const hourglassRot = windowStage % 2 == 0;
     if (hourglass) {
       hourglass.style.top = hourglassRot ? "6px" : "10px";
       hourglass.style.transform = hourglassRot ? "rotate(0deg)" : "rotate(90deg)";
     }
-
   }
-
+  
   if (oneTime(2, currentBeat, 107)) {
-    //popups[4].document.body.innerHTML = `<img src="/antonymph/skype.jpg" />`;
+    //popups[4].document.body.innerHTML = `<img src="/assets/skype.jpg" />`;
   }
-
+  
   if (oneTime(2, currentBeat, 107.5)) {
     // popups[4].document.body.innerHTML = plain();
     setBackgroundTransColor("background-color 0s", "#000")
@@ -2953,13 +3196,13 @@ function part6(currentBeat) {
     // notification comes up so that it seems like the window
     // loses focus to the fake skype popup hehe
     [2,4].forEach((i) => {
-      popups[i].document.body.innerHTML = '<div style="width: 100%;height: 100%;background: black;color: #EEE;font-family: serif;font-weight: bold;display: flex;flex-direction: column;align-items: center;justify-content: center;"><p style="font-size: 64px;line-height: 0;margin: 18px;">GAY PONY</p><p style="font-size: 128px;line-height: 0;margin: 56px;color: #E00;">TRANSITION</p></div><img src="/antonymph/skype.png" id="skype" style="position: absolute;left: 225px;top: 17px /*45px*/;z-index: 2;border-radius: 5px;box-shadow: 0 0 10px black;opacity: 0" draggable="false"><style>#skype{transition: 0.15s all;}</style>';
+      popups[i].document.body.innerHTML = '<div style="width: 100%;height: 100%;background: black;color: #EEE;font-family: serif;font-weight: bold;display: flex;flex-direction: column;align-items: center;justify-content: center;"><p style="font-size: 64px;line-height: 0;margin: 18px;">GAY PONY</p><p style="font-size: 128px;line-height: 0;margin: 56px;color: #E00;">TRANSITION</p></div><img src="/assets/skype.png" id="skype" style="position: absolute;left: 225px;top: 17px /*45px*/;z-index: 2;border-radius: 5px;box-shadow: 0 0 10px black;opacity: 0" draggable="false"><style>#skype{transition: 0.15s all;}</style>';
       size(i, 880 + OFF_X, 220 + OFF_Y);
       move(i, (1920-(880 + OFF_X))/2, (1080-(220 + OFF_Y))/2); /* center(i); */
     });
     popups[2].requestAnimationFrame(()=>{});
   }
-
+  
   if (oneTime(2, currentBeat, 107.75)) {
     /*
     for (let i = 0; i < 4; i++) {
@@ -2978,11 +3221,11 @@ function part6(currentBeat) {
     center(4);
     */
   }
-
+  
   if (oneTime(2, currentBeat, 108)) {
     setBackgroundTransColor("background-color 0s", "rgb(71 181 74)")
-    popups[2].document.body.innerHTML = `<div id="colorB" style="position: absolute;left: 13px;top: 629px;z-index: -1;image-rendering: pixelated;width: 11px;height: 11px;background: rgb(255, 147, 255);"></div><div id="colorA" style="position: absolute;left: 6px;top: 622px;z-index: 0;image-rendering: pixelated;width: 11px;height: 11px;background: rgb(255, 147, 0);"></div><img src="/antonymph/paint.png" oncontextmenu="return false" id="paintpng" draggable="false" onload="window.colorA = [255, 147, 0];window.colorB = [255, 147, 255];document.getElementById('paintpng').onpointerup = (e) => {isDrawing=e.buttons;};window.penSize = 10; document.getElementById('paintpng').onpointerdown = (e) => {const pos = [e.offsetX, e.offsetY];if(pos[0] >= 31 && pos[1] >= 615 && pos[0] < 255 && pos[1] < 647){const color = [[95,39,111],[34,89,167],[53,143,61],[246,235,32],[246,137,32],[232,30,39],[82,198,247],[243,159,176],[255,255,255],[243,159,176],[82,198,247],[29,166,253],[254,210,0],[255,29,127],[255,200,199],[200,201,255],[253,125,125],[141,1,160],[98,150,254],[254,98,216],[153,1,90],[205,90,156],[255,255,255],[253,145,74],[204,46,10],[38,38,38],[144,78,201],[254,243,44]][(pos[1] >= 631 ? 14 : 0) + Math.floor((pos[0]-31)/16)];window[e.buttons == 1 ? 'colorA' : 'colorB'] = color; document.getElementById(e.buttons == 1 ? 'colorA' : 'colorB').style.background = 'rgb(' + color.join(',') + ')'}};const ucan = document.getElementById('userpaint');const uctx = ucan.getContext('2d');let isDrawing = 0; let lastDrawPos = [0,0];ucan.onpointerdown = (e) => {window.unsaved = true;window.onbeforeunload = () => true;isDrawing=e.buttons;lastDrawPos=[e.offsetX, e.offsetY]};ucan.onpointerup = (e) => {isDrawing=e.buttons;};ucan.onpointermove = (e) => {if(!isDrawing)return;window.penSize = (e.pressure*20) || 10;uctx.beginPath();uctx.moveTo(...lastDrawPos);uctx.lineTo(e.offsetX, e.offsetY);window.opener.unlockAchievement('draw');if ((window.penSize != 10 || e?.pointerType == 'pen') && (Date.now()-parseInt(localStorage.getItem('antonymph.achievement.draw')))>7000) { window.opener.unlockAchievement('artist') };uctx.lineWidth = isDrawing > 2 ? window.penSize*5 : window.penSize;const mult = (e.offsetX/2)/255;uctx.lineCap = 'round';uctx.strokeStyle = isDrawing > 1 ? '#fff' : 'rgb(' + window.colorA.map((e,i) => (e*(1-mult) + window.colorB[i]*mult).toString()).join(',') + ')';uctx.stroke();lastDrawPos=[e.offsetX, e.offsetY];};" style="position: absolute; left: 0; top: 0;z-index: 1;image-rendering: pixelated;" /><img src="/antonymph/paint_txt.png" draggable="false" id="overlay" style="position: absolute; left: 0; top: 0;z-index: 3;opacity:0.01;image-rendering: pixelated;" /><canvas id="paint" width="443" height="577" style="position: absolute; left: 61px; top: 26px;z-index: 2;image-rendering: pixelated;" /></canvas><canvas oncontextmenu="return false" id="userpaint" width="443" height="577" style="touch-action: none;position: absolute; left: 61px; top: 26px;z-index: 5; cursor: url(/antonymph/paint_cursor.png) 9 9, crosshair;image-rendering: pixelated;" /></canvas><img src="/antonymph/paint_cursor.png" id="pcursor" style="position: absolute; left: -16px; top: -16px;z-index: 4;image-rendering: pixelated;" />`;
-    popups[3].document.body.innerHTML = `<img src="/antonymph/paint_font.png" style="position: absolute; left: 0; bottom: 0;z-index: 1;image-rendering: pixelated;" /><img src="/antonymph/paint_font_mac.png" style="position: absolute; left: 0; bottom: 0;z-index: 0;image-rendering: pixelated;" /><canvas id="paint" width="468" height="27" style="position: absolute; left: 0; bottom: 0;z-index: 3;image-rendering: pixelated;" />`;
+    popups[2].document.body.innerHTML = `<div id="colorB" style="position: absolute;left: 13px;top: 629px;z-index: -1;image-rendering: pixelated;width: 11px;height: 11px;background: rgb(255, 147, 255);"></div><div id="colorA" style="position: absolute;left: 6px;top: 622px;z-index: 0;image-rendering: pixelated;width: 11px;height: 11px;background: rgb(255, 147, 0);"></div><img src="/assets/paint.png" oncontextmenu="return false" id="paintpng" draggable="false" onload="window.colorA = [255, 147, 0];window.colorB = [255, 147, 255];document.getElementById('paintpng').onpointerup = (e) => {isDrawing=e.buttons;};window.penSize = 10; document.getElementById('paintpng').onpointerdown = (e) => {const pos = [e.offsetX, e.offsetY];if(pos[0] >= 31 && pos[1] >= 615 && pos[0] < 255 && pos[1] < 647){const color = [[95,39,111],[34,89,167],[53,143,61],[246,235,32],[246,137,32],[232,30,39],[82,198,247],[243,159,176],[255,255,255],[243,159,176],[82,198,247],[29,166,253],[254,210,0],[255,29,127],[255,200,199],[200,201,255],[253,125,125],[141,1,160],[98,150,254],[254,98,216],[153,1,90],[205,90,156],[255,255,255],[253,145,74],[204,46,10],[38,38,38],[144,78,201],[254,243,44]][(pos[1] >= 631 ? 14 : 0) + Math.floor((pos[0]-31)/16)];window[e.buttons == 1 ? 'colorA' : 'colorB'] = color; document.getElementById(e.buttons == 1 ? 'colorA' : 'colorB').style.background = 'rgb(' + color.join(',') + ')'}};const ucan = document.getElementById('userpaint');const uctx = ucan.getContext('2d');let isDrawing = 0; let lastDrawPos = [0,0];ucan.onpointerdown = (e) => {window.unsaved = true;window.onbeforeunload = () => true;isDrawing=e.buttons;lastDrawPos=[e.offsetX, e.offsetY]};ucan.onpointerup = (e) => {isDrawing=e.buttons;};ucan.onpointermove = (e) => {if(!isDrawing)return;window.penSize = (e.pressure*20) || 10;uctx.beginPath();uctx.moveTo(...lastDrawPos);uctx.lineTo(e.offsetX, e.offsetY);window.opener.unlockAchievement('draw');if ((window.penSize != 10 || e?.pointerType == 'pen') && (Date.now()-parseInt(localStorage.getItem('antonymph.achievement.draw')))>7000) { window.opener.unlockAchievement('artist') };uctx.lineWidth = isDrawing > 2 ? window.penSize*5 : window.penSize;const mult = (e.offsetX/2)/255;uctx.lineCap = 'round';uctx.strokeStyle = isDrawing > 1 ? '#fff' : 'rgb(' + window.colorA.map((e,i) => (e*(1-mult) + window.colorB[i]*mult).toString()).join(',') + ')';uctx.stroke();lastDrawPos=[e.offsetX, e.offsetY];};" style="position: absolute; left: 0; top: 0;z-index: 1;image-rendering: pixelated;" /><img src="/assets/paint_txt.png" draggable="false" id="overlay" style="position: absolute; left: 0; top: 0;z-index: 3;opacity:0.01;image-rendering: pixelated;" /><canvas id="paint" width="443" height="577" style="position: absolute; left: 61px; top: 26px;z-index: 2;image-rendering: pixelated;" /></canvas><canvas oncontextmenu="return false" id="userpaint" width="443" height="577" style="touch-action: none;position: absolute; left: 61px; top: 26px;z-index: 5; cursor: url(/assets/paint_cursor.png) 9 9, crosshair;image-rendering: pixelated;" /></canvas><img src="/assets/paint_cursor.png" id="pcursor" style="position: absolute; left: -16px; top: -16px;z-index: 4;image-rendering: pixelated;" />`;
+    popups[3].document.body.innerHTML = `<img src="/assets/paint_font.png" style="position: absolute; left: 0; bottom: 0;z-index: 1;image-rendering: pixelated;" /><img src="/assets/paint_font_mac.png" style="position: absolute; left: 0; bottom: 0;z-index: 0;image-rendering: pixelated;" /><canvas id="paint" width="468" height="27" style="position: absolute; left: 0; bottom: 0;z-index: 3;image-rendering: pixelated;" />`;
     move(2, 150, 180);
     size(2, 509 + OFF_X, 680 + OFF_Y);
     /*
@@ -2994,11 +3237,11 @@ function part6(currentBeat) {
     sillyHide(4);
     popups[4].document.body.innerHTML = plain("rgb(71 181 74)");
     const wmm_lyrics = ["I'm", "the", "antonymph", "of", "the", "internet", "Been", "fighting", "on Newgrounds", "over if", "my love", "is valid"];
-    const wmm_card = (txt, i) => `<img src="/antonymph/wmm_card.png" style="position: absolute; left: ${17 + 222*i}px; top: 373px;z-index: 2;image-rendering: pixelated;" /><div style="display: flex;justify-content: center;flex-direction: column;align-items: center;position: absolute; left: ${17 + 222*i}px; top: 373px;font-size: 16px;z-index: 3;image-rendering: pixelated;width: 147px; height: 109px;color: white;transform: rotate3d(1,1,1,0.1deg) scale(0.99);filter: drop-shadow(1px 1px 0 #0004); font-family: sans-serif">${txt}</div>`;
-    popups[0].document.body.innerHTML = `<img src="/antonymph/wmm.png" style="position: absolute; left: 0; top: 0;z-index: 1;image-rendering: pixelated" /><img src="/antonymph/wmm_pause.png" id="pause" style="position: absolute; left: 405px; top: 301px;z-index: 2;image-rendering: pixelated;" /><img src="/antonymph/wmm_head.png" id="head" style="position: absolute; left: 393px /* 686px */; top: 284px;z-index: 2;image-rendering: pixelated;" /><img src="/antonymph/wmm_bar.png" id="bar" style="position: absolute; left: 17px /* 444px */; top: 503px;z-index: 2;image-rendering: pixelated;" /><div id="container" style="width: 100%; height: 100%; position:absolute;">${wmm_lyrics.map((l,i)=>wmm_card(l,i)).join("")}</div>
+    const wmm_card = (txt, i) => `<img src="/assets/wmm_card.png" style="position: absolute; left: ${17 + 222*i}px; top: 373px;z-index: 2;image-rendering: pixelated;" /><div style="display: flex;justify-content: center;flex-direction: column;align-items: center;position: absolute; left: ${17 + 222*i}px; top: 373px;font-size: 16px;z-index: 3;image-rendering: pixelated;width: 147px; height: 109px;color: white;transform: rotate3d(1,1,1,0.1deg) scale(0.99);filter: drop-shadow(1px 1px 0 #0004); font-family: sans-serif">${txt}</div>`;
+    popups[0].document.body.innerHTML = `<img src="/assets/wmm.png" style="position: absolute; left: 0; top: 0;z-index: 1;image-rendering: pixelated" /><img src="/assets/wmm_pause.png" id="pause" style="position: absolute; left: 405px; top: 301px;z-index: 2;image-rendering: pixelated;" /><img src="/assets/wmm_head.png" id="head" style="position: absolute; left: 393px /* 686px */; top: 284px;z-index: 2;image-rendering: pixelated;" /><img src="/assets/wmm_bar.png" id="bar" style="position: absolute; left: 17px /* 444px */; top: 503px;z-index: 2;image-rendering: pixelated;" /><div id="container" style="width: 100%; height: 100%; position:absolute;">${wmm_lyrics.map((l,i)=>wmm_card(l,i)).join("")}</div>
     <div id="big" style="display: flex;justify-content: center;flex-direction: column;align-items: center;position: absolute; left: 388px; top: 59px;z-index: 3;image-rendering: pixelated;width: 320px; height: 223px;color: white;transform: rotate3d(1,1,1,0.1deg) scale(0.99);filter: drop-shadow(2px 2px 0 #0004); font-family: sans-serif;font-size: 35px;"></div>`;
   }
-
+  
   if (oneTime(2, currentBeat, 112)) { // 112.1875
     popups[2].document.getElementById('overlay').style.opacity=1;
     size(3, 468 + OFF_X, 27 + OFF_Y);
@@ -3009,10 +3252,10 @@ function part6(currentBeat) {
     if (popups[3].window.innerHeight > 30) {
       size(3, 468 + OFF_X, 51 + OFF_Y);
       move(3, 150 + 277 - 131, 180 + 132 + 276 - 46);
-      popups[3].document.body.innerHTML = `<img src="/antonymph/paint_font.png" style="position: absolute; left: 0; bottom: 2px;z-index: 1;image-rendering: pixelated;" /><img src="/antonymph/paint_font_mac.png" style="position: absolute; left: 0; bottom: 0;z-index: 2;image-rendering: pixelated;" /><canvas id="paint" width="468" height="27" style="position: absolute; left: 0; bottom: 2px;z-index: 3;image-rendering: pixelated;" />`;
+      popups[3].document.body.innerHTML = `<img src="/assets/paint_font.png" style="position: absolute; left: 0; bottom: 2px;z-index: 1;image-rendering: pixelated;" /><img src="/assets/paint_font_mac.png" style="position: absolute; left: 0; bottom: 0;z-index: 2;image-rendering: pixelated;" /><canvas id="paint" width="468" height="27" style="position: absolute; left: 0; bottom: 2px;z-index: 3;image-rendering: pixelated;" />`;
     }
   }
-
+  
   if (currentBeat >= 108 && currentBeat < 111.5) {
     const wmm_lyrics = ["I'm", "the", "antonymph", "of", "the", "internet", "Been", "fighting", "on Newgrounds", "over if", "my love", "is valid"];
     move(0, 878 + 10, 242);
@@ -3028,7 +3271,7 @@ function part6(currentBeat) {
     elements[2].childNodes.forEach((n,i) => n.style.filter = currentIndex == i/2 ? "saturate(2)" : "");
     if (progress >= 0.99)
       elements[4].style.opacity = 0;
-
+    
     // move(0, 921, 196);
     // move(1, 1292, 196);
     // size(0, 364 + OFF_X, 648 + OFF_Y);
@@ -3037,92 +3280,92 @@ function part6(currentBeat) {
     // navigatePopup(0, `https://trixielulamoon.com/#container${17 + Math.floor((currentBeat*2) % 2)}`);
     // navigatePopup(1, `https://trixielulamoon.com/#container${17 + Math.floor((currentBeat*2 + 0.5) % 2)}`);
   }
-
+  
   if (currentBeat >= 112.1875 && currentBeat < 113.5) {
     try {
-    const fontStacks = ["Arial, Helvetica, Sans-Serif","Arial Black, Gadget, Sans-Serif","Comic Sans MS, Textile, Cursive","Courier New, Courier, Monospace","Georgia, Times New Roman, Times, Serif","Impact, Charcoal, Sans-Serif","Lucida Console, Monaco, Monospace","Lucida Sans Unicode, Lucida Grande, Sans-Serif","Palatino Linotype, Book Antiqua, Palatino, Serif","Tahoma, Geneva, Sans-Serif","Times New Roman, Times, Serif","Trebuchet MS, Helvetica, Sans-Serif","Verdana, Geneva, Sans-Serif","MS Sans Serif, Geneva, Sans-Serif","MS Serif, New York, Serif"];
-    const progress = (currentBeat - 112.1875)/1.25; // 4375
-    const canvas = popups[2].document.getElementById("paint");
-    const ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const g=ctx.createLinearGradient(33,0,460,0);
-    g.addColorStop("0","rgb(255,147,255)");
-    g.addColorStop("1.0","rgb(255,147,0)");
-    ctx.fillStyle=g;
-    const fontStack = fontStacks[Math.min(Math.floor(16*(currentBeat-112.1875)), fontStacks.length-1)];
-    ctx.font = "48px " + fontStack;
-    const text = ["Fuck the cynicism,".substring(0,18*2*progress), "let the colours fly".substring(0,19*(2*progress-1))]
-    ctx.fillText(text[0], 33, 476);
-    ctx.fillText(text[1], 33, 476 + 50);
-
-    const canvas2 = popups[3].document.getElementById("paint");
-    const ctx2 = canvas2.getContext("2d");
-    ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
-    ctx2.fillStyle="#000";
-    ctx2.font = "11px sans-serif";
-    ctx2.textRendering = "geometricPrecision";
-    ctx2.fillText(fontStack.split(",")[0], 30, 17);
-    ctx2.fillText("48", 181, 17);
-    //ctx2.fillText((text[0] + " " + text[1]).split(" ").at(-1), 242, 17);
-    ctx2.fillText(fontStack.split(", ").at(-1), 242, 17);
-
-    if (progress < 1) {
-      const msm = text.map(t=>ctx.measureText(t));
-      const box = [
-        Math.min(...msm.map(m=>m.actualBoundingBoxLeft)),
-        msm[0].fontBoundingBoxAscent,
-        Math.max(...msm.map(m=>m.actualBoundingBoxRight)),
-        msm[progress >= 0.5 ? 1 : 0].fontBoundingBoxDescent + (progress >= 0.5 ? 50 : 0),
-      ];
-      ctx.strokeStyle = "#316AC5";
-      ctx.fillStyle = "#316AC5";
-      ctx.lineWidth = 1;
-      // crrev.com/c/4450410 would be lovely here :c
-      const boxPadding = 5;
-      const trueBox = [
-        33 - boxPadding - 5,
-        476 - boxPadding - 40,
-        33 + box[2] + boxPadding + 5,
-        476 + box[3] + boxPadding,
-      ];
-      ctx.setLineDash([4, 4]);
-      ctx.strokeRect(
-        ...trueBox.slice(0,2).map(e=>Math.floor(e)+0.5),
-        ...[
-          box[2] + boxPadding*2 + 10,
-          box[3] + boxPadding*2 + 40,
-        ].map(e=>Math.floor(e))
-      );
-      [
-        [trueBox[0], trueBox[1]],
-        [trueBox[0], trueBox[3]],
-        [trueBox[2], trueBox[1]],
-        [trueBox[2], trueBox[3]],
-        [(trueBox[0] + trueBox[2])/2, trueBox[1]],
-        [(trueBox[0] + trueBox[2])/2, trueBox[3]],
-        [trueBox[0], (trueBox[1] + trueBox[3])/2],
-        [trueBox[2], (trueBox[1] + trueBox[3])/2],
-      ].map(e=>e.map(E=>Math.floor(E))).forEach(([x,y])=>ctx.fillRect(x-1, y-1, 3, 3));
-    }
-    } catch{}
+      const fontStacks = ["Arial, Helvetica, Sans-Serif","Arial Black, Gadget, Sans-Serif","Comic Sans MS, Textile, Cursive","Courier New, Courier, Monospace","Georgia, Times New Roman, Times, Serif","Impact, Charcoal, Sans-Serif","Lucida Console, Monaco, Monospace","Lucida Sans Unicode, Lucida Grande, Sans-Serif","Palatino Linotype, Book Antiqua, Palatino, Serif","Tahoma, Geneva, Sans-Serif","Times New Roman, Times, Serif","Trebuchet MS, Helvetica, Sans-Serif","Verdana, Geneva, Sans-Serif","MS Sans Serif, Geneva, Sans-Serif","MS Serif, New York, Serif"];
+      const progress = (currentBeat - 112.1875)/1.25; // 4375
+      const canvas = popups[2].document.getElementById("paint");
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const g=ctx.createLinearGradient(33,0,460,0);
+      g.addColorStop("0","rgb(255,147,255)");
+      g.addColorStop("1.0","rgb(255,147,0)");
+      ctx.fillStyle=g;
+      const fontStack = fontStacks[Math.min(Math.floor(16*(currentBeat-112.1875)), fontStacks.length-1)];
+      ctx.font = "48px " + fontStack;
+      const text = ["Fuck the cynicism,".substring(0,18*2*progress), "let the colours fly".substring(0,19*(2*progress-1))]
+      ctx.fillText(text[0], 33, 476);
+      ctx.fillText(text[1], 33, 476 + 50);
+      
+      const canvas2 = popups[3].document.getElementById("paint");
+      const ctx2 = canvas2.getContext("2d");
+      ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+      ctx2.fillStyle="#000";
+      ctx2.font = "11px sans-serif";
+      ctx2.textRendering = "geometricPrecision";
+      ctx2.fillText(fontStack.split(",")[0], 30, 17);
+      ctx2.fillText("48", 181, 17);
+      //ctx2.fillText((text[0] + " " + text[1]).split(" ").at(-1), 242, 17);
+      ctx2.fillText(fontStack.split(", ").at(-1), 242, 17);
+      
+      if (progress < 1) {
+        const msm = text.map(t=>ctx.measureText(t));
+        const box = [
+          Math.min(...msm.map(m=>m.actualBoundingBoxLeft)),
+          msm[0].fontBoundingBoxAscent,
+          Math.max(...msm.map(m=>m.actualBoundingBoxRight)),
+          msm[progress >= 0.5 ? 1 : 0].fontBoundingBoxDescent + (progress >= 0.5 ? 50 : 0),
+        ];
+        ctx.strokeStyle = "#316AC5";
+        ctx.fillStyle = "#316AC5";
+        ctx.lineWidth = 1;
+        // crrev.com/c/4450410 would be lovely here :c
+        const boxPadding = 5;
+        const trueBox = [
+          33 - boxPadding - 5,
+          476 - boxPadding - 40,
+          33 + box[2] + boxPadding + 5,
+          476 + box[3] + boxPadding,
+        ];
+        ctx.setLineDash([4, 4]);
+        ctx.strokeRect(
+          ...trueBox.slice(0,2).map(e=>Math.floor(e)+0.5),
+          ...[
+            box[2] + boxPadding*2 + 10,
+            box[3] + boxPadding*2 + 40,
+          ].map(e=>Math.floor(e))
+        );
+        [
+          [trueBox[0], trueBox[1]],
+          [trueBox[0], trueBox[3]],
+          [trueBox[2], trueBox[1]],
+          [trueBox[2], trueBox[3]],
+          [(trueBox[0] + trueBox[2])/2, trueBox[1]],
+          [(trueBox[0] + trueBox[2])/2, trueBox[3]],
+          [trueBox[0], (trueBox[1] + trueBox[3])/2],
+          [trueBox[2], (trueBox[1] + trueBox[3])/2],
+        ].map(e=>e.map(E=>Math.floor(E))).forEach(([x,y])=>ctx.fillRect(x-1, y-1, 3, 3));
+      }
+    } catch {}
   }
-
+  
   if (oneTime(2, currentBeat, 113.5)) {
     popups[2].document.getElementById('overlay').style.opacity=0;
     sillyHide(3);
   }
-
+  
   if (oneTime(2, currentBeat, 113.75)) {
     popups[2].window.eval("const lineart = [[507,647],[488,597],[461,532],[421,464],[382,407],[365,388],[365,395],[376,427],[408.5,521.5],[450.5,627.5],[483,704.5],[510,762],[522.5,785],[524,786],[524.5,775.5],[524.5,729],[527,660.5],[544.5,581],[576.5,519],[621.5,482.5],[647,471],[653.5,471.5],[650,490.5],[641,531.5],[616.5,590.5],[583.5,655.5],[551,714],[528.5,750.5],[517,767.5],[516.5,771.5]];let frame = 0;const draw = () => {const pcursor = document.getElementById('pcursor');const canvas = document.getElementById('paint');const ctx = canvas.getContext('2d');ctx.setLineDash([]);const interpolate = ([x1,y1], [x2,y2], t) => [x1*(1-t) + x2*t, y1*(1-t) + y2*t];const offsetArt = ([x,y]) => [x - 360 + 70, y - 380 + 10];const f1 = offsetArt(lineart[Math.floor(frame)]);const f2 = offsetArt(lineart[Math.floor(frame + 1)]);const fi1 = interpolate(f1, f2, frame%1);const fi2 =  interpolate(f1, f2, (frame%1)+1/8);ctx.beginPath();ctx.moveTo(...fi1);ctx.lineTo(...fi2);pcursor.style.left = (fi2[0] + 61 - 9) + 'px';pcursor.style.top = (fi2[1] + 26 - 9) + 'px';ctx.lineWidth = 10;ctx.lineCap = 'round';ctx.strokeStyle = 'rgb(255,147,' + Math.floor(256-frame*256/lineart.length) + ')';ctx.stroke();frame+=1/8;if (frame < lineart.length - 1) {setTimeout(draw, 1000/60)}else{pcursor.style.display='none'}};draw()");
     sillyHide(3);
   }
-
+  
   if (oneTime(4, currentBeat, 116)) {
     setBackgroundTransColor("background-color 3s cubic-bezier(0,0.5,0,1)", "#174180");
     popups[3].document.body.innerHTML = plain("#174180");
     sillyHide(0);
   }
-
+  
   if (currentBeat >= 116 && currentBeat <= 120) {
     const currentText = [
       `<b style="font-family:sans-serif">Antonymph</b>`,
@@ -3136,15 +3379,15 @@ function part6(currentBeat) {
     size(4, ...thingSize, true);
     move(4, 1300 - thingSize[0]/2, 540 - thingSize[1]/2, true);
   }
-
+  
   if (oneTime(4, currentBeat, 120)) {
     setBackgroundTransColor("background-color 3s cubic-bezier(0,0.5,0,1)", "#DB9687");
     popups[0].document.body.innerHTML = plain("#DB9687") + `<div style="font-size:24px;font-family:monospace;color:white;font-weight:bold;position:absolute;z-index: 1; left: 50px; top: 577px;white-space: nowrap">Illustrations by Voreburger (@voreburger)<br>Referencing:<br>Caramelldansen by Caramell<br>Lick icon base by SketchMichi</div>`;
     popups[1].document.body.innerHTML = `<img style="width:100%;height:100%;background:#DB9687" src="https://derpicdn.net/img/view/2021/8/16/2679669.gif" />`;
-    popups[3].document.body.innerHTML = `<img style="width:100%;height:100%;image-rendering: pixelated;background:#DB9687" src="/antonymph/icon_0.png" />`;
-    popups[4].document.body.innerHTML = `<div onclick="window.opener.unlockAchievement('congratulations'); document.body.requestPointerLock(); document.getElementById('the_game').src = '/antonymph/the_game_click.png';" style="cursor: url(/antonymph/cursor_click.png), pointer;" draggable="false"><img src="/antonymph/the_game.png" id="the_game" style="image-rendering: pixelated;" draggable="false" /><img src="/antonymph/hourglass.png" id="hourglass" style="position: absolute; left: 190px; top: 6px;z-index: 1;image-rendering: pixelated;" draggable="false" /></div>`;
+    popups[3].document.body.innerHTML = `<img style="width:100%;height:100%;image-rendering: pixelated;background:#DB9687" src="/assets/icon_0.png" />`;
+    popups[4].document.body.innerHTML = `<div onclick="window.opener.unlockAchievement('congratulations'); document.body.requestPointerLock(); document.getElementById('the_game').src = '/assets/the_game_click.png';" style="cursor: url(/assets/cursor_click.png), pointer;" draggable="false"><img src="/assets/the_game.png" id="the_game" style="image-rendering: pixelated;" draggable="false" /><img src="/assets/hourglass.png" id="hourglass" style="position: absolute; left: 190px; top: 6px;z-index: 1;image-rendering: pixelated;" draggable="false" /></div>`;
   }
-
+  
   if (currentBeat >= 120 && currentBeat < 121) {
     const windowStage = Math.floor((currentBeat-120)/msToBeat(50))%4;
     [
@@ -3164,7 +3407,7 @@ function part6(currentBeat) {
       hourglass.style.transform = hourglassRot ? "rotate(0deg)" : "rotate(90deg)";
     }
   }
-
+  
   if (oneTime(4, currentBeat, 121)) {
     popups[4].document.exitPointerLock();
     setBackgroundTransColor("background-color 3s cubic-bezier(0,0.5,0,1)", "#93BED3");
@@ -3172,12 +3415,12 @@ function part6(currentBeat) {
     + `<div style="font-size:24px;font-family:monospace;color:white;font-weight:bold;position:absolute;z-index: 1; left: 46px; top: 342px;white-space: nowrap">Illustration by Nootaz (@nootaz)</div>`
     + `<div style="font-size:24px;font-family:monospace;color:white;font-weight:bold;position:absolute;z-index: 1; left: 542px; top: 482px;white-space: nowrap">Animation by MataSchmata<br>Referencing: ASDFMOVIE4<br>by TomSka</div>`
     + `<div style="font-size:24px;font-family:monospace;color:white;font-weight:bold;position:absolute;z-index: 1; left: 42px; top: 614px;white-space: nowrap">Assets from SIMPLY LOVE theme<br>Referencing: NotITG</div>`;
-    popups[1].document.body.innerHTML = `<img style="width:100%;height:100%;background:#93BED3" src="/antonymph/fluttgirshy.png" />`;
-    popups[3].document.body.innerHTML = `<img style="width:100%;height:100%;image-rendering: pixelated;background:#93BED3" src="/antonymph/image13_small.gif" />`;
-    // popups[4].document.body.innerHTML = `<img style="width:100%;height:100%;background:#93BED3" src="/antonymph/arrow.png" />`;
-    popups[4].document.body.innerHTML = `<img id="receptor" style="width:100%;height:100%" src="/antonymph/receptor.png" /><div style="width:100%;height:100%;background:#66160B;position:absolute;top:0;left:0;z-index: -1"></div>`;
+    popups[1].document.body.innerHTML = `<img style="width:100%;height:100%;background:#93BED3" src="/assets/fluttgirshy.png" />`;
+    popups[3].document.body.innerHTML = `<img style="width:100%;height:100%;image-rendering: pixelated;background:#93BED3" src="/assets/image13_small.gif" />`;
+    // popups[4].document.body.innerHTML = `<img style="width:100%;height:100%;background:#93BED3" src="/assets/arrow.png" />`;
+    popups[4].document.body.innerHTML = `<img id="receptor" style="width:100%;height:100%" src="/assets/receptor.png" /><div style="width:100%;height:100%;background:#66160B;position:absolute;top:0;left:0;z-index: -1"></div>`;
   }
-
+  
   if (currentBeat >= 121 && currentBeat < 122) {
     [
       [0, 834, 164, 894, 786],
@@ -3190,18 +3433,18 @@ function part6(currentBeat) {
     });
     popups[4].document.getElementById("receptor").style.filter = "brightness(" + Math.max(1,1.5-((currentBeat*4)%1)) + ")";
   }
-
+  
   if (oneTime(4, currentBeat, 122)) {
     setBackgroundTransColor("background-color 3s cubic-bezier(0,0.5,0,1)", "#172A3C");
     popups[0].document.body.innerHTML = plain("#172A3C")
     + `<div style="font-size:24px;font-family:monospace;color:white;font-weight:bold;position:absolute;z-index: 1; left: 6px; top: 348px;white-space: nowrap">Animation by Syrupyyy (@syrupyyyart)<br>Referencing: Nyan Cat<br>by Christopher Torres</div>`
     + `<div style="font-size:24px;font-family:monospace;color:white;font-weight:bold;position:absolute;z-index: 1; left: 549px; top: 470px;white-space: nowrap">Animation by AstroEden</div>`;
-    popups[1].document.body.innerHTML = `<video style="width:100%;height:100%" src="/antonymph/nyan.mp4" muted autoplay loop disableRemotePlayback />`;
+    popups[1].document.body.innerHTML = `<video style="width:100%;height:100%" src="/assets/nyan.mp4" muted autoplay loop disableRemotePlayback />`;
     popups[3].document.body.innerHTML = `<img style="width:100%;height:100%;image-rendering: pixelated;background:#172A3C" src="https://images.squarespace-cdn.com/content/v1/5ef2ebb48987dc538efdc24b/ed484ba5-f6bf-4990-bf3e-991dab7ec58e/ezgif-5-baa05c6ca5.gif?format=w1500" />`;
-    popups[4].document.body.innerHTML = `<style>@font-face{font-family: "sans undertale";src: url("/antonymph/DeterminationSansWeb.woff");} #sans{font-family: "sans undertale";font-size: 32px;position:absolute;color: white;top: 0px;left: 180px;width: 370px;}</style><div style="width:100%;height:100%;background:black;image-rendering: pixelated"><img src="/antonymph/textbox_shy.png" style="position:absolute;top:0;left:0;image-rendering: pixelated"><p id="sans">Determination font by<br>Haley Wakamatsu</p></div>`;
+    popups[4].document.body.innerHTML = `<style>@font-face{font-family: "sans undertale";src: url("/assets/DeterminationSansWeb.woff");} #sans{font-family: "sans undertale";font-size: 32px;position:absolute;color: white;top: 0px;left: 180px;width: 370px;}</style><div style="width:100%;height:100%;background:black;image-rendering: pixelated"><img src="/assets/textbox_shy.png" style="position:absolute;top:0;left:0;image-rendering: pixelated"><p id="sans">Determination font by<br>Haley Wakamatsu</p></div>`;
   }
-
-
+  
+  
   if (currentBeat >= 122 && currentBeat < 123) {
     [
       [0, 792, 186, 1032, 730],
@@ -3213,18 +3456,18 @@ function part6(currentBeat) {
       move(e[0], e[1] - OFF_X/2, e[2] - OFF_Y + 55);
     });
   }
-
+  
   if (oneTime(4, currentBeat, 123)) {
     setBackgroundTransColor("background-color 3s cubic-bezier(0,0.5,0,1)", "#FFFFFF");
     popups[0].document.body.innerHTML = plain("#FFFFFF")
     + `<div style="font-size:24px;font-family:monospace;color:black;font-weight:bold;position:absolute;z-index: 1; left: 385px; top: 55px;white-space: nowrap">Illustration by Retromochi (@retromochi)<br>Referencing: That one chibi hugging picture</div>`
     + `<div style="font-size:24px;font-family:monospace;color:black;font-weight:bold;position:absolute;z-index: 1; left: 72px; top: 415px;white-space: nowrap">Animation by Hazelnoods (@Hazelnoods)<br>Referencing: Badgers by Weebl's Stuff</div>`
     + `<div style="font-size:24px;font-family:monospace;color:black;font-weight:bold;position:absolute;z-index: 1; left: 130px; top: 711px;white-space: nowrap">Photos taken from<br>Dancing Cats - Go Kitty Go!</div>`;
-    popups[4].document.body.innerHTML = `<img style="width:100%;transform: translateY(-127px);image-rendering: pixelated;background:#FFFFFF" src="/antonymph/iphone.png" />`;
-    popups[3].document.body.innerHTML = `<video style="width:100%;height:100%" src="/antonymph/badger.mp4" muted autoplay loop disableRemotePlayback />`;
-    popups[1].document.body.innerHTML = `<img style="width:100%;height:100%;image-rendering: pixelated;background:#FFFFFF" src="/antonymph/kitten_1.png" />`;
+    popups[4].document.body.innerHTML = `<img style="width:100%;transform: translateY(-127px);image-rendering: pixelated;background:#FFFFFF" src="/assets/iphone.png" />`;
+    popups[3].document.body.innerHTML = `<video style="width:100%;height:100%" src="/assets/badger.mp4" muted autoplay loop disableRemotePlayback />`;
+    popups[1].document.body.innerHTML = `<img style="width:100%;height:100%;image-rendering: pixelated;background:#FFFFFF" src="/assets/kitten_1.png" />`;
   }
-
+  
   if (currentBeat >= 123 && currentBeat < 124) {
     [
       [0, 843, 169, 961, 813],
@@ -3236,11 +3479,11 @@ function part6(currentBeat) {
       move(e[0], e[1] - OFF_X/2, e[2] - OFF_Y + 55);
     });
   }
-
+  
   if (oneTime(4, currentBeat, 124)) {
     setBackgroundTransColor("background-color 3s cubic-bezier(0,0.5,0,1)", "#996875");
   }
-
+  
   if (currentBeat >= 124 && currentBeat < 132) {
     size(4, 700, 900);
     move(4, (1920-700)/2, (1080-900)/2); /* center(4); */
@@ -3309,27 +3552,27 @@ function mainLoop() {
     requestAnimationFrame(mainLoop);
     return;
   }
-
+  
   const frameStart = window.performance.now() || Date.now();
-
+  
   if (frameRateLimit && frameStart - lastFrame < 1000/(frameRateLimit == 1 ? 77 : 32)) {
     requestAnimationFrame(mainLoop);
     return
   }
   lastFrame = frameStart;
   const currentBeat = getCurrentBeat();
-
+  
   if (rateLimitState) rateLimitState = (rateLimitState + 1) % (2 + windowRateLimit);
-
+  
   if (DEBUG_MODE && document.getElementById("debug").style.display != "none") {
     state.innerText = `currentBeat: ${currentBeat.toFixed(2)}\ncurrentBeat x4: ${(currentBeat*4).toFixed(2)}\npopupState: ${JSON.stringify(popupState, null, 2)}`;
     //state.style.backgroundColor = ((currentBeat*4)%2) > 1 ? "#FFFFEE" : "#EEFFFF";
     mainAudio.style.webkitFilter = "sepia(1)" + (((currentBeat*4)%2) > 1 ? " hue-rotate(45deg)" : "");
   }
-
+  
   try {
     setLyrics(currentBeat);
-
+    
     // The parts here are somewhat arbitrary.
     // I originally had everything in the mainLoop
     // function, but eventually I chunked it up
@@ -3356,13 +3599,13 @@ function mainLoop() {
       mainAudio.pause();
     }
   }
-
+  
   const frameEnd = window.performance.now() || Date.now();
-
+  
   //console.log(frameStart - requestTime, frameEnd - requestTime)
   //setTimeout(() => {requestTime = window.performance.now();requestAnimationFrame(mainLoop)}, Math.max((frameStart + 1000/60) - frameEnd, 0));
   //setTimeout(mainLoop, Math.max((frameStart + 1000/60) - Date.now(), 4));
-
+  
   requestAnimationFrame(mainLoop);
 }
 
@@ -3402,31 +3645,31 @@ function onMIDIFailure(msg) {
 const midiNoteMap = {"G9": 127, "F#9": 126, "F9": 125, "E9": 124, "D#9": 123, "D9": 122, "C#9": 121, "C9": 120, "B8": 119, "A#8": 118, "A8": 117, "G#8": 116, "G8": 115, "F#8": 114, "F8": 113, "E8": 112, "D#8": 111, "D8": 110, "C#8": 109, "C8": 108, "B7": 107, "A#7": 106, "A7": 105, "G#7": 104, "G7": 103, "F#7": 102, "F7": 101, "E7": 100, "D#7": 99, "D7": 98, "C#7": 97, "C7": 96, "B6": 95, "A#6": 94, "A6": 93, "G#6": 92, "G6": 91, "F#6": 90, "F6": 89, "E6": 88, "D#6": 87, "D6": 86, "C#6": 85, "C6": 84, "B5": 83, "A#5": 82, "A5": 81, "G#5": 80, "G5": 79, "F#5": 78, "F5": 77, "E5": 76, "D#5": 75, "D5": 74, "C#5": 73, "C5": 72, "B4": 71, "A#4": 70, "A4 ": 69, "G#4": 68, "G4": 67, "F#4": 66, "F4": 65, "E4": 64, "D#4": 63, "D4": 62, "C#4": 61, "C4 ": 60, "B3": 59, "A#3": 58, "A3": 57, "G#3": 56, "G3": 55, "F#3": 54, "F3": 53, "E3": 52, "D#3": 51, "D3": 50, "C#3": 49, "C3": 48, "B2": 47, "A#2": 46, "A2": 45, "G#2": 44, "G2": 43, "F#2": 42, "F2": 41, "E2": 40, "D#2": 39, "D2": 38, "C#2": 37, "C2": 36, "B1": 35, "A#1": 34, "A1": 33, "G#1": 32, "G1": 31, "F#1": 30, "F1": 29, "E1": 28, "D#1": 27, "D1": 26, "C#1": 25, "C1": 24, "B0": 23, "A#0": 22, "A0": 21};
 
 const patterns = [
-    [
-      [2, 4, "F7", 100],
-      [4, 8, "A#6", 100],
-      [4, 8, "A#6", 100],
-      [6, 8, "A6", 100],
-      [8, 10, "F6", 100],
-      [10, 12, "A#5", 100],
-      [12, 15, "A5", 100],
-    ],
-    [
-      [0 + (5/24), 2 + (5/24), "A#4", 100],
-      [4, 6, "D5", 100],
-      [6 + (7/24), 8 + (7/24), "C5", 100],
-    ],
-    [
-      [0, 0.5, "A#6", 32],
-      [1, 1.5, "A#6", 32],
-      [2, 2.5, "A#6", 32],
-      [3, 3.5, "A#6", 32],
-      [4, 4.5, "B5", 32],
-      [5, 5.5, "B5", 32],
-      [6, 6.5, "B5", 32],
-      [7, 7.5, "B5", 32],
-    ],
-  ];
+  [
+    [2, 4, "F7", 100],
+    [4, 8, "A#6", 100],
+    [4, 8, "A#6", 100],
+    [6, 8, "A6", 100],
+    [8, 10, "F6", 100],
+    [10, 12, "A#5", 100],
+    [12, 15, "A5", 100],
+  ],
+  [
+    [0 + (5/24), 2 + (5/24), "A#4", 100],
+    [4, 6, "D5", 100],
+    [6 + (7/24), 8 + (7/24), "C5", 100],
+  ],
+  [
+    [0, 0.5, "A#6", 32],
+    [1, 1.5, "A#6", 32],
+    [2, 2.5, "A#6", 32],
+    [3, 3.5, "A#6", 32],
+    [4, 4.5, "B5", 32],
+    [5, 5.5, "B5", 32],
+    [6, 6.5, "B5", 32],
+    [7, 7.5, "B5", 32],
+  ],
+];
 
 function sendMidiData(midiData) {
   try {
