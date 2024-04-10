@@ -17,7 +17,7 @@
 |                                                               ~ Lyra Rebane |
 \*****************************************************************************/
 
-const DEBUG_MODE = document.location.hash == "#D";
+const DEBUG_MODE = document.location.hash === "#D";
 let debug_action_calls = 0;
 
 const mainAudio = document.getElementById("mainAudio");
@@ -69,22 +69,22 @@ const platformFixes = {
 function applyFixes() {
   const browserType = getBrowserType();
   const isMac = navigator.userAgent.includes("Mac");
-  if (browserType == "mobile")
+  if (browserType === "mobile")
     mobileMode();
-  platformFixes.focusFix = browserType == "firefox";
-  platformFixes.buggyCorners = browserType == "firefox" && isMac;
+  platformFixes.focusFix = browserType === "firefox";
+  platformFixes.buggyCorners = browserType === "firefox" && isMac;
   platformFixes.alternateArrows = isMac;
-  document.getElementById((browserType == "chrome" || browserType == "opera") ? "firefoxIsAwesome" : "chromiumIsLaggy").style.display = "none";
+  document.getElementById((browserType === "chrome" || browserType === "opera") ? "firefoxIsAwesome" : "chromiumIsLaggy").style.display = "none";
 }
 
 function getBrowserType() {
   if (/Android|iPhone|iPad|iPod|Windows Phone/.test(navigator.userAgent)) return "mobile";
-  if (navigator.userAgent.indexOf(" OPR/") != -1) return "opera"; // opera gx, still chrome but self-reports
-  if (navigator.userAgent.indexOf("Chrome") != -1) return "chrome";
-  if (navigator.userAgent.indexOf("Firefox") != -1) return "firefox";
+  if (navigator.userAgent.indexOf(" OPR/") !== -1) return "opera"; // opera gx, still chrome but self-reports
+  if (navigator.userAgent.indexOf("Chrome") !== -1) return "chrome";
+  if (navigator.userAgent.indexOf("Firefox") !== -1) return "firefox";
   if ("safari" in window) return "safari";
-  if (navigator.userAgent.indexOf("Safari") != -1) return "safari";
-  if (navigator.userAgent.indexOf("MSIE") != -1) return "ie";
+  if (navigator.userAgent.indexOf("Safari") !== -1) return "safari";
+  if (navigator.userAgent.indexOf("MSIE") !== -1) return "ie";
   return null;
 }
 
@@ -164,7 +164,7 @@ window.addEventListener("load", (event) => {
 function checkSettings() {
   windowRateLimit = parseInt(document.getElementById("limit-window").value);
   frameRateLimit = parseInt(document.getElementById("limit-fps").value);
-  const showWarning = (windowRateLimit && frameRateLimit) && ((windowRateLimit != 1) || (frameRateLimit != 1));
+  const showWarning = (windowRateLimit && frameRateLimit) && ((windowRateLimit !== 1) || (frameRateLimit !== 1));
   document.getElementById("limit-warn").style.display = showWarning ? "block" : "none";
 }
 
@@ -196,10 +196,10 @@ function setDisplaySizeString() {
   if (hasStarted) return;
   const {width, height, availWidth, availHeight} = screen;
   if (Math.min(...platformCorner) < 0 || platformCorner[0] > (width-availWidth) || platformCorner[1] > (height-availHeight) || Math.min(window.screenTop, window.screenLeft, height - window.screenTop, width - window.screenLeft) < -400)
-    displaySizeString.innerHTML = '<span color="red">Try moving this window to your main monitor and refresh.</span>';
-  else if (availWidth == 1920 && availHeight == 1080)
+    displaySizeString = <span color="red">Try moving this window to your main monitor and refresh.</span>;
+  else if (availWidth === 1920 && availHeight === 1080)
     displaySizeString.innerText = "Your current display is perfect!";
-  else if (availWidth == 1920 && availHeight >= 1050 && availHeight <= 1200)
+  else if (availWidth === 1920 && availHeight >= 1050 && availHeight <= 1200)
     displaySizeString.innerText = "Your current display is good!";
   else if (availWidth <= 2560 && availWidth >= 1650 && availHeight <= 1600 && availHeight >= 1000)
     displaySizeString.innerText = "Your current display will work!";
@@ -208,9 +208,30 @@ function setDisplaySizeString() {
   else if (availWidth >= 1650 && availHeight >= 1000)
     displaySizeString.innerText = "Your display is weird, but it'll work.";
   else // if (availWidth <= 1650 && availHeight <= 1050)
-    displaySizeString.innerHTML = `<span color="red">Your current display is too small, you'll probably have a bad experience.</span>${window?.devicePixelRatio > 1 ? '<br><span color="yellow">Your display is using scaling, check your settings for higher resolutions.</span>' : ''}${(width >= 1650 && height >= 1000) ? '<br><span color="yellow">Your display seems big enough, but your taskbar/dock/menubar is taking up too much space.</span>' : ''}`;
+    displaySizeString = <>
+      <span color="red">
+        Your current display is too small, you'll probably have a bad experience.
+      </span>
+      {window?.devicePixelRatio > 1 ? <>
+        <br/>
+        <span color="yellow">
+          Your display is using scaling, check your settings for higher resolutions.
+        </span>
+      </> : <></>}
+      {(width >= 1650 && height >= 1000) ? <>
+        <br/>
+        <span color="yellow">
+          Your display seems big enough, but your taskbar/dock/menubar is taking up too much space.
+        </span>
+      </> : <></>}
+    </>;
   if (window.innerWidth > (window.outerWidth + 16))
-    displaySizeString.innerHTML += '<br><span color="yellow">You seem to be using zoom, please use 100% (globally).</span>'
+    displaySizeString += <>
+      <br/>
+      <span color="yellow">
+        You seem to be using zoom, please use 100% (globally).
+      </span>
+    </>;
 }
 
 /************************************************/
@@ -251,7 +272,7 @@ function mobileMode() {
   bypassMobile.onclick = () => {
     mobileOverlay.style.display = "none";
     popupCheck();
-    if (popupOverlay.style.opacity != "0") {
+    if (popupOverlay.style.opacity !== "0") {
       popupOverlay.style.display = "block";
     } else {
       introText.style.display = "block";
@@ -264,7 +285,7 @@ function mobileMode() {
   const mobileNotification = document.getElementById("mobileNotification");
   mobileOverlay.onclick = (e) => {
     e.preventDefault();
-    if (e?.target?.id != "bypassMobile")
+    if (e?.target?.id !== "bypassMobile")
       document.body?.requestFullscreen?.();
     navigator?.vibrate?.(64);
     mobileNotification.style.left = "-4px";
@@ -273,11 +294,11 @@ function mobileMode() {
   }
   
   window.addEventListener("deviceorientation", (event) => {
-    if (mobileOverlay.style.display != "block" || hasStarted) return;
+    if (mobileOverlay.style.display !== "block" || hasStarted) return;
     //mobileNotification.innerText = [event.absolute, event.alpha, event.beta, event.gamma].map(e=>Math.floor(e)).join("\n");
     const angleX = -event.gamma;
     const angleY = -event.beta;
-    if (firstAlpha == 0 && event.alpha != 0)
+    if (firstAlpha === 0 && event.alpha !== 0)
       firstAlpha = event.alpha;
     //mobileOverlay.style.backgroundPositionX = `${50 - angleX/6}%`;
     mobileOverlay.style.backgroundPositionX = `calc(50% + ${angleX*1.5}px)`;
@@ -296,7 +317,7 @@ function mobileMode() {
   }
   mobileSlide.ontouchend = (e) => {
     e.preventDefault();
-    const targetTouch = Array.from(e.changedTouches).find(t => t.identifier == lastTouch.identifier);
+    const targetTouch = Array.from(e.changedTouches).find(t => t.identifier === lastTouch.identifier);
     if (targetTouch) {
       if (targetTouch.clientX - lastTouch.clientX > 200) {
         playNavSound(1, true);
@@ -311,12 +332,12 @@ function mobileMode() {
   };
   mobileSlide.ontouchmove = (e) => {
     e.preventDefault();
-    const targetTouch = Array.from(e.targetTouches).find(t => t.identifier == lastTouch.identifier);
+    const targetTouch = Array.from(e.targetTouches).find(t => t.identifier === lastTouch.identifier);
     if (!targetTouch) return;
     
     const posX = Math.min(Math.max((targetTouch.clientX - lastTouch.clientX),0),204);
     try {
-      if (posX != sliderClick && posX == 204) {
+      if (posX !== sliderClick && posX === 204) {
         navigator?.vibrate?.(200);
         sliderClick = posX;
       }
@@ -331,7 +352,7 @@ function mobileMode() {
   };
   
   const updateMobileInfo = () => {
-    if (mobileOverlay.style.display != "block" || hasStarted) return;
+    if (mobileOverlay.style.display !== "block" || hasStarted) return;
     
     const date = getDate();
     document.getElementById('ios_tme').innerText = date.getHours() + ':' + date.getMinutes().toString().padStart(2, '0');
@@ -383,7 +404,7 @@ function toggleScreenSizeDisplay() {
 }
 function renderScreenSizePreview() {
   if (!screenSizeDisplayActive || hasStarted) return;
-  if (windowPosLast[0] != window.screenTop || windowPosLast[1] != window.screenLeft) {
+  if (windowPosLast[0] !== window.screenTop || windowPosLast[1] !== window.screenLeft) {
     setDisplaySizeString();
     setTimeout(()=>setDisplaySizeString(), 2000);
     screenSizeHasChanged = true;
@@ -443,7 +464,7 @@ function renderScreenSizePreview() {
         if (tooSmall)
           ctx.fillText(`Minimum required (rose)`, textPos[0], textPos[1] + 24);
         ctx.textAlign = "left";
-        ctx.fillText(`: ${screenSize[0]}x${screenSize[1]}${window?.devicePixelRatio != 1 ? ` (${window?.devicePixelRatio}x scale)` : ""}`, textPos[0], textPos[1] - 12);
+        ctx.fillText(`: ${screenSize[0]}x${screenSize[1]}${window?.devicePixelRatio !== 1 ? ` (${window?.devicePixelRatio}x scale)` : ""}`, textPos[0], textPos[1] - 12);
         ctx.fillText(`: ${availSize[0]}x${availSize[1]}`, textPos[0], textPos[1]);
         ctx.fillText(`: ${desiredSize[0]}x${desiredSize[1]}`, textPos[0], textPos[1] + 12);
         if (tooSmall)
@@ -575,7 +596,7 @@ function achievementsScreen(trueEnding) {
   endText.style.display = "block";
   introText.style.opacity = "0";
   // iframe (cohost) workaround
-  endText.style.transform = (window.innerHeight == 640) ? "scale(0.5) translate(-240px, -240px)" : "";
+  endText.style.transform = (window.innerHeight === 640) ? "scale(0.5) translate(-240px, -240px)" : "";
   setTimeout(() => endText.style.opacity = "1", 32);
   setTimeout(() => introText.style.display = "none", 750);
 }
@@ -663,7 +684,7 @@ function noPopups() {
 let lastCheck = 0;
 function popupCheck() {
   if (Date.now() - lastCheck < 500) return;
-  if (document.getElementById("mobileOverlay").style.display == "block") return;
+  if (document.getElementById("mobileOverlay").style.display === "block") return;
   lastCheck = Date.now();
   state.innerText = "Checking for popup permission...";
   popupsCheckCounter = 0;
@@ -819,15 +840,15 @@ const achievements = {
 let epicAchievementProgress = 0;
 function getEpicAchievement() {
   const theme = "color:#0F0;background:black";
-  if (epicAchievementProgress == 0) {
+  if (epicAchievementProgress === 0) {
     console.log("%cHmm, that'd be too easy... Run it 20 times!", theme);
   } else if (epicAchievementProgress > 0 && epicAchievementProgress < 20) {
     console.log(`%c${20 - epicAchievementProgress} to go`, theme);
-  } else if (epicAchievementProgress == 20) {
+  } else if (epicAchievementProgress === 20) {
     console.log("%cHmm, no, still too easy. Try running it 9999 more times", theme);
   } else if (epicAchievementProgress > 20 && epicAchievementProgress < 0x1337) {
     console.log(`%c${(20 + 9999) - epicAchievementProgress} to go`, theme);
-  } else if (epicAchievementProgress == 0x1337) {
+  } else if (epicAchievementProgress === 0x1337) {
     console.log(`%cAlright, that's enough, you can have the achievement, enjoy!`, theme);
     unlockAchievement("hacker");
   }
@@ -858,20 +879,43 @@ function checkUnlocks() {
 
 function generateAchievementsScreen() {
   const achievementsEl = document.getElementById("achievements");
-  achievementsEl.innerHTML = "";
+  //achievementsEl.innerHTML = "";
   for (const [name, achievement] of Object.entries(achievements)) {
     const unlocked = !!localStorage.getItem(`antonymph.achievement.${name}`);
     const prerequisiteUnlocked = achievement?.prerequisite ? localStorage.getItem(`antonymph.achievement.${achievement?.prerequisite}`) : true;
-    const htmlCode = `
-    <div class="achievementBox ${unlocked ? "unlocked" : "locked"}">
-      <div style="width: 70px; height: 70px; border-radius: 70px;margin: 5px;float:left; background: center/cover url(${achievement.icon}) black; filter: saturate(${unlocked ? 1 : 0})"></div>
-      <div style="width: calc(100% - 90px); height: 70px; margin: 5px;float:left;display: flex; justify-content: center;align-content: center;flex-direction: column; overflow: hidden; text-overflow: ellipsis;white-space: nowrap;">
-        <span><b>${achievement.title}</b>${unlocked ? "" : " (locked)"}</span>
-        <i>${prerequisiteUnlocked ? achievement.description : achievement?.prerequisiteMessage}</i>
+    const htmlCode = <>
+      <div class={`achievementBox ${unlocked ? "unlocked" : "locked"}`}>
+        <div style={`
+          width: 70px;
+          height: 70px;
+          border-radius: 70px;
+          margin: 5px;
+          float: left;
+          background: center/cover url(${achievement.icon}) black;
+          filter: saturate(${unlocked ? 1 : 0});
+        `}></div>
+        <div style="
+          width: calc(100% - 90px);
+          height: 70px;
+          margin: 5px;
+          float: left;
+          display: flex;
+          justify-content: center;
+          align-content: center;
+          flex-direction: column;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        ">
+          <span>
+            <b>{achievement.title}</b>{unlocked || " (locked)"}
+          </span>
+          <i>${prerequisiteUnlocked ? achievement.description : achievement?.prerequisiteMessage}</i>
+        </div>
       </div>
-    </div>`;
+    </>;
     // Unsanitized yum!
-    achievementsEl.innerHTML += htmlCode;
+    achievementsEl = htmlCode;
   }
   document.querySelectorAll(".achievementBox.unlocked").forEach(e => {
     e.onmouseenter = () => playNavSound(5, true);
@@ -903,8 +947,88 @@ function showAchievement({title, description, icon}) {
 
 const loadedAssets = [];
 function preloadAssets() {
-  const assets = ["DeterminationSansWeb.woff","achievement.mp3","achievement_antonymph.png","achievement_artist.png","achievement_congratulations.png","achievement_developer.png","achievement_draw.png","achievement_gehorse.png","achievement_hacker.png","achievement_inspector.png","achievement_lyrabon.png","achievement_musician.png","achievement_nightcore.png","achievement_notitg.png","achievement_sam.png","aim.png","arrow.png","badger.mp4","chat-d.png","chat-f.png","chipmunk_laugh.mp3","click.mp3","click.wav","cursor.png","cursor_click.png","door-left.jpg","door-right.jpg","ds_bottom.png","ds_top.png","event_mode.png","excellent.png","fluttgirshy.png","frog_1.png","frog_2.png","frog_3.png","gangnam-style-gif.mp4","hit.wav","hoId.png","hold.png","hourglass.png","icons.png","image13_small.gif","iphone.png","iphone_slide.png","keychain.png","kitten_1.png","kitten_2a.png","kitten_2b.png","kitten_2c.png","kitten_3a.png","kitten_3b.png","kitten_4a.png","kitten_4b.png","kitten_car.png","navigate.mp3","nyan.mp4","paint.png","paint_cursor.png","paint_font.png","paint_font_mac.png","paint_txt.png","perfect.png","popup_blocked.mp3","receptor.png","sad.png","skype.png","steam.png","tada.mp3","textbox_shy.png","textbox_tacky.png","the_game.png","the_game_click.png","vylet_intro.mp3","wmm.png","wmm_bar.png","wmm_card.png","wmm_head.png","wmm_pause.png","yay.png"];
-  assets.forEach((assetName)=>fetch("/assets/" + assetName).then(r=>r.blob()).then((blob)=>{
+  const assets = [
+    "DeterminationSansWeb.woff",
+    "achievement.mp3",
+    "achievement_antonymph.png",
+    "achievement_artist.png",
+    "achievement_congratulations.png",
+    "achievement_developer.png",
+    "achievement_draw.png",
+    "achievement_gehorse.png",
+    "achievement_hacker.png",
+    "achievement_inspector.png",
+    "achievement_lyrabon.png",
+    "achievement_musician.png",
+    "achievement_nightcore.png",
+    "achievement_notitg.png",
+    "achievement_sam.png",
+    "aim.png",
+    "arrow.png",
+    "badger.mp4",
+    "chat-d.png",
+    "chat-f.png",
+    "chipmunk_laugh.mp3",
+    "click.mp3",
+    "click.wav",
+    "cursor.png",
+    "cursor_click.png",
+    "door-left.jpg",
+    "door-right.jpg",
+    "ds_bottom.png",
+    "ds_top.png",
+    "event_mode.png",
+    "excellent.png",
+    "fluttgirshy.png",
+    "frog_1.png",
+    "frog_2.png",
+    "frog_3.png",
+    "gangnam-style-gif.mp4",
+    "hit.wav",
+    "hoId.png",
+    "hold.png",
+    "hourglass.png",
+    "icons.png",
+    "image13_small.gif",
+    "iphone.png",
+    "iphone_slide.png",
+    "keychain.png",
+    "kitten_1.png",
+    "kitten_2a.png",
+    "kitten_2b.png",
+    "kitten_2c.png",
+    "kitten_3a.png",
+    "kitten_3b.png",
+    "kitten_4a.png",
+    "kitten_4b.png",
+    "kitten_car.png",
+    "navigate.mp3",
+    "nyan.mp4",
+    "paint.png",
+    "paint_cursor.png",
+    "paint_font.png",
+    "paint_font_mac.png",
+    "paint_txt.png",
+    "perfect.png",
+    "popup_blocked.mp3",
+    "receptor.png",
+    "sad.png",
+    "skype.png",
+    "steam.png",
+    "tada.mp3",
+    "textbox_shy.png",
+    "textbox_tacky.png",
+    "the_game.png",
+    "the_game_click.png",
+    "vylet_intro.mp3",
+    "wmm.png",
+    "wmm_bar.png",
+    "wmm_card.png",
+    "wmm_head.png",
+    "wmm_pause.png",
+    "yay.png"
+  ];
+  assets.forEach((assetName)=>fetch(`/assets/${assetName}`).then(r=>r.blob()).then((blob)=>{
     const reader = new FileReader();
     reader.onload = (e) => loadedAssets[assetName] = e.target.result;
     reader.readAsDataURL(blob);
@@ -1302,10 +1426,10 @@ function selectSkip() {
 let lastLyrics = "";
 function setLyrics(currentBeat) {
   const currentLyrics = timedLyrics.filter(l => l[0] <= currentBeat).at(-1);
-  if (currentLyrics[1] == null) {
+  if (currentLyrics[1] === null) {
     return;
   }
-  if (currentLyrics[1] != lastLyrics) {
+  if (currentLyrics[1] !== lastLyrics) {
     if (textToSpeech) {
     try {
       window.speechSynthesis.cancel();
@@ -1327,18 +1451,75 @@ function setLyrics(currentBeat) {
 }
 
 function tumblrChat(title, messages) {
-  const messagesHtml = messages.map(msg => msg[0] == 0 ? `<img src="/assets/chat-d.png" style="margin: 20px 13px 0 20px" /><span style="background:white; font-size: 15px; border-radius: 10px;padding: 8px; margin:5px 0; display: inline-block; width:50%">${msg[1]}</span><br>` : `<span style="background:white; font-size: 15px; border-radius: 10px;padding: 8px; margin-left: 90px; display: inline-block; width:50%">${msg[1]}</span><img src="/assets/chat-f.png" style="margin: 20px 13px 0 20px" /><br>`).join("\n");
-  return `<style>.tumblrBg{transition:filter 1s;}</style><div class="tumblrBg" style="background: #D1D4F4; height: 100%; font-family: 'Comic Sans MS', cursive;filter: brightness(1);">
-<div style="background: #6A708F; width: 100%; height: 25px; color: white; font-size: 16px; padding: 15px">${title}</div>
-${messagesHtml}
-<div style="background: #FAF6FC; width: 100%; height: 25px; color: #B0B2C3; font-size: 16px; padding: 15px; position: absolute; bottom: 0">Say Something</div>
-</div>`;
+  const messagesHtml = messages.map(msg => msg[0] === 0 ? <>
+    <img src="/assets/chat-d.png" style="margin: 20px 13px 0 20px" />
+    <span style="
+      background: white;
+      font-size: 15px;
+      border-radius: 10px;
+      padding: 8px;
+      margin: 5px 0;
+      display: inline-block;
+      width: 50%;
+    ">{msg[1].join("\n")}</span><br/>
+  </> : <>
+    <span style="
+      background: white;
+      font-size: 15px;
+      border-radius: 10px;
+      padding: 8px;
+      margin-left: 90px;
+      display: inline-block;
+      width: 50%;
+    ">{msg[1].join("\n")}</span>
+    <img src="/assets/chat-f.png" style="margin: 20px 13px 0 20px;" /><br/>
+  </>);
+  return <>
+    <style>{`.tumblrBg{transition:filter 1s;}`}</style>
+    <div class="tumblrBg" style="
+      background: #D1D4F4;
+      height: 100%;
+      font-family: 'Comic Sans MS', cursive;
+      filter: brightness(1);
+    ">
+      <div style="
+        background: #6A708F;
+        width: 100%;
+        height: 25px;
+        color: white;
+        font-size: 16px;
+        padding: 15px;
+      ">{title}</div>
+      {messagesHtml}
+      <div style="
+        background: #FAF6FC;
+        width: 100%;
+        height: 25px;
+        color: #B0B2C3;
+        font-size: 16px;
+        padding: 15px;
+        position: absolute;
+        bottom: 0;
+      ">Say Something</div>
+    </div>
+  </>;
 }
 
 function notepad(text) {
   return <>
-    <div style="background: #FFF; color: black; height: 100%; font-size: 12px; font-family: 'Arial', sans-serif;">
-      <div style="width: 100%; height: 16px;  padding: 4px 6px 0; border-bottom: solid 2px #F0F0F0;">
+    <div style="
+      background: #FFF;
+      color: black;
+      height: 100%;
+      font-size: 12px;
+      font-family: 'Arial', sans-serif;
+    ">
+      <div style="
+        width: 100%;
+        height: 16px;
+        padding: 4px 6px 0;
+        border-bottom: solid 2px #F0F0F0;
+      ">
         <u>F</u>ile&emsp;<u>E</u>dit&emsp;F<u>o</u>rmat&emsp;<u>V</u>iew&emsp;<u>H</u>elp
       </div>
       <div style="padding: 4px;">
@@ -1368,7 +1549,7 @@ function part1(currentBeat) {
       size(i, 200, 200);
       move(i, 200, i*200 + 140 + 100);
       try {
-        popups[i].document.body.innerHTML = plain("#E8E9C5");
+        popups[i].document.body = plain("#E8E9C5");
       } catch {}
     }
     // mainAudio.currentTime = 40;
@@ -1481,7 +1662,7 @@ function part1(currentBeat) {
   
   if (oneTime(3, currentBeat, 8)) {
     restorePopup(3);
-    popups[4].document.body.innerHTML = plain("#174180");
+    popups[4].document.body = plain("#174180");
     sillyHide(1);
     sillyHide(2);
     sillyHide(4);
@@ -1510,7 +1691,7 @@ function part1(currentBeat) {
   
   if (oneTime(3, currentBeat, 16)) {
     setBackgroundTransColor("background-color 0s", "#174180");
-    popups[4].document.body.innerHTML = plain("#174180");
+    popups[4].document.body = plain("#174180");
   }
   
   if (currentBeat >= 16 && currentBeat < 24) {
@@ -1533,7 +1714,7 @@ function part1(currentBeat) {
         ...(currentBeat >= 21 ? [[1, 'gotta go']] : []),
         //(currentBeat >= 21.25 ? [0, 'You left the chat'] : [])
       ];
-      popups[1].document.body.innerHTML = tumblrChat("xxflutt-gir-shy + itsdashyy327", messages);
+      popups[1].document.body = tumblrChat("xxflutt-gir-shy + itsdashyy327", messages);
     } catch {}
     /*
     if (currentBeat > 22) {
@@ -1579,9 +1760,9 @@ function part2(currentBeat) {
     restorePopup(0, true);
     sillyHide(1);
     setBackgroundTransColor("background-color 0s", "#637");
-    popups[1].document.body.innerHTML = plain("#637");
-    popups[3].document.body.innerHTML = plain("#637");
-    popups[4].document.body.innerHTML = plain("#637");
+    popups[1].document.body = plain("#637");
+    popups[3].document.body = plain("#637");
+    popups[4].document.body = plain("#637");
   }
   
   if (currentBeat >= 24 && currentBeat < 31.5) {
@@ -1721,9 +1902,9 @@ function part2(currentBeat) {
       </div>
     </>;
     const toolbarText = (content) => <span style="display: inline-block; transform: translateY(-7px); margin: 2px">{content}</span>;
-    const toolbarIcon = (index, mr) => `<div class="icon" style="background-position-x: -${index*22}px; margin-right: ${mr ?? 0}px"></div>`;
+    const toolbarIcon = (index, mr) => <div class="icon" style={`background-position-x: -${index*22}px; margin-right: ${mr??0}px`}></div>;
     const toolbarButton = (iconIndex, content) => `${toolbarIcon(iconIndex, -2)}${toolbarText(content)}`
-      popups[2].document.body.innerHTML = <style>{`
+      popups[2].document.body = <style>{`
         .component {
           background: #D4D0C8;
           border-top: 1px #FFF solid;
@@ -1765,14 +1946,27 @@ function part2(currentBeat) {
       + (currentBeat >= 24 + 6/16 ? toolbarButton(12, "The") : '')
       + (currentBeat >= 24 + 8/16 ? toolbarButton(13, currentBeat >= 24 + 12/16 ? "Antonymph" : "Anto") : '')
     ) : ''}
-    {currentBeat >= 25 ? toolbarContainer(
-      `<span style="display: inline-block;transform: translateY(-7px);font-family: &quot;Arial Black&quot;, sans-serif;font-size: 11px;font-weight: bold;padding: 4px;"><font style="color: #929598;">of</font><font style="font-style: italic;color: #0c57ba;padding-right: 1px;">${currentBeat >= 25 + 2/16 ? 'the' : ''}</font><font style="color: #5b5a5b;">${currentBeat >= 25 + 4/16 ? 'in' : ''}${currentBeat >= 25 + 6/16 ? 'ter' : ''}${currentBeat >= 25 + 8/16 ? 'net' : ''}</font></span>`
-      + (currentBeat >= 25 + 12/16 ? toolbarIcon(7) + toolbarTextbox(128) : '')
-      + (currentBeat >= 25 + 13/16 ? toolbarButton(8, "Still") : '')
-      + (currentBeat >= 26 ? toolbarButton(0, "Cleaning") : '')
-      + (currentBeat >= 26 + 4/16 ? toolbarButton(1, "Up") : '')
-      + (currentBeat >= 26 + 6/16 ? toolbarButton(2, "The") : '')
-    ) : ''}
+    {currentBeat >= 25 ? toolbarContainer(<>
+      <span style="
+        display: inline-block;
+        transform: translateY(-7px);
+        font-family: 'Arial Black', sans-serif;
+        font-size: 11px;
+        font-weight: bold;
+        padding: 4px;
+      ">
+        <span style="color: #929598;">of</span>
+        <span style="font-style: italic; color: #0c57ba; padding-right: 1px;">{currentBeat >= 25 + 2/16 ? 'the' : ''}</span>
+        <span style="color: #5b5a5b;">
+          {currentBeat >= 25 + 4/16 ? 'in' : ''}{currentBeat >= 25 + 6/16 ? 'ter' : ''}{currentBeat >= 25 + 8/16 ? 'net' : ''}
+        </span>
+      </span>
+      {currentBeat >= 25 + 12/16 ? toolbarIcon(7) + toolbarTextbox(128) : <></>}
+      {currentBeat >= 25 + 13/16 ? toolbarButton(8, "Still") : <></>}
+      {currentBeat >= 26 ? toolbarButton(0, "Cleaning") : <></>}
+      {currentBeat >= 26 + 4/16 ? toolbarButton(1, "Up") : <></>}
+      {currentBeat >= 26 + 6/16 ? toolbarButton(2, "The") : <></>}
+    </>) : <></>}
     {currentBeat >= 26 + 8/16 ? toolbarContainer(<>
       <span style="
         display: inline-block;
@@ -1794,12 +1988,12 @@ function part2(currentBeat) {
       </span>
       {currentBeat >= 27 ? toolbarSeparator() : <></>}
       {currentBeat >= 27 + 2/16 ? toolbarButton(11, "That") + toolbarTextbox(333) : <></>}</>
-    ) : ''}
+    ) : <></>}
     {currentBeat >= 27 + 4/16 ? toolbarContainer(
       toolbarIcon(3) + toolbarIcon(4) + toolbarTextbox(165)
       + (currentBeat >= 27 + 6/16 ? toolbarSeparator() + toolbarButton(6, "Had") + toolbarIcon(7) : '')
       + (currentBeat >= 27 + 8/16 ? toolbarButton(5, "Left") + toolbarIcon(7) : '')
-    ) : ''}
+    ) : <></>}
     {currentBeat >= 28 ? <>
       <img src="/assets/image13_small.gif" style="
         image-rendering: pixelated;
@@ -1864,7 +2058,7 @@ function part2(currentBeat) {
     size(1, 1280 + OFF_X, 720 + OFF_Y);
     move(1, (1920 - 1280 - OFF_X)/2, (1080 - 720 - OFF_Y)/2);
     navigatePopup(1, "https://" + "YAY-".repeat(98) + "yay");
-    popups[2].document.body.innerHTML = `<img style="width:100%;height:100%;background:#F3E488" src="/assets/yay.png" />`;
+    popups[2].document.body = <img style="width:100%; height:100%; background:#F3E488;" src="/assets/yay.png" />;
     size(2, 500 + OFF_X, 370 + OFF_Y);
     move(2, (1920 - 500 - OFF_X)/2 - 20, (1080 - 370 - OFF_Y)/2);
   }
@@ -1879,7 +2073,7 @@ function part2(currentBeat) {
     sillyHide(2);
     sillyHide(3);
     sillyHide(4);
-    popups[0].document.body.innerHTML = <>
+    popups[0].document.body = <>
       <svg viewBox="0 0 512 512" id="gay" style="
         transform: scale(4) rotate(0deg);
         height: 100%;
@@ -1919,14 +2113,22 @@ function part2(currentBeat) {
       src="https://derpicdn.net/img/view/2021/8/16/2679669.gif"
       />
     </>;
-    popups[2].document.body.innerHTML = <div style="width: 100%; height: 100%; background: #fe7426; font-family: Impact; font-size: 140px; padding: 0 18px; color: white; -webkit-text-stroke-width: 4px; -webkit-text-stroke-color: black; line-height: 157px; letter-spacing: -5px; white-space: nowrap"><span id="text">Don't care you think it's cringe</span></div>;
-    popups[3].document.body.innerHTML = <div style="width: 100%; height: 100%; background: #feff00; font-family: Impact; font-size: 148px; padding: 0 16px; color: white; -webkit-text-stroke-width: 4px; -webkit-text-stroke-color: black; line-height: 160px; white-space: nowrap"><span id="text">BECAUSE ITS NOT YOUR LIFE</span></div>;
+    popups[2].document.body = <div style="width: 100%; height: 100%; background: #fe7426; font-family: Impact; font-size: 140px; padding: 0 18px; color: white; -webkit-text-stroke-width: 4px; -webkit-text-stroke-color: black; line-height: 157px; letter-spacing: -5px; white-space: nowrap"><span id="text">Don't care you think it's cringe</span></div>;
+    popups[3].document.body = <div style="width: 100%; height: 100%; background: #feff00; font-family: Impact; font-size: 148px; padding: 0 16px; color: white; -webkit-text-stroke-width: 4px; -webkit-text-stroke-color: black; line-height: 160px; white-space: nowrap"><span id="text">BECAUSE ITS NOT YOUR LIFE</span></div>;
     // lolface vector recreation, feel free to use :)
     // might move the vector to a separate file
-    popups[4].document.body.innerHTML = <>
-      <div style="position: absolute; z-index: 1; top: 0; left: 0; width: 100%; height: 100%; background: #fe0000;" id="coverup"></div>
+    popups[4].document.body = <>
+      <div id="coverup" style="
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #fe0000;
+      "></div>
       <svg id="lol" style="height: 100%; width: 100%; background: #c6efa1;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" xml:space="preserve">
-        <style type="text/css">{`
+        <style>{`
           .st0 {
             fill: #ffdd4d;
             stroke: #000000;
@@ -1968,7 +2170,7 @@ function part2(currentBeat) {
   }
   
   if (oneTime(1, currentBeat, 34)) {
-    popups[1].document.body.innerHTML = <img style="width:100%; height:100%;" src="/assets/fluttgirshy.png" />;
+    popups[1].document.body = <img style="width:100%; height:100%;" src="/assets/fluttgirshy.png" />;
   }
   
   if (oneTime(0, currentBeat, 36)) {
@@ -1979,7 +2181,7 @@ function part2(currentBeat) {
   if (currentBeat >= 32 && currentBeat < 40) {
     const currentColor = ["#FEFF00", "#0A7324", "#005CFF", "#730073", "#FE0000", "#FE7426"][Math.floor((currentBeat*4-2)%6)];
     const coverup = popups[4]?.document?.getElementById("coverup");
-    if (background.style.background != currentColor && currentBeat < 39.5) { // 39.625
+    if (background.style.background !== currentColor && currentBeat < 39.5) { // 39.625
       setBackgroundTransColor("background-color 0s", currentColor);
       if (coverup) coverup.style.background = currentColor;
     }
@@ -2047,7 +2249,7 @@ function part2(currentBeat) {
     restorePopup(1, true);
     restorePopup(2, true);
     setBackgroundTransColor("background-color 0s", "#1A1721");
-    popups[4].document.body.innerHTML = plain("#1A1721");
+    popups[4].document.body = plain("#1A1721");
   }
   
   if (currentBeat >= 40 && currentBeat < 41) {
@@ -2064,7 +2266,7 @@ function part2(currentBeat) {
 function part3(currentBeat) {
   if (oneTime(0, currentBeat, 41)) {
     setBackgroundTransColor("background-color 0s", "#FFA3CF");
-    popups[4].document.body.innerHTML = plain("#FFA3CF");
+    popups[4].document.body = plain("#FFA3CF");
     try {
       // This is just so ALSA default midi passthrough port on Linux won't get detected, it's okay to cheat with virtual midi :)
       midi?.outputs?.forEach(e=>{if (!e.name.includes("Midi Through Port"))unlockAchievement("musician");})
@@ -2076,14 +2278,14 @@ function part3(currentBeat) {
     move(2, 1250, 460 + Math.floor((currentBeat*4)%2)*20);
     try {
       const messages = [
-        ...(currentBeat >= 41 ? [[0, 'do you like waffles? :3']] : []),
-        ...(currentBeat >= 42.25 && currentBeat < 42.5 ? [[1, 'hell']] : []),
-        ...(currentBeat >= 42.5 ? [[1, 'hell yeah! &gt;w&lt;']] : []),
-        ...(currentBeat >= 42.75 ? [[0, 'look what i found :o']] : []),
-        ...(currentBeat >= 43 ? [[0, '<a href="https://www.youtube.com/watch?v=ah7hxQIuwD8">youtube.com/watch?<br>v=ah7hxQIuwD8</a>']] : []),
+        ...(currentBeat >= 41 ? [[0, <>do you like waffles? :3</>]] : []),
+        ...(currentBeat >= 42.25 && currentBeat < 42.5 ? [[1, <>hell</>]] : []),
+        ...(currentBeat >= 42.5 ? [[1, <>hell yeah! &gt;w&lt;</>]] : []),
+        ...(currentBeat >= 42.75 ? [[0, <>look what i found :o</>]] : []),
+        ...(currentBeat >= 43 ? [[0, <a href="https://www.youtube.com/watch?v=ah7hxQIuwD8">youtube.com/watch?<br/>v=ah7hxQIuwD8</a>]] : []),
         ]
       if (currentBeat < 44)
-        popups[2].document.body.innerHTML = tumblrChat("xxflutt-gir-shy + itsdashyy327", messages);
+        popups[2].document.body = tumblrChat("xxflutt-gir-shy + itsdashyy327", messages);
     } catch{}
     if (currentBeat > 43) {
       size(0, 1024-83, 768);
@@ -2093,7 +2295,7 @@ function part3(currentBeat) {
   }
   
   if (oneTime(0, currentBeat, 43)) {
-    popups[4].document.body.innerHTML = plain("#D6A8FF");
+    popups[4].document.body = plain("#D6A8FF");
     setBackgroundTransColor("background-color 0s", "#D6A8FF");
   }
   
@@ -2106,53 +2308,75 @@ function part3(currentBeat) {
   }
   
   if (oneTime(2, currentBeat, 45)) {
-    popups[2].document.body.innerHTML = `<style>
-#ios {
-  background: black;
-  width: 100%;
-  height: 100%;
-  transition: filter 1s;
-  filter: saturate(0) brightness(1.2);
-}
-.ios_abs {
-  position: absolute; left: 0; top: 0;
-}
-.ios_txt {
-  width: 100%;
-  color: #EEE;
-  font-family: sans-serif;
-  text-align: center;
-  z-index: 2;
-}
-#ios_sld {
-  transition: left 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-#ios_unl {
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  color: #555;
-  font-family: sans-serif;
-  font-size: 24px;
-  opacity: 1;
-}
-#ios_prc {
-  text-align: right;
-  font-size: 11px;
-  font-weight: 600;
-  color: #C7C7C7;
-  top: -7px;
-  left: -26px;
-}
-</style>
-
-<div id="ios">
-<img class="ios_abs" src="/assets/iphone.png" onload="setTimeout(()=>{document.getElementById('ios').style.filter = 'saturate(1) brightness(1)'}, 16);const ios_tme = document.getElementById('ios_tme');const ios_dte = document.getElementById('ios_dte');const date = window.opener.getDate();ios_tme.innerText = date.getHours() + ':' + date.getMinutes().toString().padStart(2, '0');ios_dte.innerText = date.toLocaleDateString(undefined /*'en-US'*/, {weekday: 'long',month: 'long',day: 'numeric',});if ('getBattery' in navigator)navigator.getBattery().then((battery) => {document.querySelector('#ios_prc > p').innerText = Math.floor(battery.level*100) + '%';document.querySelector('#ios_ico').style.width = Math.floor(15*battery.level) + 'px'});" style="z-index: 1;" />
-<div class="ios_abs ios_txt" style="top: -50px; font-size: 66px;"><p id="ios_tme"></p></div>
-<div class="ios_abs ios_txt" style="top: 68px; font-size: 18px;"><p id="ios_dte"></p></div>
-<p class="ios_abs" id="ios_unl" style="left: 136px; top: 400px; z-index: 2;">slide to unlock</p>
-<img class="ios_abs" id="ios_sld" src="/assets/iphone_slide.png" style="left: 46px /*250px*/; top: 416px; z-index: 3;" />
-<div class="ios_abs" id="ios_ico" style="left: 342px;top: 7px;background: #C7C7C7;width: 15px;height: 6px;z-index: 3;"></div>
-<div class="ios_abs ios_txt" id="ios_prc"><p>100%</p></div>
-</div>`;
+    const onLoad = () => {
+      setTimeout(()=>{
+        document.getElementById('ios').style.filter = 'saturate(1) brightness(1)'
+      }, 16);
+      const ios_tme = document.getElementById('ios_tme');
+      const ios_dte = document.getElementById('ios_dte');
+      const date = window.opener.getDate();
+      ios_tme.innerText = date.getHours() + ':' + date.getMinutes().toString().padStart(2, '0');
+      ios_dte.innerText = date.toLocaleDateString(
+        undefined /*'en-US'*/, {
+          weekday: 'long',
+          month: 'long',
+          day: 'numeric'
+        }
+      );
+      if ('getBattery' in navigator)
+        navigator.getBattery().then((battery) => {
+          document.querySelector('#ios_prc > p').innerText = Math.floor(battery.level*100) + '%';
+          document.querySelector('#ios_ico').style.width = Math.floor(15*battery.level) + 'px';
+        });
+    }
+    popups[2].document.body = <>
+    <style>{`
+      #ios {
+        background: black;
+        width: 100%;
+        height: 100%;
+        transition: filter 1s;
+        filter: saturate(0) brightness(1.2);
+      }
+      .ios_abs {
+        position: absolute; left: 0; top: 0;
+      }
+      .ios_txt {
+        width: 100%;
+        color: #EEE;
+        font-family: sans-serif;
+        text-align: center;
+        z-index: 2;
+      }
+      #ios_sld {
+        transition: left 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      #ios_unl {
+        transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        color: #555;
+        font-family: sans-serif;
+        font-size: 24px;
+        opacity: 1;
+      }
+      #ios_prc {
+        text-align: right;
+        font-size: 11px;
+        font-weight: 600;
+        color: #C7C7C7;
+        top: -7px;
+        left: -26px;
+      }
+    `}</style>
+    <div id="ios">
+      <img class="ios_abs" src="/assets/iphone.png" style="z-index: 1;" onload="onLoad()" />
+      <div class="ios_abs ios_txt" style="top:-50px; font-size:66px;"><p id="ios_tme"></p></div>
+      <div class="ios_abs ios_txt" style="top:68px; font-size:18px;"><p id="ios_dte"></p></div>
+      <p class="ios_abs" id="ios_unl" style="left:136px; top:400px; z-index:2;">slide to unlock</p>
+      <img class="ios_abs" id="ios_sld" src="/assets/iphone_slide.png" style="left:46px /*250px*/; top:416px; z-index:3;" />
+      <div class="ios_abs" id="ios_ico" style="left:342px; top:7px; background:#C7C7C7; width:15px; height:6px; z-index:3;"></div>
+      <div class="ios_abs ios_txt" id="ios_prc"><p>100%</p></div>
+    </div>
+  </>;
   }
   
   if (oneTime(2, currentBeat, 45.75)) {
@@ -2162,9 +2386,31 @@ function part3(currentBeat) {
   }
   
   if (oneTime(2, currentBeat, 46.25)) {
-    popups[2].document.body.innerHTML = `<style>#ds{transition:filter 0.5s;filter:saturate(0) brightness(0);image-rendering: pixelated;}</style><img src="/assets/ds_top.png" id="ds" onload="setTimeout(()=>{document.getElementById('ds').style.filter =   'saturate(1) brightness(1)'}, 16);" />`;
-    popups[1].document.body.innerHTML = `<style>#ds{transition:filter 0.5s;filter:saturate(0) brightness(0);image-rendering: pixelated;}</style><img src="/assets/ds_bottom.png" id="ds" onload="setTimeout(()=>{document.getElementById('ds').style.filter  = 'saturate(1) brightness(1)'}, 16);" />`;
-    popups[3].document.body.innerHTML = `<img style="width:100%;height:100%" src="/assets/keychain.png" />`;
+    const onLoad = () => {
+      setTimeout(() => {
+        document.getElementById('ds').style.filter = 'saturate(1) brightness(1)'
+      }, 16);
+    }
+    popups[2].document.body = <>
+      <style>{`
+      #ds {
+        transition: filter 0.5s;
+        filter: saturate(0) brightness(0);
+        image-rendering: pixelated;
+      }`}</style>
+      <img src="/assets/ds_top.png" id="ds" onload="onLoad" />
+    </>;
+    popups[1].document.body = <>
+      <style>{`
+        #ds {
+          transition: filter 0.5s;
+          filter:saturate(0) brightness(0);
+          image-rendering: pixelated;
+        }`
+      }</style>
+      <img src="/assets/ds_bottom.png" id="ds" onload="onLoad()" />
+    </>;
+    popups[3].document.body = <img style="width:100%; height:100%;" src="/assets/keychain.png" />;
   }
   
   if (currentBeat >= 46 && currentBeat < 48) {
@@ -2205,7 +2451,13 @@ function part3(currentBeat) {
     move(4, 1920/2 - 1000/2, 1080/2 - 200/2 + ((offset-3) * 100));
     try {
       popups[4].document.body.style.backgroundColor = "#1A1721";
-      popups[4].document.body.innerHTML = `<h1 style="font-family: arial, sans-serif;font-size: 90px;color: ${lifeColors[offset]}">sing a song about life</h1>`;
+      popups[4].document.body = <h1 style={`
+        font-family: Arial, sans-serif;
+        font-size: 90px;
+        color: ${lifeColors[offset]};`
+      }>
+        sing a song about life
+      </h1>;
     } catch {}
   }
   
@@ -2215,8 +2467,8 @@ function part3(currentBeat) {
   
   if (oneTime(0, currentBeat, 49)) {
     setBackgroundTransColor("background-color 0s", "#FFFFF0");
-    popups[2].document.body.innerHTML = plain("#e43e2f");
-    popups[4].document.body.innerHTML = plain("#FFFFF0");
+    popups[2].document.body = plain("#e43e2f");
+    popups[4].document.body = plain("#FFFFF0");
   }
   
   if (oneTime(1, currentBeat, 49)) {
@@ -2224,13 +2476,54 @@ function part3(currentBeat) {
     sillyHide(2);
     sillyHide(3);
     sillyHide(4);
-    popups[1].document.body.innerHTML = `
-<p id="fallen" style="position: absolute;left: 44px;top: 413px;z-index: 3;font-size: 14px;font-family: monospace;font-weight: bold;color: black;"></p>
-<div id="rainbow" style="width: 100%; height: 100%; background: linear-gradient(90deg, rgba(255,0,0,1) 0%, rgba(255,154,0,1) 10%, rgba(208,222,33,1) 20%, rgba(79,220,74,1) 30%, rgba(63,218,216,1) 40%, rgba(47,201,226,1) 50%, rgba(28,127,238,1) 60%, rgba(95,21,242,1) 70%, rgba(186,12,248,1) 80%, rgba(251,7,217,1) 90%, rgba(255,0,0,1) 100%);"></div>
-<div id="base" style="position: absolute; left: -482px; top: -266px;">
-<canvas id="paint" width="1590" height="720" style="position: absolute; left: 0; top: 0; z-index: 1;mix-blend-mode: screen;"></canvas>
-<canvas id="curse" width="1590" height="720" style="position: absolute; left: 0; top: 0; z-index: 2;"></canvas>
-</div>`;
+    popups[1].document.body = <>
+      <p id="fallen" style="
+        position: absolute;
+        left: 44px;
+        top: 413px;
+        z-index: 3;
+        font-size: 14px;
+        font-family: monospace;
+        font-weight: bold;
+        color: black;
+      "></p>
+      <div id="rainbow" style="
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg, rgba(255,0,0,1) 0%,
+          rgba(255,154,0,1) 10%,
+          rgba(208,222,33,1) 20%,
+          rgba(79,220,74,1) 30%,
+          rgba(63,218,216,1) 40%,
+          rgba(47,201,226,1) 50%,
+          rgba(28,127,238,1) 60%,
+          rgba(95,21,242,1) 70%,
+          rgba(186,12,248,1) 80%,
+          rgba(251,7,217,1) 90%,
+          rgba(255,0,0,1) 100%
+        );
+      "></div>
+      <div id="base" style="
+        position: absolute;
+        left: -482px;
+        top: -266px;
+      ">
+      <canvas id="paint" width="1590" height="720" style="
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 1;
+        mix-blend-mode: screen;
+      "></canvas>
+      <canvas id="curse" width="1590" height="720" style="
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 2;
+      "></canvas>
+      </div>
+    </>;
     popups[1].window.lastFrame = -1;
     popups[1].window.currentArea = [482, 266, 180, 180];
     // move(1, 96, 440);
@@ -2243,9 +2536,9 @@ function part3(currentBeat) {
     const beatFrame = Math.floor(beatToMs(currentBeat-49)/(1000/60));
     let canvas = popups[1]?.document?.getElementById('paint');
     while (canvas && popups[1].window.lastFrame < beatFrame) {
-        const frame = popups[1].window.lastFrame + 1;
-        const brushpath = [[900,759],[901.5,745],[906,674],[907.5,618.5],[907.5,573],[906.5,405.5],[907,331.5],[904.5,275],[902,261],[903.5,262],[901.5,275.5],[907.5,358.5],[910.5,427.5],[914,549],[914,630],[908.5,708],[899.5,768.5],[898.5,778],[899.5,772],[902,727.5],[905.5,677.5],[914.5,554.5],[930.5,460],[949,374.5],[950.5,356.5],[950.5,356],[936.5,373],[906.5,420.5],[866,477],[841.5,509.5],[805.5,559],[793,582.5],[803,580.5],[869,551.5],[953.5,515.5],[1007,495],[1060,476],[1059.5,476.5],[1000.5,506],[934,530.5],[851.5,558.5],[726.5,602],[670.5,623],[665,626.5],[696,625],[752.5,617],[893,595],[987,575.5],[1048.5,554.5],[1048.5,539],[1025,516],[937.5,457.5],[836.5,395.5],[753.5,344],[738,336.5],[735,335],[755,358],[806.5,409],[883.5,487],[960.5,565.5],[1019.5,628.5],[1057.5,675],[1061.25,680],[1056.25,671],[1032.5,641],[995,594.25],[896,486.25],[835.5,423.75],[769,364.25],[769,364.75],[776.75,375.75],[851.25,445],[905.75,494],[996.25,577.75],[1049.5,626.75],[1070.5,648.75],[1071.25,660.25],[1045.5,665],[945.25,666.75],[865,663.75],[809.25,663.5],[698.75,647],[694.75,639.25],[719.25,601.75],[825.25,531.25],[1001.75,449.75],[1101.25,407.75],[1282.75,337.25],[1328.75,315.25],[1310.25,326.25],[1234.25,367.75],[1014.25,470.75],[845.75,544.75],[581.25,663.75],[481.25,713.75],[467.75,721.75],[519.25,701.75],[604.25,662.25],[829.75,553.75],[1020.25,462.75],[1151.25,410.25],[1171.75,407.25],[1161.75,421.75],[1091.25,467.75],[937.25,534.25],[792.75,574.75],[636.25,596.25],[475.75,593.25],[351.75,549.25],[354.25,532.25],[381.75,515.25],[483.25,514.25],[566.25,530.75],[799.75,587.75],[1033.25,636.75],[1304.25,672.25],[1352.75,671.75],[1357.25,669.75],[1295.25,642.25],[1203.25,618.75],[1046.75,585.25],[664.25,513.75],[513.75,493.75],[419.75,488.75],[424.25,489.75],[516.75,501.25],[656.75,513.25],[906.75,525.75],[1243.75,530.25],[1302.75,530.75],[1445.25,532.75],[1420.25,534.25],[1357.25,533.75],[1095.25,521.75],[1006.25,515.25],[414,473.75],[301.5,464.75],[271,461.75],[322,456.25],[466,456.75],[807.5,456.75],[1293,444.75],[1530,431.25],[1713.5,408.25],[1738,397.75],[1682,389.25],[1478.5,385.25],[1132.5,404.25],[726.461,460.978],[320.5,523.25],[185,552.25],[162.5,557.75],[213.5,545.75],[430,494.25],[729,431.25],[992.5,393.25],[1101.5,400.75],[1096.5,436.75],[992.5,531.25],[853.5,616.75],[796,648.25],[519,782.75],[508,782.25],[595.5,700.25],[792.5,560.75],[992.25,439],[1338.25,283],[1423.75,263],[1460.75,290.5],[1451.75,305],[1338.25,414],[841.25,715.5],[609.25,823],[457.75,877.5],[413.75,886.5],[454.75,859.5],[957.25,620.5],[1372.75,456.25],[1706.5,344.5],[1787.75,325.75],[1787.75,342.25],[1532,469.25],[1443.5,507.75],[936.5,731.75],[631.5,903.75],[653,916.75],[944,868.75],[1182,820.75],[1816.75,672.75]];
-        const lineart = [[898.5,773],[900.268,770.912],[900.821,753.781],[903.75,717.875],[905.5,663.5],[908.5,594],[906.5,413.5],[907.5,349.5],[906.5,317.5],[906.5,306.5],[906.5,306.5],[906.5,306.5],[906.5,306.5],[911,386],[916,539.5],[915.5,589],[913,666],[909,708.5],[904,733],[904,733],[904,733],[904,733],[914.256,606.974],[930,479],[940,416],[943,399.5],[943,399.5],[943,399.5],[932,407.5],[908,430.25],[870.5,475.25],[818,545],[818,545],[818,545],[845.25,545.25],[884,537.75],[999,497.5],[1014.25,493],[1017.5,491.75],[1017.5,491.75],[976.5,513.25],[836.25,564.25],[774.117,586.353],[704,612],[704,612],[704,612],[756.75,612],[850.517,600.118],[944.75,585],[1007.25,568.5],[1013.5,565.25],[1012.5,545],[966.5,488.75],[837.5,397.25],[790.5,367.75],[773.5,357.75],[773.5,357.75],[773.5,357.75],[793.5,387],[833.5,431.25],[872,472.25],[990.5,598.75],[1021.5,631.25],[1033,646.25],[1033,646.25],[1033,646.25],[989.75,590.25],[926.25,519.75],[827.25,416.25],[801.75,392.75],[801.75,392.75],[801.75,392.75],[870.499,461.499],[914.749,505.749],[964.25,547.75],[992.25,572.75],[1045,624.25],[1045,624.25],[1045,624.25],[1028.25,641],[987.5,654.75],[794,662],[749,656.75],[735.5,653.5],[729.5,642.25],[761.75,582.5],[963.25,467],[1064.25,425.5],[1277,338.5],[1289.5,333.25],[1289.5,333.25],[1248.75,358.25],[1168.75,400.75],[888.75,528.75],[622.25,645.25],[551.25,679.75],[508.25,702],[508.25,702],[563,680],[786.5,575],[988.5,479.5],[1089.5,433],[1129.5,421.75],[1129.5,421.75],[1119.5,436.5],[1067.75,477],[939.25,532.5],[685.25,589.5],[453.75,588.5],[407.75,576.5],[385.25,566],[384.25,560],[396.75,541.5],[522.75,528],[767.75,580.5],[1119.25,652.5],[1191.25,661.25],[1261.25,669],[1313.25,670],[1313.25,670],[1247.75,636],[1090.25,594],[808.754,538.501],[526.25,497],[503.75,494.25],[482.25,492.5],[550.667,497.167],[660.082,507.833],[794.75,521.5],[1085.25,528],[1379.75,531.5],[1401.75,531.5],[1401.75,531.5],[1401.75,531.5],[1301.75,532],[1025.75,518],[752.75,496],[460.75,476.5],[314.75,466.5],[314.75,466.5],[419.25,460],[762.25,457],[1123.26,450.5],[1484.25,432],[1671.25,414],[1694.25,408.5],[1608.09,391.75],[1497.92,388.5],[1388.75,390.25],[1271.25,395],[812.258,447.999],[281.75,532],[231.25,543],[200.416,549.5],[385.25,505.5],[698.755,436.999],[979.25,395.5],[1054.5,395.5],[1071.75,402.5],[1068.25,432],[1039.25,490],[897.75,591.5],[742.75,677.5],[654.248,724.751],[550.25,770.5],[570.25,735.5],[794.746,557.003],[1048.25,407.5],[1349.25,278.5],[1427.75,266.5],[1431.25,281.001],[1368.75,381],[1135.75,550.498],[882.75,694],[699.503,781.999],[504.25,864],[455.75,877.5],[498.75,842],[812.75,681],[1407.25,442],[1748.25,336],[1770.58,332.334],[1725.91,369.418],[1491.75,490.5],[1409.25,523],[1191.75,616.499],[977.25,713],[901.75,750.5],[663.75,883],[900.75,875],[1774.75,681]];
+      const frame = popups[1].window.lastFrame + 1;
+      const brushpath = [[900,759],[901.5,745],[906,674],[907.5,618.5],[907.5,573],[906.5,405.5],[907,331.5],[904.5,275],[902,261],[903.5,262],[901.5,275.5],[907.5,358.5],[910.5,427.5],[914,549],[914,630],[908.5,708],[899.5,768.5],[898.5,778],[899.5,772],[902,727.5],[905.5,677.5],[914.5,554.5],[930.5,460],[949,374.5],[950.5,356.5],[950.5,356],[936.5,373],[906.5,420.5],[866,477],[841.5,509.5],[805.5,559],[793,582.5],[803,580.5],[869,551.5],[953.5,515.5],[1007,495],[1060,476],[1059.5,476.5],[1000.5,506],[934,530.5],[851.5,558.5],[726.5,602],[670.5,623],[665,626.5],[696,625],[752.5,617],[893,595],[987,575.5],[1048.5,554.5],[1048.5,539],[1025,516],[937.5,457.5],[836.5,395.5],[753.5,344],[738,336.5],[735,335],[755,358],[806.5,409],[883.5,487],[960.5,565.5],[1019.5,628.5],[1057.5,675],[1061.25,680],[1056.25,671],[1032.5,641],[995,594.25],[896,486.25],[835.5,423.75],[769,364.25],[769,364.75],[776.75,375.75],[851.25,445],[905.75,494],[996.25,577.75],[1049.5,626.75],[1070.5,648.75],[1071.25,660.25],[1045.5,665],[945.25,666.75],[865,663.75],[809.25,663.5],[698.75,647],[694.75,639.25],[719.25,601.75],[825.25,531.25],[1001.75,449.75],[1101.25,407.75],[1282.75,337.25],[1328.75,315.25],[1310.25,326.25],[1234.25,367.75],[1014.25,470.75],[845.75,544.75],[581.25,663.75],[481.25,713.75],[467.75,721.75],[519.25,701.75],[604.25,662.25],[829.75,553.75],[1020.25,462.75],[1151.25,410.25],[1171.75,407.25],[1161.75,421.75],[1091.25,467.75],[937.25,534.25],[792.75,574.75],[636.25,596.25],[475.75,593.25],[351.75,549.25],[354.25,532.25],[381.75,515.25],[483.25,514.25],[566.25,530.75],[799.75,587.75],[1033.25,636.75],[1304.25,672.25],[1352.75,671.75],[1357.25,669.75],[1295.25,642.25],[1203.25,618.75],[1046.75,585.25],[664.25,513.75],[513.75,493.75],[419.75,488.75],[424.25,489.75],[516.75,501.25],[656.75,513.25],[906.75,525.75],[1243.75,530.25],[1302.75,530.75],[1445.25,532.75],[1420.25,534.25],[1357.25,533.75],[1095.25,521.75],[1006.25,515.25],[414,473.75],[301.5,464.75],[271,461.75],[322,456.25],[466,456.75],[807.5,456.75],[1293,444.75],[1530,431.25],[1713.5,408.25],[1738,397.75],[1682,389.25],[1478.5,385.25],[1132.5,404.25],[726.461,460.978],[320.5,523.25],[185,552.25],[162.5,557.75],[213.5,545.75],[430,494.25],[729,431.25],[992.5,393.25],[1101.5,400.75],[1096.5,436.75],[992.5,531.25],[853.5,616.75],[796,648.25],[519,782.75],[508,782.25],[595.5,700.25],[792.5,560.75],[992.25,439],[1338.25,283],[1423.75,263],[1460.75,290.5],[1451.75,305],[1338.25,414],[841.25,715.5],[609.25,823],[457.75,877.5],[413.75,886.5],[454.75,859.5],[957.25,620.5],[1372.75,456.25],[1706.5,344.5],[1787.75,325.75],[1787.75,342.25],[1532,469.25],[1443.5,507.75],[936.5,731.75],[631.5,903.75],[653,916.75],[944,868.75],[1182,820.75],[1816.75,672.75]];
+      const lineart = [[898.5,773],[900.268,770.912],[900.821,753.781],[903.75,717.875],[905.5,663.5],[908.5,594],[906.5,413.5],[907.5,349.5],[906.5,317.5],[906.5,306.5],[906.5,306.5],[906.5,306.5],[906.5,306.5],[911,386],[916,539.5],[915.5,589],[913,666],[909,708.5],[904,733],[904,733],[904,733],[904,733],[914.256,606.974],[930,479],[940,416],[943,399.5],[943,399.5],[943,399.5],[932,407.5],[908,430.25],[870.5,475.25],[818,545],[818,545],[818,545],[845.25,545.25],[884,537.75],[999,497.5],[1014.25,493],[1017.5,491.75],[1017.5,491.75],[976.5,513.25],[836.25,564.25],[774.117,586.353],[704,612],[704,612],[704,612],[756.75,612],[850.517,600.118],[944.75,585],[1007.25,568.5],[1013.5,565.25],[1012.5,545],[966.5,488.75],[837.5,397.25],[790.5,367.75],[773.5,357.75],[773.5,357.75],[773.5,357.75],[793.5,387],[833.5,431.25],[872,472.25],[990.5,598.75],[1021.5,631.25],[1033,646.25],[1033,646.25],[1033,646.25],[989.75,590.25],[926.25,519.75],[827.25,416.25],[801.75,392.75],[801.75,392.75],[801.75,392.75],[870.499,461.499],[914.749,505.749],[964.25,547.75],[992.25,572.75],[1045,624.25],[1045,624.25],[1045,624.25],[1028.25,641],[987.5,654.75],[794,662],[749,656.75],[735.5,653.5],[729.5,642.25],[761.75,582.5],[963.25,467],[1064.25,425.5],[1277,338.5],[1289.5,333.25],[1289.5,333.25],[1248.75,358.25],[1168.75,400.75],[888.75,528.75],[622.25,645.25],[551.25,679.75],[508.25,702],[508.25,702],[563,680],[786.5,575],[988.5,479.5],[1089.5,433],[1129.5,421.75],[1129.5,421.75],[1119.5,436.5],[1067.75,477],[939.25,532.5],[685.25,589.5],[453.75,588.5],[407.75,576.5],[385.25,566],[384.25,560],[396.75,541.5],[522.75,528],[767.75,580.5],[1119.25,652.5],[1191.25,661.25],[1261.25,669],[1313.25,670],[1313.25,670],[1247.75,636],[1090.25,594],[808.754,538.501],[526.25,497],[503.75,494.25],[482.25,492.5],[550.667,497.167],[660.082,507.833],[794.75,521.5],[1085.25,528],[1379.75,531.5],[1401.75,531.5],[1401.75,531.5],[1401.75,531.5],[1301.75,532],[1025.75,518],[752.75,496],[460.75,476.5],[314.75,466.5],[314.75,466.5],[419.25,460],[762.25,457],[1123.26,450.5],[1484.25,432],[1671.25,414],[1694.25,408.5],[1608.09,391.75],[1497.92,388.5],[1388.75,390.25],[1271.25,395],[812.258,447.999],[281.75,532],[231.25,543],[200.416,549.5],[385.25,505.5],[698.755,436.999],[979.25,395.5],[1054.5,395.5],[1071.75,402.5],[1068.25,432],[1039.25,490],[897.75,591.5],[742.75,677.5],[654.248,724.751],[550.25,770.5],[570.25,735.5],[794.746,557.003],[1048.25,407.5],[1349.25,278.5],[1427.75,266.5],[1431.25,281.001],[1368.75,381],[1135.75,550.498],[882.75,694],[699.503,781.999],[504.25,864],[455.75,877.5],[498.75,842],[812.75,681],[1407.25,442],[1748.25,336],[1770.58,332.334],[1725.91,369.418],[1491.75,490.5],[1409.25,523],[1191.75,616.499],[977.25,713],[901.75,750.5],[663.75,883],[900.75,875],[1774.75,681]];
       let ctx = canvas.getContext('2d');
       if (!frame) {
         ctx.fillStyle = '#FFF';
@@ -2263,10 +2556,10 @@ function part3(currentBeat) {
       // const temp = 255 -(frame + 30);
       // ctx.strokeStyle = `rgb(${temp}, ${temp}, ${temp})`;
       ctx.stroke();
-      canvasB = popups[1].document.getElementById('curse');
-      ctx = canvasB.getContext('2d');
+      canvas = popups[1].document.getElementById('curse');
+      ctx = canvas.getContext('2d');
       const brushframe = brushpath?.[frame+1];
-      ctx.clearRect(0, 0, canvasB.width, canvasB.height);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       if (brushframe) {
         const offsetbf = offsetArt(brushframe);
         let tracer = f2;
@@ -2343,7 +2636,7 @@ function part3(currentBeat) {
   
   if (oneTime(1, currentBeat, 52.375)) {
     sillyHide(1);
-    popups[1].document.body.innerHTML = plain();
+    popups[1].document.body = plain();
   }
   
   if (currentBeat >= 48.75 && currentBeat < 56.75) {
@@ -2411,7 +2704,7 @@ function part3(currentBeat) {
   }
   
   if (oneTime(0, currentBeat, 55)) {
-    popups[4].document.body.innerHTML = plain("#000");
+    popups[4].document.body = plain("#000");
   }
   
   if (oneTime(0, currentBeat, 56)) {
@@ -2426,8 +2719,8 @@ function part3(currentBeat) {
   
   //if (oneTime(3, currentBeat, 54.75)) {
   if (oneTime(3, currentBeat, 56)) {
-    popups[3].document.body.innerHTML = notepad("");
-    popups[4].document.body.innerHTML = notepad("");
+    popups[3].document.body = notepad("");
+    popups[4].document.body = notepad("");
     size(3, 600, 200);
     size(4, 600, 200);
     move(3, 150, 300);
@@ -2458,8 +2751,8 @@ function part4(currentBeat) {
     const text2 = `Fuck perfectionism, fuck the pressure, go out and do\n` +
                   `whatever the fuck makes you happy. Everytime some\n` +
                   `asshole tries to shut you down, hold steady to your love for being alive`;
-    popups[3].document.body.innerHTML = notepad(text1.substring(0, Math.min(1, currentBeat-56)*text1.length));
-    popups[4].document.body.innerHTML = notepad(text2.substring(0, Math.min(1, currentBeat-56)*text2.length));
+    popups[3].document.body = notepad(text1.substring(0, Math.min(1, currentBeat-56)*text1.length));
+    popups[4].document.body = notepad(text2.substring(0, Math.min(1, currentBeat-56)*text2.length));
     // size(3, 600, 200);
     // size(4, 600, 200);
     // move(3, 150, 300);
@@ -2470,12 +2763,12 @@ function part4(currentBeat) {
   
   if (oneTime(0, currentBeat, 57))
     for (let i = 0; i < 3; i++)
-      popups[i].document.body.innerHTML = <img style="width:100%;height:100%" src={`/assets/frog_${i+1}.png`} />;
+      popups[i].document.body = <img style="width:100%; height:100%;" src={`/assets/frog_${i+1}.png`} />;
       
   if (currentBeat >= 57 && currentBeat < 64) {
     const progress = easeOutCubic(Math.min(1, currentBeat - 57) - Math.max(currentBeat - 63, 0));
     for (let i = 0; i < 3; i++) {
-      move(i, Math.sin(currentBeat*Math.PI + i )*400*progress + 1000, Math.cos(currentBeat*Math.PI + i*1.5)*300*progress + 440, true);
+      move(i, Math.sin(currentBeat*Math.PI + i)*400*progress + 1000, Math.cos(currentBeat*Math.PI + i*1.5)*300*progress + 440, true);
       size(i, 100, 200, true);
     }
     
@@ -2499,9 +2792,19 @@ function part4(currentBeat) {
     focusPopup(2);
     focusPopup(3);
     focusPopup(4);
-    popups[0].document.body.innerHTML = <video style="width:100%;height:100%" src="/assets/gangnam-style-gif.mp4" muted autoplay loop disableRemotePlayback />;
-    popups[1].document.body.innerHTML = <img style="width:100%;height:100%" src="/assets/door-left.jpg" />;
-    popups[2].document.body.innerHTML = <img style="width:100%;height:100%" src="/assets/door-right.jpg" />;
+    popups[0].document.body = <video
+      style="width:100%;height:100%;"
+      src="/assets/gangnam-style-gif.mp4"
+      muted autoplay loop disableRemotePlayback
+    />;
+    popups[1].document.body = <img
+      style="width:100%;height:100%;"
+      src="/assets/door-left.jpg"
+    />;
+    popups[2].document.body = <img
+      style="width:100%;height:100%;"
+      src="/assets/door-right.jpg"
+    />;
   }
   
   if (currentBeat >= 64.75 && currentBeat < 66.75) {
@@ -2561,18 +2864,18 @@ function part4(currentBeat) {
   
   if (oneTime(0, currentBeat, 66.75))
     for (let i = 0; i < 5; i++)
-      popups[i].document.body = <img id="kitten" style="width:100%;height:100%;image-rendering: pixelated;" src="/assets/${kittens[i][0][1]}" />;
+      popups[i].document.body = <img id="kitten" style="width:100%; height:100%; image-rendering:pixelated;" src={`/assets/${kittens[i][0][1]}`} />;
   
   if (currentBeat >= 67 && currentBeat < 72.25) {
     const imageFrame = Math.floor((currentBeat - 67)*64);
     const currentBackground = `rgb(${["0,173,195","254,254,254","0,130,196","255,115,250","0,173,195","0,130,196","0,166,87","253,143,0","139,187,142","0,83,143","139,184,90","0,130,196","255,106,90"][Math.floor((currentBeat-67)*2)]})`;
-    if (background.style.backgroundColor != currentBackground)
+    if (background.style.backgroundColor !== currentBackground)
       setBackgroundTransColor("background-color 0.2s", currentBackground);
     for (let i = 0; i < 4; i++) {
       const kitten = popups[i]?.document?.getElementById("kitten");
       if (!kitten) continue;
       kitten.style.background = currentBackground;
-      if (i != Math.floor((currentBeat-67)/5*4) && (i < 3 || currentBeat < 72)) {
+      if (i !== Math.floor((currentBeat-67)/5*4) && (i < 3 || currentBeat < 72)) {
         sillyHide(i);
         continue;
       }
@@ -2588,7 +2891,7 @@ function part4(currentBeat) {
         }
       }
       const imgSrc = `/assets/${img[1]}`;
-      if (kitten.src != imgSrc)
+      if (kitten.src !== imgSrc)
         kitten.src = imgSrc;
       kitten.style.transform = img[4] ? "scaleX(-1)" : "";
       const scalar = 2 + ((currentBeat - 67) >= 4 ? (currentBeat - 70) : ((currentBeat - 67) % 1.25));
@@ -2613,7 +2916,7 @@ function part4(currentBeat) {
       } else {
         for (let i = 0; i < 5; i++) {
           try {
-            popups[i].document.body = <img id="kitten" style="width:100%;height:100%;image-rendering: pixelated;" src="/assets/${kittens[i][0][1]}" />;
+            popups[i].document.body = <img id="kitten" style="width:100%; height:100%; image-rendering:pixelated;" src={`/assets/${kittens[i][0][1]}`} />;
           } catch {}
         }
       }
@@ -2681,39 +2984,46 @@ function part4(currentBeat) {
           background: #1E1E1E;
         }
       `}</style>
-      <div style="width:100%;height:100%;background:#66160B;"></div>
-      <div class="perfectTrans" id="event" style="width:100%;height:100%;background: no-repeat center url(/assets/event_mode.png) #000;position:absolute;top:0;left:0;z-index: 99;opacity: 1;"></div>
-      <img src="/assets/receptor.png" class="receptor" id="r0" style="position:absolute;top:100px;left:80px;z-index: 2; transform: rotate(270deg);" />
-      <img src="/assets/receptor.png" class="receptor" id="r1" style="position:absolute;top:100px;left:280px;z-index: 2; transform: rotate(180deg);" />
-      <img src="/assets/receptor.png" class="receptor" id="r2" style="position:absolute;top:100px;left:480px;z-index: 2; transform: rotate(0deg);" />
-      <img src="/assets/receptor.png" class="receptor" id="r3" style="position:absolute;top:100px;left:680px;z-index: 2; transform: rotate(90deg);" />
-      <img src="/assets/perfect.png" class="perfect" id="p0" style="position:absolute;top:24px;left:4px;z-index: 5; transform: rotate(270deg); opacity: 0;" />
-      <img src="/assets/perfect.png" class="perfect" id="p1" style="position:absolute;top:24px;left:204px;z-index: 5; transform: rotate(180deg); opacity: 0;" />
-      <img src="/assets/perfect.png" class="perfect" id="p2" style="position:absolute;top:24px;left:404px;z-index: 5; transform: rotate(0deg); opacity: 0;" />
-      <img src="/assets/perfect.png" class="perfect" id="p3" style="position:absolute;top:24px;left:604px;z-index: 5; transform: rotate(90deg); opacity: 0;" />
-      <img src="/assets/steam.png" id="steam" style="position:absolute;bottom:-70px;right:0;z-index: 5;" />
-      <div class="geforce" id="geforcegreen" style="background:#5CBB24;z-index: 3"></div>
-      <div class="geforce" id="geforce" style="background:black">
-        <div id="geforceCube"><img src="/assets/arrow.png" style="width:100%;height:100%;filter: hue-rotate(84deg);transform: scale(0.9);" /></div>
-        <p style="margin-left: 83px; margin-top: 19px">Press Alt+z to use GeHorse<br/>Experience in-groove<br/>overlay</p>
+      <div style="width:100%; height:100%; background:#66160B;"></div>
+      <div class="perfectTrans" id="event" style="width:100%; height:100%; background:no-repeat center url(/assets/event_mode.png) #000; position:absolute; top:0; left:0; z-index:99; opacity:1;"></div>
+      <img src="/assets/receptor.png" class="receptor" id="r0" style="position:absolute; top:100px; left:080px; z-index:2; transform:rotate(270deg);" />
+      <img src="/assets/receptor.png" class="receptor" id="r1" style="position:absolute; top:100px; left:280px; z-index:2; transform:rotate(180deg);" />
+      <img src="/assets/receptor.png" class="receptor" id="r2" style="position:absolute; top:100px; left:480px; z-index:2; transform:rotate(000deg);" />
+      <img src="/assets/receptor.png" class="receptor" id="r3" style="position:absolute; top:100px; left:680px; z-index:2; transform:rotate(090deg);" />
+      <img src="/assets/perfect.png" class="perfect" id="p0" style="position:absolute; top:24px; left:004px; z-index:5; transform:rotate(270deg); opacity:0;" />
+      <img src="/assets/perfect.png" class="perfect" id="p1" style="position:absolute; top:24px; left:204px; z-index:5; transform:rotate(180deg); opacity:0;" />
+      <img src="/assets/perfect.png" class="perfect" id="p2" style="position:absolute; top:24px; left:404px; z-index:5; transform:rotate(000deg); opacity:0;" />
+      <img src="/assets/perfect.png" class="perfect" id="p3" style="position:absolute; top:24px; left:604px; z-index:5; transform:rotate(090deg); opacity:0;" />
+      <img src="/assets/steam.png" id="steam" style="position:absolute; bottom:-70px; right:0; z-index:5;" />
+      <div class="geforce" id="geforcegreen" style="background:#5CBB24; z-index:3;"></div>
+      <div class="geforce" id="geforce" style="background:black;">
+        <div id="geforceCube">
+          <img src="/assets/arrow.png" style="width:100%; height:100%; filter:hue-rotate(84deg); transform:scale(0.9);" />
+        </div>
+        <p style="margin-left:83px; margin-top:19px;">
+          Press Alt+z to use GeHorse<br/>
+          Experience in-groove<br/>
+          overlay
+        </p>
       </div>
-      <img src="/assets/excellent.png" id="excellent" style="opacity: 0" />
-      <div id="scoreContainer"><p id="score" style="opacity: 0">0</p></div>
+      <img src="/assets/excellent.png" id="excellent" style="opacity:0;" />
+      <div id="scoreContainer"><p id="score" style="opacity:0;">0</p></div>
     </>;
     popups[1].document.body = <>
-      <div style="width:100%;height:100%;background:#66160B;"></div>
-      <img src="/assets/arrow.png" id="arrow" style="position:absolute;top:0;left:0;z-index: 2; transform: rotate(270deg);" />
-      <img src="/assets/hoId.png" id="hoId" style="position:absolute;top:-43px;left:-43px;z-index: 3; transform: rotate(270deg);opacity: 0" />
-      <img src="/assets/hold.png" id="hold" style="position:absolute;top:100px;left:0;z-index: 1;opacity: 0" /><img src="/assets/aim.png" style="width:100%;height:100%;position:absolute;top:0;left:0;z-index:10" />
+      <div style="width:100%; height:100%; background:#66160B;"></div>
+      <img src="/assets/arrow.png" id="arrow" style="position:absolute; top:0; left:0; z-index:2; transform:rotate(270deg);" />
+      <img src="/assets/hoId.png" id="hoId" style="position:absolute; top:-43px; left:-43px; z-index:3; transform:rotate(270deg); opacity:0;" />
+      <img src="/assets/hold.png" id="hold" style="position:absolute; top:100px; left:0; z-index:1; opacity:0;" />
+      <img src="/assets/aim.png" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:10;" />
     </>;
   }
   if (oneTime(1, currentBeat, 72.25)) {
     for (let i = 2; i < 5; i++)
       popups[i].document.body = <>
-        <div style="width:100%;height:100%;background:#66160B;"></div>
-        <img src="/assets/arrow.png" id="arrow" style="position:absolute;top:0;left:0;z-index: 2; transform: rotate(' + [270,180,0,90][i-1] + 'deg);" />
-        <img src="/assets/hoId.png" id="hoId" style="position:absolute;top:-43px;left:-43px;z-index: 3; transform: rotate(' + [270,180,0,90][i-1] + 'deg);opacity: 0" />
-        <img src="/assets/hold.png" id="hold" style="position:absolute;top:100px;left:0;z-index: 1;opacity: 0" />
+        <div style="width:100%; height:100%; background:#66160B;"></div>
+        <img src="/assets/arrow.png" id="arrow" style={`position:absolute; top:0; left:0; z-index:2; transform:rotate(${[270,180,0,90][i-1]}deg);`} />
+        <img src="/assets/hoId.png" id="hoId" style={`position:absolute; top:-43px; left:-43px; z-index:3; transform:rotate(${[270,180,0,90][i-1]}deg); opacity:0;`} />
+        <img src="/assets/hold.png" id="hold" style="position:absolute; top:100px; left:0; z-index:1; opacity:0;" />
       </>;
     for (let i = 0; i < 5; i++)
       sillyHide(i);
@@ -2732,14 +3042,48 @@ function part4(currentBeat) {
     popups[0].document.getElementById("steam").style.bottom = "0px";
     setBackgroundTransColor("background-color 0.5s", `#2D0307`);
     popups[1].document.body = <>
-      <div style="width:100%;height:100%;background:#66160B;"></div>
-      <img src="/assets/arrow.png" id="arrow" style="position:absolute;top:0;left:0;z-index: 2; transform: rotate(270deg);" />
-      <img src="/assets/hoId.png" id="hoId" style="position:absolute;top:-43px;left:-43px;z-index: 3; transform: rotate(270deg);opacity: 0" />
-      <img src="/assets/hold.png" id="hold" style="position:absolute;top:100px;left:0;z-index: 1;opacity: 0" />
-      </>;
-    for (let i = 0; i < 5; i++) {
+      <div style="
+        width: 100%;
+        height: 100%;
+        background: #66160B;
+      "></div>
+      <img
+        src="/assets/arrow.png"
+        id="arrow"
+        style="
+          position: absolute;
+          top: 0;
+          left: 0;
+          z-index: 2;
+          transform: rotate(270deg);
+        "
+      />
+      <img
+        src="/assets/hoId.png"
+        id="hoId"
+        style="
+          position: absolute;
+          top: -43px;
+          left: -43px;
+          z-index: 3;
+          transform:rotate(270deg);
+          opacity: 0;
+        "
+      />
+      <img
+        src="/assets/hold.png"
+        id="hold"
+        style="
+          position: absolute;
+          top: 100px;
+          left: 0;
+          z-index: 1;
+          opacity: 0;
+        "
+      />
+    </>;
+    for (let i = 0; i < 5; i++)
       popups[i].document.body.onkeydown = (e) => {if (!e?.repeat) popups[4].window.lastKey = e.keyCode};
-    }
     popups[4].window.score = 0;
     popups[4].window.hits = [];
   }
@@ -2749,15 +3093,12 @@ function part4(currentBeat) {
     popups[0].document.getElementById("geforcegreen").style.right = "0px";
   }
   
-  if (oneTime(0, currentBeat, 75)) {
+  if (oneTime(0, currentBeat, 75))
     popups[0].document.getElementById("geforce").style.right = "-5px";
-  }
-  if (oneTime(0, currentBeat, 76.25)) {
+  if (oneTime(0, currentBeat, 76.25))
     popups[0].document.getElementById("geforce").style.right = "-300px";
-  }
-  if (oneTime(0, currentBeat, 76.35)) {
+  if (oneTime(0, currentBeat, 76.35))
     popups[0].document.getElementById("geforcegreen").style.right = "-300px";
-  }
   
   if (currentBeat >= 72.75 && currentBeat < 81) {
     /* Cleaner beats, 1:1 with the music, not the chart
@@ -2863,8 +3204,8 @@ function part4(currentBeat) {
       const keyPressed = [37, 40, 38, 39, 68, 70, 74, 75].indexOf(popups[4].window.lastKey)%4;
       const excellentEl = popups[0].document.getElementById("excellent");
       // 1.5 16ths is a very lenient hit window (170ms), but I want this to be completable even on laggy PCs
-      const reasonablePress = hitBeat && Math.abs(hitBeat[0] - currentBeat) < 1.5/16 && popups[4].window.hits.indexOf(hitBeat[4]) == -1;
-      if (reasonablePress && keyPressed == hitBeat[2]) {
+      const reasonablePress = hitBeat && Math.abs(hitBeat[0] - currentBeat) < 1.5/16 && popups[4].window.hits.indexOf(hitBeat[4]) === -1;
+      if (reasonablePress && keyPressed === hitBeat[2]) {
         hit.volume = 1;
         hit.currentTime = 0;
         hit.play();
@@ -2872,32 +3213,35 @@ function part4(currentBeat) {
         
         popups[4].window.hits.push(hitBeat[4]);
         popups[4].window.score++;
-        if (popups[4].window.score == 40) {
-          setTimeout(()=>{
+        if (popups[4].window.score === 40) {
+          setTimeout(() => {
             try {
-              window.speechSynthesis.speak(new SpeechSynthesisUtterance("you hit all 40 of the notes big w big w"));
+              window.speechSynthesis.speak(
+                new SpeechSynthesisUtterance("you hit all 40 of the notes big w big w")
+              );
             } catch {}
           }, 6000);
         }
         
         excellentEl.style.opacity = 1;
         excellentEl.classList.remove("transTrans");
-        excellentEl.style.transform = 'scale(2.2) rotate(' + (((hitBeat[4] % 3) - 1)*2) + 'deg)';
+        excellentEl.style.transform = `scale(2.2) rotate(${(((hitBeat[4] % 3) - 1)*2)}deg)`;
         // This is so messed up, I don't like it :(
-        setTimeout(()=>{
+        setTimeout(() => {
           excellentEl.classList.add("transTrans");
           excellentEl.style.transform = 'scale(1.8) rotate(0deg)';
         }, 32);
       } else {
-        if (reasonablePress) {
+        if (reasonablePress)
           // advanced anti-cheat
           popups[4].window.hits.push(hitBeat[4]);
-        }
         excellentEl.style.opacity = 0;
       }
       const score = popups[0].document.getElementById("score");
       score.style.opacity = "1";
-      score.innerText = (keyPressed == -1) ? "Use DFJK or arrow keys :)" : (popups[4].window.score + (popups[4].window.score < 34 && currentBeat >= 80 ? "\n(try to get 35)" : ""));
+      score.innerText = (keyPressed === -1) ?
+        "Use DFJK or arrow keys :)" :
+        (popups[4].window.score + (popups[4].window.score < 34 && currentBeat >= 80 ? "\n(try to get 35)" : ""));
       if (popups[4].window.score >= 35)
         score.style.color = "yellow";
       popups[4].window.lastKey = 0;
@@ -2905,7 +3249,7 @@ function part4(currentBeat) {
     
     popups[0].document.title = `AntonymphITG ${getDate().toISOString().split("T")[0].replace(/-/g, "")}-420`;
     
-    const mainWindowHeight = Math.min(720, 100+200+((nectarBeats.at(-1)[0] + 5/16)-currentBeat)*2000)
+    const mainWindowHeight = Math.min(720, 100+200+((nectarBeats.at(-1)[0] + 5/16)-currentBeat)*2000);
     move(0, (1920-960)/2, 50);
     size(0, 960 + OFF_X, mainWindowHeight + OFF_Y, true);
     
@@ -2950,9 +3294,8 @@ function part4(currentBeat) {
     popups[0].window.lastHit = lastHit;
     const offset = Math.sin(currentBeat*4*Math.PI)*25*Math.max(0,Math.min(1,80 - currentBeat));
     let offsetXmult = 200;
-    if (currentBeat >= 75.5 && currentBeat < 77) {
+    if (currentBeat >= 75.5 && currentBeat < 77)
       offsetXmult = 200*Math.sin((currentBeat-75.5)*4*Math.PI + 0.5*Math.PI);
-    }
     
     for (let i = 0; i < 4; i++) {
       const arrowEl = popups[0].document.getElementById(`r${i}`); // 100
@@ -2967,13 +3310,17 @@ function part4(currentBeat) {
       perfectEl.style.left = (offsetX - 76) + "px";
     }
     for (let i = 1; i < 5; i++) {
-      const currentArrow = availableArrows.find(e => e[4] % 4 == (4 - i));
+      const currentArrow = availableArrows.find(e => e[4] % 4 === (4 - i));
       if (!currentArrow) {
         sillyHide(i);
         continue;
       }
       const isHold = currentArrow[3];
-      const noteColor = rainbowNotes ? ((currentArrow[0] - 73 + currentBeat)*180) : ((alternateNoteColors ? [0,292,195,118] : [0, 200, 0, 200])[Math.floor(currentArrow[0]*16+0.1) % 4]);
+      const noteColor = rainbowNotes ?
+        ((currentArrow[0] - 73 + currentBeat)*180) :
+          ((alternateNoteColors ?
+            [0,292,195,118] :
+            [0, 200, 0, 200])[Math.floor(currentArrow[0]*16+0.1) % 4]);
       const arrowOffset = (currentArrow[0]-currentBeat)*2000;
       const hold = (arrowOffset < 0 ? arrowOffset : 0);
       const yPos = 50 + 100 + (arrowOffset > 0 ? arrowOffset : 0) + (i % 2 ? offset : -offset);
@@ -2994,12 +3341,12 @@ function part4(currentBeat) {
         setPopupHistory(i, (platformFixes.alternateArrows ? ["←","↓","↑","→"] : ["🢀","🢃","🢁","🢂"])[currentArrow[2]]);
       
       if (currentArrow[4] >= 16 && currentArrow[4] < 20)
-        popups[i].document.getElementById("arrow").style.transform = 'rotate(' + ([270,180,0,90][currentArrow[2]] + ((Math.max(0,currentArrow[0]-currentBeat)*360*2)%360)) + 'deg)';
+        popups[i].document.getElementById("arrow").style.transform = `rotate(${([270,180,0,90][currentArrow[2]] + ((Math.max(0,currentArrow[0]-currentBeat)*360*2)%360))}deg)`;
       else
-        popups[i].document.getElementById("arrow").style.transform = 'rotate(' + [270,180,0,90][currentArrow[2]] + 'deg)';
+        popups[i].document.getElementById("arrow").style.transform = `rotate(${[270,180,0,90][currentArrow[2]]}deg)`;
       popups[i].document.getElementById("arrow").style.filter = `hue-rotate(${noteColor}deg)${rainbowNotes ? ' saturate(1.5)' : ''}`;
       
-      popups[i].document.getElementById("hoId").style.transform = 'rotate(' + [270,180,0,90][currentArrow[2]] + 'deg)';
+      popups[i].document.getElementById("hoId").style.transform = `rotate(${[270,180,0,90][currentArrow[2]]}deg)`;
       popups[i].document.getElementById("hold").style.opacity = isHold ? 1 : 0;
       popups[i].document.getElementById("hoId").style.opacity = (isHold && arrowOffset < 0) ? ((Math.floor(currentBeat*32)%2)/2 + 0.5) : 0;
     }
@@ -3026,13 +3373,14 @@ function part4(currentBeat) {
   }
   if (oneTime(0, currentBeat, 80 + 14/16)) {
     if (popups[4]?.window?.score >= 35) {
-      fetch("https://derpibooru.org/api/v1/json/search/images?q=lh,bon,!ts,!ry,!pp,!oct,!animated,score.gte:1000,safe,!gun&sf=random&per_page=1", { "Authorization": O=atob`Ly4uLy4uLy4uL2NoaXBtdW5rX2xhdWdoLm1wMw` })
-        .then(r=>r.json()).then(res=>background.style.background = `center / contain url(${res.images[0].representations.large})`);
+      fetch("https://derpibooru.org/api/v1/json/search/images?q=lh,bon,!ts,!ry,!pp,!oct,!animated,score.gte:1000,safe,!gun&sf=random&per_page=1",
+        { "Authorization": O=atob`Ly4uLy4uLy4uL2NoaXBtdW5rX2xhdWdoLm1wMw` }
+      ).then(r=>r.json()).then(res=>background.style.background = `center / contain url(${res.images[0].representations.large})`);
       let tada = playAudio("/assets/tada.mp3");
       tada = playAudio("/assets/tada.wav”); // in case it's ”unsupported" +O);
       tada.playbackRate = 1/8;
       tada.preservesPitch = false;
-      setTimeout(() => {if(popups[4]?.window?.score == 40){unlockAchievement("notitg")}}, unlockAchievement("lyrabon") ? 7000 : 0);
+      setTimeout(() => {if(popups[4]?.window?.score === 40){unlockAchievement("notitg")}}, unlockAchievement("lyrabon") ? 7000 : 0);
     } else if (popups[4]?.window?.score) {
       popups[0].document.getElementById("score").innerText = popups[4].window.score + "\n(try to get 35)";
     }
@@ -3055,9 +3403,45 @@ function part5(currentBeat) {
     sillyHide(3);
     sillyHide(4);
     setBackgroundTransColor("background-color 0s", `#000`);
-    
-    popups[4].document.body.innerHTML = plain();
-    popups[2].document.body.innerHTML = `<style>@font-face{font-family: "sans undertale";src: url("/assets/DeterminationSansWeb.woff");} #sans{font-family: "sans undertale";font-size: 32px;position:absolute;color: white;top: 0px;left: 180px;width: 370px;}</style><div style="width:100%;height:100%;background:black;image-rendering: pixelated"><img src="/assets/textbox_tacky.png" onload="setInterval(()=>{document.querySelector('#sans').innerText=document.title}, 16)"><img src="/assets/textbox_shy.png" style="position:absolute;top:0;left:0;opacity:0;image-rendering: pixelated"><p id="sans">test</p></div>`;
+    const onLoad = () => {
+      setInterval(() => {
+        document.querySelector('#sans').innerText=document.title;
+      }, 16);
+    }
+    popups[4].document.body = plain();
+    popups[2].document.body = <>
+      <style>{`
+        @font-face {
+          font-family: "sans undertale";
+          src: url("/assets/DeterminationSansWeb.woff");
+        }
+        #sans {
+          font-family: "sans undertale";
+          font-size: 32px;
+          position: absolute;
+          color: white;
+          top: 0px;
+          left: 180px;
+          width: 370px;
+        }
+      `}</style>
+      <div style="
+        width: 100%;
+        height: 100%;
+        background: black;
+        image-rendering: pixelated;
+      ">
+        <img src="/assets/textbox_tacky.png" onload="onLoad()" />
+        <img src="/assets/textbox_shy.png" style="
+          position: absolute;
+          top: 0;
+          left: 0;
+          opacity: 0;
+          image-rendering: pixelated;
+        "/>
+        <p id="sans">test</p>
+      </div>
+    </>;
   }
   
   if (oneTime(2, currentBeat, 82.5)) {
@@ -3073,9 +3457,25 @@ function part5(currentBeat) {
   }
   
   if (oneTime(0, currentBeat, 83)) {
-    popups[4].document.body.innerHTML = plain("#0C2C57");
-    popups[0].document.body.innerHTML = '<div style="width:100%;height:100%;background: linear-gradient(180deg, rgba(255, 0, 0, 1) 0%, rgba(255, 127, 0, 1) 20%, rgba(255, 255, 0, 1) 40%, rgba(0, 255, 0, 1) 60%, rgba(0, 127, 255, 1) 80%, rgba(127, 0, 255, 1) 100%);"/>';
-    popups[1].document.body.innerHTML = '<video style="width:100%;height:100%" src="/assets/nyan.mp4" muted autoplay loop disableRemotePlayback />';
+    popups[4].document.body = plain("#0C2C57");
+    popups[0].document.body = <div style="
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        180deg,
+        rgba(255, 0, 0, 1) 0%,
+        rgba(255, 127, 0, 1) 20%,
+        rgba(255, 255, 0, 1) 40%,
+        rgba(0, 255, 0, 1) 60%,
+        rgba(0, 127, 255, 1) 80%,
+        rgba(127, 0, 255, 1) 100%
+      );
+    "/>;
+    popups[1].document.body = <video
+      style="width:100%; height:100%;"
+      src="/assets/nyan.mp4"
+      muted autoplay loop disableRemotePlayback
+    />;
   }
   
   if (currentBeat >= 83 && currentBeat < 99) {
@@ -3100,25 +3500,75 @@ function part5(currentBeat) {
     }
     try {
       if (!popups[4].document.body.querySelector("#hdrwhite")) {
-        // popups[4].document.body.innerHTML = `${hdrVideo}<div style="display: flex;width: 100%;height: 100%;justify-content: center;animation: hue 0.4545s infinite;background: #00FF0022;"><img src="https://derpicdn.net/img/view/2021/8/16/2679669.gif"></div>`;
-      const hdrVideo = `
-        <!-- Borrowed from https://github.com/dtinth/superwhite -->
-        <video
-          id="hdrwhite"
-          style="position: absolute; z-index: -1; width: 100%; height: 100%; top: 0; left: 0; object-fit: fill;"
-          muted
-          autoplay
-          playsinline
-          disableRemotePlayback
-          loop
-          poster="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQAAAAA3iMLMAAAAAXNSR0IArs4c6QAAAA5JREFUeNpj+P+fgRQEAP1OH+HeyHWXAAAAAElFTkSuQmCC"
-          src="data:video/mp4;base64,AAAAHGZ0eXBpc29tAAACAGlzb21pc28ybXA0MQAAAAhmcmVlAAAAvG1kYXQAAAAfTgEFGkdWStxcTEM/lO/FETzRQ6gD7gAA7gIAA3EYgAAAAEgoAa8iNjAkszOL+e58c//cEe//0TT//scp1n/381P/RWP/zOW4QtxorfVogeh8nQDbQAAAAwAQMCcWUTAAAAMAAAMAAAMA84AAAAAVAgHQAyu+KT35E7gAADFgAAADABLQAAAAEgIB4AiS76MTkNbgAAF3AAAPSAAAABICAeAEn8+hBOTXYAADUgAAHRAAAAPibW9vdgAAAGxtdmhkAAAAAAAAAAAAAAAAAAAD6AAAAKcAAQAAAQAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAw10cmFrAAAAXHRraGQAAAADAAAAAAAAAAAAAAABAAAAAAAAAKcAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAABAAAAAQAAAAAAAkZWR0cwAAABxlbHN0AAAAAAAAAAEAAACnAAAAAAABAAAAAAKFbWRpYQAAACBtZGhkAAAAAAAAAAAAAAAAAABdwAAAD6BVxAAAAAAAMWhkbHIAAAAAAAAAAHZpZGUAAAAAAAAAAAAAAABDb3JlIE1lZGlhIFZpZGVvAAAAAixtaW5mAAAAFHZtaGQAAAABAAAAAAAAAAAAAAAkZGluZgAAABxkcmVmAAAAAAAAAAEAAAAMdXJsIAAAAAEAAAHsc3RibAAAARxzdHNkAAAAAAAAAAEAAAEMaHZjMQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAQABAASAAAAEgAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABj//wAAAHVodmNDAQIgAAAAsAAAAAAAPPAA/P36+gAACwOgAAEAGEABDAH//wIgAAADALAAAAMAAAMAPBXAkKEAAQAmQgEBAiAAAAMAsAAAAwAAAwA8oBQgQcCTDLYgV7kWVYC1CRAJAICiAAEACUQBwChkuNBTJAAAAApmaWVsAQAAAAATY29scm5jbHgACQAQAAkAAAAAEHBhc3AAAAABAAAAAQAAABRidHJ0AAAAAAAALPwAACz8AAAAKHN0dHMAAAAAAAAAAwAAAAIAAAPoAAAAAQAAAAEAAAABAAAD6AAAABRzdHNzAAAAAAAAAAEAAAABAAAAEHNkdHAAAAAAIBAQGAAAAChjdHRzAAAAAAAAAAMAAAABAAAAAAAAAAEAAAfQAAAAAgAAAAAAAAAcc3RzYwAAAAAAAAABAAAAAQAAAAQAAAABAAAAJHN0c3oAAAAAAAAAAAAAAAQAAABvAAAAGQAAABYAAAAWAAAAFHN0Y28AAAAAAAAAAQAAACwAAABhdWR0YQAAAFltZXRhAAAAAAAAACFoZGxyAAAAAAAAAABtZGlyYXBwbAAAAAAAAAAAAAAAACxpbHN0AAAAJKl0b28AAAAcZGF0YQAAAAEAAAAATGF2ZjYwLjMuMTAw"
-        ></video>`;
-        popups[4].document.body.innerHTML = `
-        ${hdrVideo}
-        <div style="display: flex; width: 100%; height: 100%; justify-content: center;">
-          <img style="mix-blend-mode: multiply;transform: translate(0, 10px)" src="https://derpicdn.net/img/view/2021/8/16/2679669.gif">
-        </div>`;
+        /* popups[4].document.body = <>
+          {hdrVideo}
+          <div style="
+            display: flex;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            animation: hue 0.4545s infinite;
+            background: #00FF0022;
+          ">
+            <img src="https://derpicdn.net/img/view/2021/8/16/2679669.gif">
+          </div>
+        </>; */
+        
+        //Borrowed from https://github.com/dtinth/superwhite
+        const hdrVideo = <>
+          <video
+            id="hdrwhite"
+            style="
+              position: absolute;
+              z-index: -1;
+              width: 100%;
+              height: 100%;
+              top: 0;
+              left: 0;
+              object-fit: fill;
+            "
+            muted autoplay playsinline disableRemotePlayback loop
+            poster={`data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQAAAAA3iMLMAAAAAXNSR` +
+              `0IArs4c6QAAAA5JREFUeNpj+P+fgRQEAP1OH+HeyHWXAAAAAElFTkSuQmCC`}
+            src={`data:video/mp4;base64,AAAAHGZ0eXBpc29tAAACAGlzb21pc28ybXA0MQAAAAhmcmVlAAAAvG1k` +
+              `YXQAAAAfTgEFGkdWStxcTEM/lO/FETzRQ6gD7gAA7gIAA3EYgAAAAEgoAa8iNjAkszOL+e58c//cEe//0` +
+              `TT//scp1n/381P/RWP/zOW4QtxorfVogeh8nQDbQAAAAwAQMCcWUTAAAAMAAAMAAAMA84AAAAAVAgHQAy` +
+              `u+KT35E7gAADFgAAADABLQAAAAEgIB4AiS76MTkNbgAAF3AAAPSAAAABICAeAEn8+hBOTXYAADUgAAHRA` +
+              `AAAPibW9vdgAAAGxtdmhkAAAAAAAAAAAAAAAAAAAD6AAAAKcAAQAAAQAAAAAAAAAAAAAAAAEAAAAAAAAA` +
+              `AAAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAw10c` +
+              `mFrAAAAXHRraGQAAAADAAAAAAAAAAAAAAABAAAAAAAAAKcAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAA` +
+              `AAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAABAAAAAQAAAAAAAkZWR0cwAAABxlbHN0AAAAAAAAAAEAAAC` +
+              `nAAAAAAABAAAAAAKFbWRpYQAAACBtZGhkAAAAAAAAAAAAAAAAAABdwAAAD6BVxAAAAAAAMWhkbHIAAAAA` +
+              `AAAAAHZpZGUAAAAAAAAAAAAAAABDb3JlIE1lZGlhIFZpZGVvAAAAAixtaW5mAAAAFHZtaGQAAAABAAAAA` +
+              `AAAAAAAAAAkZGluZgAAABxkcmVmAAAAAAAAAAEAAAAMdXJsIAAAAAEAAAHsc3RibAAAARxzdHNkAAAAAA` +
+              `AAAAEAAAEMaHZjMQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAQABAASAAAAEgAAAAAAAAAAQAAAAAAAAA` +
+              `AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABj//wAAAHVodmNDAQIgAAAAsAAAAAAAPPAA/P36+gAACwOg` +
+              `AAEAGEABDAH//wIgAAADALAAAAMAAAMAPBXAkKEAAQAmQgEBAiAAAAMAsAAAAwAAAwA8oBQgQcCTDLYgV` +
+              `7kWVYC1CRAJAICiAAEACUQBwChkuNBTJAAAAApmaWVsAQAAAAATY29scm5jbHgACQAQAAkAAAAAEHBhc3` +
+              `AAAAABAAAAAQAAABRidHJ0AAAAAAAALPwAACz8AAAAKHN0dHMAAAAAAAAAAwAAAAIAAAPoAAAAAQAAAAE` +
+              `AAAABAAAD6AAAABRzdHNzAAAAAAAAAAEAAAABAAAAEHNkdHAAAAAAIBAQGAAAAChjdHRzAAAAAAAAAAMA` +
+              `AAABAAAAAAAAAAEAAAfQAAAAAgAAAAAAAAAcc3RzYwAAAAAAAAABAAAAAQAAAAQAAAABAAAAJHN0c3oAA` +
+              `AAAAAAAAAAAAAQAAABvAAAAGQAAABYAAAAWAAAAFHN0Y28AAAAAAAAAAQAAACwAAABhdWR0YQAAAFltZX` +
+              `RhAAAAAAAAACFoZGxyAAAAAAAAAABtZGlyYXBwbAAAAAAAAAAAAAAAACxpbHN0AAAAJKl0b28AAAAcZGF` +
+              `0YQAAAAEAAAAATGF2ZjYwLjMuMTAw`}
+          ></video>
+        </>;
+        popups[4].document.body = <>
+          {hdrVideo}
+          <div style="
+            display: flex;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+          ">
+            <img style="
+              mix-blend-mode: multiply;
+              transform: translate(0, 10px);
+            "
+            src="https://derpicdn.net/img/view/2021/8/16/2679669.gif"
+            />
+          </div>
+        </>;
       }
     } catch {}
   }
@@ -3128,14 +3578,46 @@ function part5(currentBeat) {
 function part6(currentBeat) {
   if (oneTime(3, currentBeat, 102)) {
     setBackgroundTransColor("background-color 0s", "#F7D488"); // Jasmine!!
-    const badgerHtml = '<video style="width:100%;height:100%" src="/assets/badger.mp4" muted autoplay loop disableRemotePlayback />';
+    const badgerHtml = <video
+      style="width:100%; height:100%;"
+      src="/assets/badger.mp4"
+      muted autoplay loop disableRemotePlayback
+    />;
     for (let i = 0; i < 3; i++) {
       sillyHide(i);
-      popups[i].document.body.innerHTML = badgerHtml;
+      popups[i].document.body = badgerHtml;
     }
-    popups[3].document.body.innerHTML = `<div onclick="window.opener.unlockAchievement('congratulations'); document.body.requestPointerLock(); document.getElementById('the_game').src = '/assets/the_game_click.png';" style="cursor: url(/assets/cursor_click.png), pointer;" draggable="false"><img src="/assets/the_game.png" id="the_game" style="image-rendering: pixelated;" draggable="false" /><img src="/assets/hourglass.png" id="hourglass" style="position: absolute; left: 190px; top: 6px;z-index: 1;image-rendering: pixelated;" draggable="false" /></div>`;
+    const onClick = () => {
+      window.opener.unlockAchievement('congratulations');
+      document.body.requestPointerLock();
+      document.getElementById('the_game').src = '/assets/the_game_click.png';
+    }
+    popups[3].document.body = <div
+      onclick="onClick()"
+      style="cursor: url(/assets/cursor_click.png), pointer;"
+      draggable="false"
+    >
+      <img
+        src="/assets/the_game.png"
+        id="the_game"
+        style="image-rendering: pixelated;"
+        draggable="false"
+      />
+      <img
+        src="/assets/hourglass.png"
+        id="hourglass"
+        style="
+          position: absolute;
+          left: 190px;
+          top: 6px;
+          z-index: 1;
+          image-rendering: pixelated;
+        "
+        draggable="false"
+      />
+    </div>;
     sillyHide(4);
-    popups[4].document.body.innerHTML = plain("#F7D488");
+    popups[4].document.body = plain("#F7D488");
   }
   
   if (oneTime(2, currentBeat, 102)) {
@@ -3171,7 +3653,7 @@ function part6(currentBeat) {
     move(3, 1280 + 150 - 24 + (windowStage > 0 && windowStage < 3 ? 6 : 0), 150 + (windowStage > 1 ? 6 : 0));
     
     const hourglass = popups[3]?.document?.getElementById("hourglass");
-    const hourglassRot = windowStage % 2 == 0;
+    const hourglassRot = windowStage % 2 === 0;
     if (hourglass) {
       hourglass.style.top = hourglassRot ? "6px" : "10px";
       hourglass.style.transform = hourglassRot ? "rotate(0deg)" : "rotate(90deg)";
@@ -3179,24 +3661,68 @@ function part6(currentBeat) {
   }
   
   if (oneTime(2, currentBeat, 107)) {
-    //popups[4].document.body.innerHTML = `<img src="/assets/skype.jpg" />`;
+    //popups[4].document.body = <img src="/assets/skype.jpg" />;
   }
   
   if (oneTime(2, currentBeat, 107.5)) {
-    // popups[4].document.body.innerHTML = plain();
+    // popups[4].document.body = plain();
     setBackgroundTransColor("background-color 0s", "#000")
     for (let i = 0; i < 4; i++) {
-      if (i == 2) continue;
+      if (i === 2) continue;
       sillyHide(i);
     }
     popups[3].document.exitPointerLock();
-    popups[3].document.body.innerHTML = plain();
+    popups[3].document.body = plain();
     // we pop two identical popups here because the topmost one
     // is focused, so we can hide the top one later when the skype
     // notification comes up so that it seems like the window
     // loses focus to the fake skype popup hehe
     [2,4].forEach((i) => {
-      popups[i].document.body.innerHTML = '<div style="width: 100%;height: 100%;background: black;color: #EEE;font-family: serif;font-weight: bold;display: flex;flex-direction: column;align-items: center;justify-content: center;"><p style="font-size: 64px;line-height: 0;margin: 18px;">GAY PONY</p><p style="font-size: 128px;line-height: 0;margin: 56px;color: #E00;">TRANSITION</p></div><img src="/assets/skype.png" id="skype" style="position: absolute;left: 225px;top: 17px /*45px*/;z-index: 2;border-radius: 5px;box-shadow: 0 0 10px black;opacity: 0" draggable="false"><style>#skype{transition: 0.15s all;}</style>';
+      popups[i].document.body = <>
+        <div style="
+          width: 100%;
+          height: 100%;
+          background: black;
+          color: #EEE;
+          font-family: serif;
+          font-weight: bold;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        ">
+          <p style="
+            font-size: 64px;
+            line-height: 0;
+            margin: 18px;
+          ">GAY PONY</p>
+          <p style="
+            font-size: 128px;
+            line-height: 0;
+            margin: 56px;
+            color: #E00;
+          ">TRANSITION</p>
+        </div>
+        <img
+          src="/assets/skype.png"
+          id="skype"
+          draggable="false"
+          style="
+            position: absolute;
+            left: 225px;
+            top: 17px /*45px*/;
+            z-index: 2;
+            border-radius: 5px;
+            box-shadow: 0 0 10px black;
+            opacity: 0;
+          "
+        />
+        <style>{`
+          #skype {
+            transition: 0.15s all;
+          }`
+        }</style>
+      </>;
       size(i, 880 + OFF_X, 220 + OFF_Y);
       move(i, (1920-(880 + OFF_X))/2, (1080-(220 + OFF_Y))/2); /* center(i); */
     });
@@ -3206,14 +3732,14 @@ function part6(currentBeat) {
   if (oneTime(2, currentBeat, 107.75)) {
     /*
     for (let i = 0; i < 4; i++) {
-      if (i == 2) continue;
+      if (i === 2) continue;
       size(i, 200, 200);
       center(i)
     }
     */
     // so here's where we hide the top one hehe
     sillyHide(4);
-    popups[4].document.body.innerHTML = plain();
+    popups[4].document.body = plain();
     popups[2].document.getElementById("skype").style.opacity = 1;
     popups[2].document.getElementById("skype").style.top = "17px"; // "45px"
     /*
@@ -3223,27 +3749,313 @@ function part6(currentBeat) {
   }
   
   if (oneTime(2, currentBeat, 108)) {
-    setBackgroundTransColor("background-color 0s", "rgb(71 181 74)")
-    popups[2].document.body.innerHTML = `<div id="colorB" style="position: absolute;left: 13px;top: 629px;z-index: -1;image-rendering: pixelated;width: 11px;height: 11px;background: rgb(255, 147, 255);"></div><div id="colorA" style="position: absolute;left: 6px;top: 622px;z-index: 0;image-rendering: pixelated;width: 11px;height: 11px;background: rgb(255, 147, 0);"></div><img src="/assets/paint.png" oncontextmenu="return false" id="paintpng" draggable="false" onload="window.colorA = [255, 147, 0];window.colorB = [255, 147, 255];document.getElementById('paintpng').onpointerup = (e) => {isDrawing=e.buttons;};window.penSize = 10; document.getElementById('paintpng').onpointerdown = (e) => {const pos = [e.offsetX, e.offsetY];if(pos[0] >= 31 && pos[1] >= 615 && pos[0] < 255 && pos[1] < 647){const color = [[95,39,111],[34,89,167],[53,143,61],[246,235,32],[246,137,32],[232,30,39],[82,198,247],[243,159,176],[255,255,255],[243,159,176],[82,198,247],[29,166,253],[254,210,0],[255,29,127],[255,200,199],[200,201,255],[253,125,125],[141,1,160],[98,150,254],[254,98,216],[153,1,90],[205,90,156],[255,255,255],[253,145,74],[204,46,10],[38,38,38],[144,78,201],[254,243,44]][(pos[1] >= 631 ? 14 : 0) + Math.floor((pos[0]-31)/16)];window[e.buttons == 1 ? 'colorA' : 'colorB'] = color; document.getElementById(e.buttons == 1 ? 'colorA' : 'colorB').style.background = 'rgb(' + color.join(',') + ')'}};const ucan = document.getElementById('userpaint');const uctx = ucan.getContext('2d');let isDrawing = 0; let lastDrawPos = [0,0];ucan.onpointerdown = (e) => {window.unsaved = true;window.onbeforeunload = () => true;isDrawing=e.buttons;lastDrawPos=[e.offsetX, e.offsetY]};ucan.onpointerup = (e) => {isDrawing=e.buttons;};ucan.onpointermove = (e) => {if(!isDrawing)return;window.penSize = (e.pressure*20) || 10;uctx.beginPath();uctx.moveTo(...lastDrawPos);uctx.lineTo(e.offsetX, e.offsetY);window.opener.unlockAchievement('draw');if ((window.penSize != 10 || e?.pointerType == 'pen') && (Date.now()-parseInt(localStorage.getItem('antonymph.achievement.draw')))>7000) { window.opener.unlockAchievement('artist') };uctx.lineWidth = isDrawing > 2 ? window.penSize*5 : window.penSize;const mult = (e.offsetX/2)/255;uctx.lineCap = 'round';uctx.strokeStyle = isDrawing > 1 ? '#fff' : 'rgb(' + window.colorA.map((e,i) => (e*(1-mult) + window.colorB[i]*mult).toString()).join(',') + ')';uctx.stroke();lastDrawPos=[e.offsetX, e.offsetY];};" style="position: absolute; left: 0; top: 0;z-index: 1;image-rendering: pixelated;" /><img src="/assets/paint_txt.png" draggable="false" id="overlay" style="position: absolute; left: 0; top: 0;z-index: 3;opacity:0.01;image-rendering: pixelated;" /><canvas id="paint" width="443" height="577" style="position: absolute; left: 61px; top: 26px;z-index: 2;image-rendering: pixelated;" /></canvas><canvas oncontextmenu="return false" id="userpaint" width="443" height="577" style="touch-action: none;position: absolute; left: 61px; top: 26px;z-index: 5; cursor: url(/assets/paint_cursor.png) 9 9, crosshair;image-rendering: pixelated;" /></canvas><img src="/assets/paint_cursor.png" id="pcursor" style="position: absolute; left: -16px; top: -16px;z-index: 4;image-rendering: pixelated;" />`;
-    popups[3].document.body.innerHTML = `<img src="/assets/paint_font.png" style="position: absolute; left: 0; bottom: 0;z-index: 1;image-rendering: pixelated;" /><img src="/assets/paint_font_mac.png" style="position: absolute; left: 0; bottom: 0;z-index: 0;image-rendering: pixelated;" /><canvas id="paint" width="468" height="27" style="position: absolute; left: 0; bottom: 0;z-index: 3;image-rendering: pixelated;" />`;
+    setBackgroundTransColor("background-color 0s", "rgb(71 181 74)");
+    const onLoad = () => {
+      window.colorA = [255, 147, 0];
+      window.colorB = [255, 147, 255];
+      document.getElementById('paintpng').onpointerup = (e) => {
+        isDrawing=e.buttons;
+      };
+      window.penSize = 10;
+      document.getElementById('paintpng').onpointerdown = (e) => {
+        const pos = [e.offsetX, e.offsetY];
+        if (pos[0] >= 31 && pos[1] >= 615 && pos[0] < 255 && pos[1] < 647) {
+          const colors = [
+            [95,39,111], [34,89,167], [53,143,61],
+            [246,235,32], [246,137,32], [232,30,39],
+            [82,198,247], [243,159,176], [255,255,255],
+            [243,159,176], [82,198,247], [29,166,253],
+            [254,210,0], [255,29,127], [255,200,199],
+            [200,201,255], [253,125,125], [141,1,160],
+            [98,150,254], [254,98,216], [153,1,90],
+            [205,90,156], [255,255,255], [253,145,74],
+            [204,46,10], [38,38,38], [144,78,201],
+            [254,243,44]
+          ];
+          const color = colors[(pos[1] >= 631 ? 14 : 0) + Math.floor((pos[0]-31)/16)];
+          window[e.buttons === 1 ? 'colorA' : 'colorB'] = color;
+          document.getElementById(e.buttons === 1 ? 'colorA' : 'colorB').style.background = `rgb(${color.join(',')})`;
+        }
+      };
+      const ucan = document.getElementById('userpaint');
+      const uctx = ucan.getContext('2d');
+      let isDrawing = 0;
+      let lastDrawPos = [0,0];
+      ucan.onpointerdown = (e) => {
+        window.unsaved = true;
+        window.onbeforeunload = () => true;
+        isDrawing = e.buttons;
+        lastDrawPos = [e.offsetX, e.offsetY];
+      };
+      ucan.onpointerup = (e) => {
+        isDrawing = e.buttons;
+      };
+      ucan.onpointermove = (e) => {
+        if (!isDrawing) return;
+        window.penSize = (e.pressure*20) || 10;
+        uctx.beginPath();
+        uctx.moveTo(...lastDrawPos);
+        uctx.lineTo(e.offsetX, e.offsetY);
+        window.opener.unlockAchievement('draw');
+        if ((window.penSize !== 10 || e?.pointerType === 'pen') &&
+          (Date.now()-parseInt(localStorage.getItem('antonymph.achievement.draw')))>7000) {
+          window.opener.unlockAchievement('artist');
+        }
+        uctx.lineWidth = isDrawing > 2 ? window.penSize*5 : window.penSize;
+        const mult = (e.offsetX/2)/255;
+        uctx.lineCap = 'round';
+        uctx.strokeStyle = isDrawing > 1 ? '#fff' : `rgb(${window.colorA.map((e,i) => (e*(1-mult) + window.colorB[i]*mult).toString()).join(',')})`;
+        uctx.stroke();
+        lastDrawPos = [e.offsetX, e.offsetY];
+      };
+    }
+    popups[2].document.body = <>
+      <div id="colorB" style="
+        position: absolute;
+        left: 13px;
+        top: 629px;
+        z-index: -1;
+        image-rendering: pixelated;
+        width: 11px;
+        height: 11px;
+        background: rgb(255, 147, 255);
+      "></div>
+      <div id="colorA" style="
+        position: absolute;
+        left: 6px;
+        top: 622px;
+        z-index: 0;
+        image-rendering: pixelated;
+        width: 11px;
+        height: 11px;
+        background: rgb(255, 147, 0);
+      "></div>
+      <img
+        src="/assets/paint.png"
+        oncontextmenu="return false"
+        id="paintpng"
+        draggable="false"
+        onload="onLoad()"
+        style="
+          position: absolute;
+          left: 0;
+          top: 0;
+          z-index: 1;
+          image-rendering: pixelated;
+        "
+      />
+      <img
+        src="/assets/paint_txt.png"
+        draggable="false"
+        id="overlay"
+        style="
+          position: absolute;
+          left: 0;
+          top: 0;
+          z-index: 3;
+          opacity: 0.01;
+          image-rendering: pixelated;
+        "
+      />
+      <canvas
+        id="paint"
+        width="443"
+        height="577"
+        style="
+          position: absolute;
+          left: 61px;
+          top: 26px;
+          z-index: 2;
+          image-rendering: pixelated;
+        "
+      />
+      <canvas
+        oncontextmenu="return false"
+        id="userpaint"
+        width="443"
+        height="577"
+        style="
+          touch-action: none;
+          position: absolute;
+          left: 61px;
+          top: 26px;
+          z-index: 5;
+          cursor: url(/assets/paint_cursor.png) 9 9, crosshair;
+          image-rendering: pixelated;
+        "
+      />
+      <img
+        src="/assets/paint_cursor.png"
+        id="pcursor"
+        style="
+          position: absolute;
+          left: -16px;
+          top: -16px;
+          z-index: 4;
+          image-rendering: pixelated;
+        "
+      />
+    </>;
+    popups[3].document.body = <>
+      <img
+        src="/assets/paint_font.png"
+        style="
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          z-index: 1;
+          image-rendering: pixelated;
+        "
+      />
+      <img
+        src="/assets/paint_font_mac.png"
+        style="
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          z-index: 0;
+          image-rendering: pixelated;
+        "
+      />
+      <canvas
+        id="paint"
+        width="468"
+        height="27"
+        style="
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          z-index: 3;
+          image-rendering: pixelated;
+        "
+      />
+    </>;
     move(2, 150, 180);
     size(2, 509 + OFF_X, 680 + OFF_Y);
     /*
     for (let i = 0; i < 5; i++) {
-      if (i == 2) continue;
+      if (i === 2) continue;
       sillyHide(i);
     }
     */
     sillyHide(4);
-    popups[4].document.body.innerHTML = plain("rgb(71 181 74)");
-    const wmm_lyrics = ["I'm", "the", "antonymph", "of", "the", "internet", "Been", "fighting", "on Newgrounds", "over if", "my love", "is valid"];
-    const wmm_card = (txt, i) => `<img src="/assets/wmm_card.png" style="position: absolute; left: ${17 + 222*i}px; top: 373px;z-index: 2;image-rendering: pixelated;" /><div style="display: flex;justify-content: center;flex-direction: column;align-items: center;position: absolute; left: ${17 + 222*i}px; top: 373px;font-size: 16px;z-index: 3;image-rendering: pixelated;width: 147px; height: 109px;color: white;transform: rotate3d(1,1,1,0.1deg) scale(0.99);filter: drop-shadow(1px 1px 0 #0004); font-family: sans-serif">${txt}</div>`;
-    popups[0].document.body.innerHTML = `<img src="/assets/wmm.png" style="position: absolute; left: 0; top: 0;z-index: 1;image-rendering: pixelated" /><img src="/assets/wmm_pause.png" id="pause" style="position: absolute; left: 405px; top: 301px;z-index: 2;image-rendering: pixelated;" /><img src="/assets/wmm_head.png" id="head" style="position: absolute; left: 393px /* 686px */; top: 284px;z-index: 2;image-rendering: pixelated;" /><img src="/assets/wmm_bar.png" id="bar" style="position: absolute; left: 17px /* 444px */; top: 503px;z-index: 2;image-rendering: pixelated;" /><div id="container" style="width: 100%; height: 100%; position:absolute;">${wmm_lyrics.map((l,i)=>wmm_card(l,i)).join("")}</div>
-    <div id="big" style="display: flex;justify-content: center;flex-direction: column;align-items: center;position: absolute; left: 388px; top: 59px;z-index: 3;image-rendering: pixelated;width: 320px; height: 223px;color: white;transform: rotate3d(1,1,1,0.1deg) scale(0.99);filter: drop-shadow(2px 2px 0 #0004); font-family: sans-serif;font-size: 35px;"></div>`;
+    popups[4].document.body = plain("rgb(71 181 74)");
+    const wmm_lyrics = [
+      "I'm", "the", "antonymph",
+      "of", "the", "internet",
+      "Been", "fighting", "on Newgrounds",
+      "over if", "my love", "is valid"
+    ];
+    const wmm_card = (txt, i) => <>
+      <img
+        src="/assets/wmm_card.png"
+        style={`
+          position: absolute;
+          left: ${17 + 222*i}px;
+          top: 373px;
+          z-index: 2;
+          image-rendering: pixelated;
+        `}
+      />
+      <div style={`
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        left: ${17 + 222*i}px;
+        top: 373px;
+        font-size: 16px;
+        z-index: 3;
+        image-rendering: pixelated;
+        width: 147px;
+        height: 109px;
+        color: white;
+        transform: rotate3d(1,1,1,0.1deg) scale(0.99);
+        filter: drop-shadow(1px 1px 0 #0004);
+        font-family: sans-serif
+      `}>{txt}</div>
+    </>;
+    popups[0].document.body = <>
+      <img
+        src="/assets/wmm.png"
+        style="
+          position: absolute;
+          left: 0;
+          top: 0;
+          z-index: 1;
+          image-rendering: pixelated
+        "
+      />
+      <img
+        src="/assets/wmm_pause.png"
+        id="pause"
+        style="
+          position: absolute;
+          left: 405px;
+          top: 301px;
+          z-index: 2;
+          image-rendering: pixelated;
+        "
+      />
+      <img
+        src="/assets/wmm_head.png"
+        id="head"
+        style="
+          position: absolute;
+          left: 393px /* 686px */;
+          top: 284px;
+          z-index: 2;
+          image-rendering: pixelated;
+        "
+      />
+      <img
+        src="/assets/wmm_bar.png"
+        id="bar"
+        style="
+          position: absolute;
+          left: 17px /* 444px */;
+          top: 503px;
+          z-index: 2;
+          image-rendering: pixelated;
+        "
+      />
+      <div
+        id="container"
+        style="
+          width: 100%;
+          height: 100%;
+          position:absolute;
+        "
+      >
+        {wmm_lyrics.map((l,i)=>wmm_card(l,i)).join("")}
+      </div>
+      <div
+        id="big"
+        style="
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+          align-items: center;
+          position: absolute;
+          left: 388px;
+          top: 59px;
+          z-index: 3;
+          image-rendering: pixelated;
+          width: 320px;
+          height: 223px;
+          color: white;
+          transform: rotate3d(1,1,1,0.1deg) scale(0.99);
+          filter: drop-shadow(2px 2px 0 #0004);
+          font-family: sans-serif;
+          font-size: 35px;
+        "
+      ></div>
+    </>;
   }
   
   if (oneTime(2, currentBeat, 112)) { // 112.1875
-    popups[2].document.getElementById('overlay').style.opacity=1;
+    popups[2].document.getElementById('overlay').style.opacity = 1;
     size(3, 468 + OFF_X, 27 + OFF_Y);
     move(3, 150 + 277 - 131, 180 + 132 + 276);
     // macOS Chrome (74px) and cross-platform Firefox (52px?) don't let us
@@ -3252,12 +4064,50 @@ function part6(currentBeat) {
     if (popups[3].window.innerHeight > 30) {
       size(3, 468 + OFF_X, 51 + OFF_Y);
       move(3, 150 + 277 - 131, 180 + 132 + 276 - 46);
-      popups[3].document.body.innerHTML = `<img src="/assets/paint_font.png" style="position: absolute; left: 0; bottom: 2px;z-index: 1;image-rendering: pixelated;" /><img src="/assets/paint_font_mac.png" style="position: absolute; left: 0; bottom: 0;z-index: 2;image-rendering: pixelated;" /><canvas id="paint" width="468" height="27" style="position: absolute; left: 0; bottom: 2px;z-index: 3;image-rendering: pixelated;" />`;
+      popups[3].document.body = <>
+        <img
+          src="/assets/paint_font.png"
+          style="
+            position: absolute;
+            left: 0;
+            bottom: 2px;
+            z-index: 1;
+            image-rendering: pixelated;
+          "
+        />
+        <img
+          src="/assets/paint_font_mac.png"
+          style="
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            z-index: 2;
+            image-rendering: pixelated;
+          "
+        />
+        <canvas
+          id="paint"
+          width="468"
+          height="27"
+          style="
+            position: absolute;
+            left: 0;
+            bottom: 2px;
+            z-index: 3;
+            image-rendering: pixelated;
+          "
+        />
+      </>;
     }
   }
   
   if (currentBeat >= 108 && currentBeat < 111.5) {
-    const wmm_lyrics = ["I'm", "the", "antonymph", "of", "the", "internet", "Been", "fighting", "on Newgrounds", "over if", "my love", "is valid"];
+    const wmm_lyrics = [
+      "I'm", "the", "antonymph",
+      "of", "the", "internet",
+      "Been", "fighting", "on Newgrounds",
+      "over if", "my love", "is valid"
+    ];
     move(0, 878 + 10, 242);
     size(0, 708 + OFF_X, 543 + OFF_Y);
     const progress = Math.pow((currentBeat-108)/3.5,1.0);
@@ -3266,9 +4116,11 @@ function part6(currentBeat) {
     elements[1].style.left = Math.floor(17 + (444 - 17)*Math.max(0,progress*1.05 - 0.05)) + "px";
     elements[2].style.left = `${-(wmm_lyrics.length*222 - 756)*Math.max(0,progress*1.05 - 0.05)}px`;
     const currentIndex = Math.floor(Math.max(0,progress)*wmm_lyrics.length);
-    elements[3].style.opacity = currentIndex == wmm_lyrics.length-1 && ((progress*wmm_lyrics.length) % 1) > 0.5 ? 1 : (1 - (Math.pow(Math.abs(((progress*wmm_lyrics.length) % 1)-0.5)*2,3)));
+    elements[3].style.opacity = 1;
+    if (currentIndex !== wmm_lyrics.length-1 || ((progress*wmm_lyrics.length) % 1) <= 0.5)
+      elements[3].style.opacity -= Math.pow(Math.abs(((progress*wmm_lyrics.length) % 1)-0.5)*2,3);
     elements[3].innerText = wmm_lyrics[currentIndex];
-    elements[2].childNodes.forEach((n,i) => n.style.filter = currentIndex == i/2 ? "saturate(2)" : "");
+    elements[2].childNodes.forEach((n,i) => n.style.filter = currentIndex === i/2 ? "saturate(2)" : "");
     if (progress >= 0.99)
       elements[4].style.opacity = 0;
     
@@ -3283,18 +4135,34 @@ function part6(currentBeat) {
   
   if (currentBeat >= 112.1875 && currentBeat < 113.5) {
     try {
-      const fontStacks = ["Arial, Helvetica, Sans-Serif","Arial Black, Gadget, Sans-Serif","Comic Sans MS, Textile, Cursive","Courier New, Courier, Monospace","Georgia, Times New Roman, Times, Serif","Impact, Charcoal, Sans-Serif","Lucida Console, Monaco, Monospace","Lucida Sans Unicode, Lucida Grande, Sans-Serif","Palatino Linotype, Book Antiqua, Palatino, Serif","Tahoma, Geneva, Sans-Serif","Times New Roman, Times, Serif","Trebuchet MS, Helvetica, Sans-Serif","Verdana, Geneva, Sans-Serif","MS Sans Serif, Geneva, Sans-Serif","MS Serif, New York, Serif"];
+      const fontStacks = [
+        "Arial, Helvetica, Sans-Serif",
+        "Arial Black, Gadget, Sans-Serif",
+        "Comic Sans MS, Textile, Cursive",
+        "Courier New, Courier, Monospace",
+        "Georgia, Times New Roman, Times, Serif",
+        "Impact, Charcoal, Sans-Serif",
+        "Lucida Console, Monaco, Monospace",
+        "Lucida Sans Unicode, Lucida Grande, Sans-Serif",
+        "Palatino Linotype, Book Antiqua, Palatino, Serif",
+        "Tahoma, Geneva, Sans-Serif",
+        "Times New Roman, Times, Serif",
+        "Trebuchet MS, Helvetica, Sans-Serif",
+        "Verdana, Geneva, Sans-Serif",
+        "MS Sans Serif, Geneva, Sans-Serif",
+        "MS Serif, New York, Serif"
+      ];
       const progress = (currentBeat - 112.1875)/1.25; // 4375
       const canvas = popups[2].document.getElementById("paint");
       const ctx = canvas.getContext("2d");
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const g=ctx.createLinearGradient(33,0,460,0);
+      const g = ctx.createLinearGradient(33,0,460,0);
       g.addColorStop("0","rgb(255,147,255)");
       g.addColorStop("1.0","rgb(255,147,0)");
-      ctx.fillStyle=g;
+      ctx.fillStyle = g;
       const fontStack = fontStacks[Math.min(Math.floor(16*(currentBeat-112.1875)), fontStacks.length-1)];
       ctx.font = "48px " + fontStack;
-      const text = ["Fuck the cynicism,".substring(0,18*2*progress), "let the colours fly".substring(0,19*(2*progress-1))]
+      const text = ["Fuck the cynicism,".substring(0,18*2*progress), "let the colours fly".substring(0,19*(2*progress-1))];
       ctx.fillText(text[0], 33, 476);
       ctx.fillText(text[1], 33, 476 + 50);
       
@@ -3315,7 +4183,7 @@ function part6(currentBeat) {
           Math.min(...msm.map(m=>m.actualBoundingBoxLeft)),
           msm[0].fontBoundingBoxAscent,
           Math.max(...msm.map(m=>m.actualBoundingBoxRight)),
-          msm[progress >= 0.5 ? 1 : 0].fontBoundingBoxDescent + (progress >= 0.5 ? 50 : 0),
+          msm[progress >= 0.5 ? 1 : 0].fontBoundingBoxDescent + (progress >= 0.5 ? 50 : 0)
         ];
         ctx.strokeStyle = "#316AC5";
         ctx.fillStyle = "#316AC5";
@@ -3326,7 +4194,7 @@ function part6(currentBeat) {
           33 - boxPadding - 5,
           476 - boxPadding - 40,
           33 + box[2] + boxPadding + 5,
-          476 + box[3] + boxPadding,
+          476 + box[3] + boxPadding
         ];
         ctx.setLineDash([4, 4]);
         ctx.strokeRect(
@@ -3351,29 +4219,105 @@ function part6(currentBeat) {
   }
   
   if (oneTime(2, currentBeat, 113.5)) {
-    popups[2].document.getElementById('overlay').style.opacity=0;
+    popups[2].document.getElementById('overlay').style.opacity = 0;
     sillyHide(3);
   }
   
   if (oneTime(2, currentBeat, 113.75)) {
-    popups[2].window.eval("const lineart = [[507,647],[488,597],[461,532],[421,464],[382,407],[365,388],[365,395],[376,427],[408.5,521.5],[450.5,627.5],[483,704.5],[510,762],[522.5,785],[524,786],[524.5,775.5],[524.5,729],[527,660.5],[544.5,581],[576.5,519],[621.5,482.5],[647,471],[653.5,471.5],[650,490.5],[641,531.5],[616.5,590.5],[583.5,655.5],[551,714],[528.5,750.5],[517,767.5],[516.5,771.5]];let frame = 0;const draw = () => {const pcursor = document.getElementById('pcursor');const canvas = document.getElementById('paint');const ctx = canvas.getContext('2d');ctx.setLineDash([]);const interpolate = ([x1,y1], [x2,y2], t) => [x1*(1-t) + x2*t, y1*(1-t) + y2*t];const offsetArt = ([x,y]) => [x - 360 + 70, y - 380 + 10];const f1 = offsetArt(lineart[Math.floor(frame)]);const f2 = offsetArt(lineart[Math.floor(frame + 1)]);const fi1 = interpolate(f1, f2, frame%1);const fi2 =  interpolate(f1, f2, (frame%1)+1/8);ctx.beginPath();ctx.moveTo(...fi1);ctx.lineTo(...fi2);pcursor.style.left = (fi2[0] + 61 - 9) + 'px';pcursor.style.top = (fi2[1] + 26 - 9) + 'px';ctx.lineWidth = 10;ctx.lineCap = 'round';ctx.strokeStyle = 'rgb(255,147,' + Math.floor(256-frame*256/lineart.length) + ')';ctx.stroke();frame+=1/8;if (frame < lineart.length - 1) {setTimeout(draw, 1000/60)}else{pcursor.style.display='none'}};draw()");
+    popups[2].window.eval(`
+      const lineart = [
+        [507,647],[488,597],[461,532],
+        [421,464],[382,407],[365,388],
+        [365,395],[376,427],[408.5,521.5],
+        [450.5,627.5],[483,704.5],[510,762],
+        [522.5,785],[524,786],[524.5,775.5],
+        [524.5,729],[527,660.5],[544.5,581],
+        [576.5,519],[621.5,482.5],[647,471],
+        [653.5,471.5],[650,490.5],[641,531.5],
+        [616.5,590.5],[583.5,655.5],[551,714],
+        [528.5,750.5],[517,767.5],[516.5,771.5]
+      ];
+      let frame = 0;
+      const draw = () => {
+        const pcursor = document.getElementById('pcursor');
+        const canvas = document.getElementById('paint');
+        const ctx = canvas.getContext('2d');
+        ctx.setLineDash([]);
+        const interpolate = ([x1,y1], [x2,y2], t) => [x1*(1-t) + x2*t, y1*(1-t) + y2*t];
+        const offsetArt = ([x,y]) => [x - 360 + 70, y - 380 + 10];
+        const f1 = offsetArt(lineart[Math.floor(frame)]);
+        const f2 = offsetArt(lineart[Math.floor(frame + 1)]);
+        const fi1 = interpolate(f1, f2, frame%1);
+        const fi2 =  interpolate(f1, f2, (frame%1)+1/8);
+        ctx.beginPath();
+        ctx.moveTo(...fi1);
+        ctx.lineTo(...fi2);
+        pcursor.style.left = (fi2[0] + 61 - 9) + 'px';
+        pcursor.style.top = (fi2[1] + 26 - 9) + 'px';
+        ctx.lineWidth = 10;ctx.lineCap = 'round';
+        ctx.strokeStyle = 'rgb(255,147,' + Math.floor(256-frame*256/lineart.length) + ')';
+        ctx.stroke();
+        frame += 1/8;
+        if (frame < lineart.length - 1) {
+          setTimeout(draw, 1000/60)
+        } else {
+          pcursor.style.display='none'
+        }
+      };
+      draw();
+    `);
     sillyHide(3);
   }
   
   if (oneTime(4, currentBeat, 116)) {
     setBackgroundTransColor("background-color 3s cubic-bezier(0,0.5,0,1)", "#174180");
-    popups[3].document.body.innerHTML = plain("#174180");
+    popups[3].document.body = plain("#174180");
     sillyHide(0);
   }
   
   if (currentBeat >= 116 && currentBeat <= 120) {
-    const currentText = [
-      `<b style="font-family:sans-serif">Antonymph</b>`,
-      `<span style="font-size: 72px"><b>Music</b><br><i>Vylet Pony - Antonymph<br>Vylet Pony - Nectar<br>Dancing Cats - Go Kitty Go!<br><span style="font-size: 30px;">Vylet Pony - we worked so hard to leave equestria and now all i want is to go back</span></i></span>`,
-      `<span style="font-size: 64px"><b>Additional samples</b><br><i>Crazy Frog<br>PSY (Gangnam Style)<br>Tiko (Fishy on Me)<br>Toby Fox (Field of Hopes And Dreams)</i></span>`,
-      `<b>Web experience by</b><br><i>Lyra Rebane</i>`,
-      ][Math.floor(currentBeat-116)]
-    popups[4].document.body.innerHTML = `<div id="epic" style="width:fit-content; height: fit-content; background: #174180; font-family: serif; font-size: 96px; white-space: nowrap;text-shadow: 0 0 3px #0005 /*text-shadow: 2px 2px 4px #0002*/;color: white;padding: 0 20px 20px 20px;">${currentText}</div>`;
+    const text = [
+      <b style="font-family:sans-serif">Antonymph</b>,
+      <span style="font-size:72px;">
+        <b>Music</b><br/>
+        <i>
+          Vylet Pony - Antonymph<br/>
+          Vylet Pony - Nectar<br/>
+          Dancing Cats - Go Kitty Go!<br/>
+          <span style="font-size:30px;">
+            Vylet Pony - we worked so hard to leave equestria and now all i want is to go back
+          </span>
+        </i>
+      </span>,
+      <span style="font-size:64px;">
+        <b>Additional samples</b><br/>
+        <i>
+          Crazy Frog<br/>
+          PSY (Gangnam Style)<br/>
+          Tiko (Fishy on Me)<br/>
+          Toby Fox (Field of Hopes And Dreams)
+        </i>
+      </span>,
+      <>
+        <b>Web experience by</b><br/>
+        <i>Lyra Rebane</i>
+      </>
+    ];
+    const currentText = text[Math.floor(currentBeat-116)];
+    popups[4].document.body = <div
+      id="epic"
+      style="
+        width: fit-content;
+        height: fit-content;
+        background: #174180;
+        font-family: serif;
+        font-size: 96px;
+        white-space: nowrap;
+        text-shadow: 0 0 3px #0005 /*text-shadow: 2px 2px 4px #0002*/;
+        color: white;
+        padding: 0 20px 20px 20px;
+      "
+    >${currentText}</div>;
     const epicEl = popups[4].document.getElementById("epic");
     const thingSize = [epicEl.getBoundingClientRect().width + OFF_X, epicEl.getBoundingClientRect().height + OFF_Y];
     size(4, ...thingSize, true);
@@ -3382,10 +4326,64 @@ function part6(currentBeat) {
   
   if (oneTime(4, currentBeat, 120)) {
     setBackgroundTransColor("background-color 3s cubic-bezier(0,0.5,0,1)", "#DB9687");
-    popups[0].document.body.innerHTML = plain("#DB9687") + `<div style="font-size:24px;font-family:monospace;color:white;font-weight:bold;position:absolute;z-index: 1; left: 50px; top: 577px;white-space: nowrap">Illustrations by Voreburger (@voreburger)<br>Referencing:<br>Caramelldansen by Caramell<br>Lick icon base by SketchMichi</div>`;
-    popups[1].document.body.innerHTML = `<img style="width:100%;height:100%;background:#DB9687" src="https://derpicdn.net/img/view/2021/8/16/2679669.gif" />`;
-    popups[3].document.body.innerHTML = `<img style="width:100%;height:100%;image-rendering: pixelated;background:#DB9687" src="/assets/icon_0.png" />`;
-    popups[4].document.body.innerHTML = `<div onclick="window.opener.unlockAchievement('congratulations'); document.body.requestPointerLock(); document.getElementById('the_game').src = '/assets/the_game_click.png';" style="cursor: url(/assets/cursor_click.png), pointer;" draggable="false"><img src="/assets/the_game.png" id="the_game" style="image-rendering: pixelated;" draggable="false" /><img src="/assets/hourglass.png" id="hourglass" style="position: absolute; left: 190px; top: 6px;z-index: 1;image-rendering: pixelated;" draggable="false" /></div>`;
+    popups[0].document.body = <>
+      {plain("#DB9687")}
+      <div style="
+        font-size: 24px;
+        font-family: monospace;
+        color: white;
+        font-weight: bold;
+        position: absolute;
+        z-index: 1;
+        left: 50px;
+        top: 577px;
+        white-space: nowrap;
+      ">
+        Illustrations by Voreburger (@voreburger)<br/>
+        Referencing:<br/>
+        Caramelldansen by Caramell<br/>
+        Lick icon base by SketchMichi
+      </div>
+    </>;
+    const onClick = () => {
+      window.opener.unlockAchievement('congratulations');
+      document.body.requestPointerLock();
+      document.getElementById('the_game').src = '/assets/the_game_click.png';
+    };
+    popups[1].document.body = <img
+      style="width:100%; height:100%; background:#DB9687;"
+      src="https://derpicdn.net/img/view/2021/8/16/2679669.gif"
+    />;
+    popups[3].document.body = <img
+      style="width:100%; height:100%; image-rendering:pixelated; background:#DB9687;"
+      src="/assets/icon_0.png"
+    />;
+    popups[4].document.body = <>
+      <div
+        onclick="onClick()"
+        style="cursor: url(/assets/cursor_click.png), pointer;"
+        draggable="false"
+      >
+        <img
+          src="/assets/the_game.png"
+          id="the_game"
+          style="image-rendering:pixelated;"
+          draggable="false"
+        />
+        <img
+          src="/assets/hourglass.png"
+          id="hourglass"
+          style="
+            position: absolute;
+            left: 190px;
+            top: 6px;
+            z-index: 1;
+            image-rendering: pixelated;
+          "
+          draggable="false"
+        />
+      </div>
+    </>;
   }
   
   if (currentBeat >= 120 && currentBeat < 121) {
@@ -3399,26 +4397,99 @@ function part6(currentBeat) {
       size(e[0], e[3] + OFF_X, e[4] + OFF_Y);
       move(e[0], e[1] - OFF_X/2, e[2] - OFF_Y + 55);
     });
-    popups[3].document.body.innerHTML = `<img style="width:100%;height:100%;image-rendering: pixelated;background:#DB9687" src="${document.querySelector("link[rel~='icon']").href}" />`;
+    popups[3].document.body = <img
+      style="
+        width: 100%;
+        height: 100%;
+        image-rendering: pixelated;
+        background: #DB9687;
+      "
+      src={document.querySelector("link[rel~='icon']").href}
+    />;
     const hourglass = popups[4]?.document?.getElementById("hourglass");
-    const hourglassRot = windowStage % 2 == 0;
+    const hourglassRot = windowStage % 2 === 0;
     if (hourglass) {
-      hourglass.style.top = hourglassRot ? "6px" : "10px";
-      hourglass.style.transform = hourglassRot ? "rotate(0deg)" : "rotate(90deg)";
+      hourglass.style.top = `${hourglassRot ? 6 : 10}px`;
+      hourglass.style.transform = `rotate(${hourglassRot ? 0 : 90}deg)`;
     }
   }
   
   if (oneTime(4, currentBeat, 121)) {
     popups[4].document.exitPointerLock();
     setBackgroundTransColor("background-color 3s cubic-bezier(0,0.5,0,1)", "#93BED3");
-    popups[0].document.body.innerHTML = plain("#93BED3")
-    + `<div style="font-size:24px;font-family:monospace;color:white;font-weight:bold;position:absolute;z-index: 1; left: 46px; top: 342px;white-space: nowrap">Illustration by Nootaz (@nootaz)</div>`
-    + `<div style="font-size:24px;font-family:monospace;color:white;font-weight:bold;position:absolute;z-index: 1; left: 542px; top: 482px;white-space: nowrap">Animation by MataSchmata<br>Referencing: ASDFMOVIE4<br>by TomSka</div>`
-    + `<div style="font-size:24px;font-family:monospace;color:white;font-weight:bold;position:absolute;z-index: 1; left: 42px; top: 614px;white-space: nowrap">Assets from SIMPLY LOVE theme<br>Referencing: NotITG</div>`;
-    popups[1].document.body.innerHTML = `<img style="width:100%;height:100%;background:#93BED3" src="/assets/fluttgirshy.png" />`;
-    popups[3].document.body.innerHTML = `<img style="width:100%;height:100%;image-rendering: pixelated;background:#93BED3" src="/assets/image13_small.gif" />`;
-    // popups[4].document.body.innerHTML = `<img style="width:100%;height:100%;background:#93BED3" src="/assets/arrow.png" />`;
-    popups[4].document.body.innerHTML = `<img id="receptor" style="width:100%;height:100%" src="/assets/receptor.png" /><div style="width:100%;height:100%;background:#66160B;position:absolute;top:0;left:0;z-index: -1"></div>`;
+    popups[0].document.body = <>
+      {plain("#93BED3")}
+      <div style="
+        font-size: 24px;
+        font-family: monospace;
+        color: white;
+        font-weight: bold;
+        position: absolute;
+        z-index: 1;
+        left: 046px;
+        top: 342px;
+        white-space: nowrap;
+      ">
+        Illustration by Nootaz (@nootaz)
+      </div>
+      <div style="
+        font-size: 24px;
+        font-family: monospace;
+        color: white;
+        font-weight: bold;
+        position: absolute;
+        z-index: 1;
+        left: 542px;
+        top: 482px;
+        white-space: nowrap;
+      ">
+        Animation by MataSchmata<br/>
+        Referencing: ASDFMOVIE4<br/>
+        by TomSka
+      </div>
+      <div style="
+        font-size: 24px;
+        font-family: monospace;
+        color: white;
+        font-weight: bold;
+        position: absolute;
+        z-index: 1;
+        left: 042px;
+        top: 614px;
+        white-space: nowrap;
+      ">
+        Assets from SIMPLY LOVE theme<br/>
+        Referencing: NotITG
+      </div>
+    </>;
+    popups[1].document.body = <img
+      style="width:100%; height:100%; background:#93BED3;"
+      src="/assets/fluttgirshy.png"
+    />;
+    popups[3].document.body = <img
+      style="width:100%; height:100%; image-rendering:pixelated; background:#93BED3;"
+      src="/assets/image13_small.gif"
+    />;
+    /* popups[4].document.body = <img
+      style="width:100%; height:100%; background:#93BED3;"
+      src="/assets/arrow.png"
+    />; */
+    popups[4].document.body = <>
+      <img
+        id="receptor"
+        style="width:100%; height:100%;"
+        src="/assets/receptor.png"
+      />
+      <div style="
+        width: 100%;
+        height: 100%;
+        background: #66160B;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+      "></div>
+    </>;
   }
   
   if (currentBeat >= 121 && currentBeat < 122) {
@@ -3431,19 +4502,89 @@ function part6(currentBeat) {
       size(e[0], e[3] + OFF_X, e[4] + OFF_Y);
       move(e[0], e[1] - OFF_X/2, e[2] - OFF_Y + 55);
     });
-    popups[4].document.getElementById("receptor").style.filter = "brightness(" + Math.max(1,1.5-((currentBeat*4)%1)) + ")";
+    popups[4].document.getElementById("receptor").style.filter = `brightness(${Math.max(1,1.5-((currentBeat*4)%1))})`;
   }
   
   if (oneTime(4, currentBeat, 122)) {
     setBackgroundTransColor("background-color 3s cubic-bezier(0,0.5,0,1)", "#172A3C");
-    popups[0].document.body.innerHTML = plain("#172A3C")
-    + `<div style="font-size:24px;font-family:monospace;color:white;font-weight:bold;position:absolute;z-index: 1; left: 6px; top: 348px;white-space: nowrap">Animation by Syrupyyy (@syrupyyyart)<br>Referencing: Nyan Cat<br>by Christopher Torres</div>`
-    + `<div style="font-size:24px;font-family:monospace;color:white;font-weight:bold;position:absolute;z-index: 1; left: 549px; top: 470px;white-space: nowrap">Animation by AstroEden</div>`;
-    popups[1].document.body.innerHTML = `<video style="width:100%;height:100%" src="/assets/nyan.mp4" muted autoplay loop disableRemotePlayback />`;
-    popups[3].document.body.innerHTML = `<img style="width:100%;height:100%;image-rendering: pixelated;background:#172A3C" src="https://images.squarespace-cdn.com/content/v1/5ef2ebb48987dc538efdc24b/ed484ba5-f6bf-4990-bf3e-991dab7ec58e/ezgif-5-baa05c6ca5.gif?format=w1500" />`;
-    popups[4].document.body.innerHTML = `<style>@font-face{font-family: "sans undertale";src: url("/assets/DeterminationSansWeb.woff");} #sans{font-family: "sans undertale";font-size: 32px;position:absolute;color: white;top: 0px;left: 180px;width: 370px;}</style><div style="width:100%;height:100%;background:black;image-rendering: pixelated"><img src="/assets/textbox_shy.png" style="position:absolute;top:0;left:0;image-rendering: pixelated"><p id="sans">Determination font by<br>Haley Wakamatsu</p></div>`;
+    popups[0].document.body = <>
+      {plain("#172A3C")}
+      <div style="
+        font-size: 24px;
+        font-family: monospace;
+        color: white;
+        font-weight: bold;
+        position: absolute;
+        z-index: 1;
+        left: 6px;
+        top: 348px;
+        white-space: nowrap;
+      ">
+        Animation by Syrupyyy (@syrupyyyart)<br/>
+        Referencing: Nyan Cat<br/>
+        by Christopher Torres
+      </div>
+      <div style="
+        font-size: 24px;
+        font-family: monospace;
+        color: white;
+        font-weight: bold;
+        position: absolute;
+        z-index: 1;
+        left: 549px;
+        top: 470px;
+        white-space: nowrap;
+      ">
+        Animation by AstroEden
+      </div>
+    </>;
+    popups[1].document.body = <video
+      style="width:100%; height:100%;"
+      src="/assets/nyan.mp4"
+      muted autoplay loop disableRemotePlayback
+    />;
+    popups[3].document.body = <img
+      style="width:100%; height:100%; image-rendering:pixelated; background:#172A3C;"
+      src="https://images.squarespace-cdn.com/content/v1/5ef2ebb48987dc538efdc24b/ed484ba5-f6bf-4990-bf3e-991dab7ec58e/ezgif-5-baa05c6ca5.gif?format=w1500"
+    />;
+    popups[4].document.body = <>
+      <style>{`
+        @font-face { 
+          font-family: "sans undertale";
+          src: url("/assets/DeterminationSansWeb.woff");
+        }
+        #sans {
+          font-family: "sans undertale";
+          font-size: 32px;
+          position: absolute;
+          color: white;
+          top: 0px;
+          left: 180px;
+          width: 370px;
+        }
+      `}</style>
+      <div style="
+        width: 100%;
+        height: 100%;
+        background: black;
+        image-rendering: pixelated;
+      ">
+        <img
+          src="/assets/textbox_shy.png"
+          style="
+            position: absolute;
+            top: 0;
+            left: 0;
+            image-rendering: pixelated;
+          "
+        />
+        <p id="sans">
+          Determination font by<br/>
+          Haley Wakamatsu
+        </p>
+      </div>
+    </>;
   }
-  
   
   if (currentBeat >= 122 && currentBeat < 123) {
     [
@@ -3459,13 +4600,66 @@ function part6(currentBeat) {
   
   if (oneTime(4, currentBeat, 123)) {
     setBackgroundTransColor("background-color 3s cubic-bezier(0,0.5,0,1)", "#FFFFFF");
-    popups[0].document.body.innerHTML = plain("#FFFFFF")
-    + `<div style="font-size:24px;font-family:monospace;color:black;font-weight:bold;position:absolute;z-index: 1; left: 385px; top: 55px;white-space: nowrap">Illustration by Retromochi (@retromochi)<br>Referencing: That one chibi hugging picture</div>`
-    + `<div style="font-size:24px;font-family:monospace;color:black;font-weight:bold;position:absolute;z-index: 1; left: 72px; top: 415px;white-space: nowrap">Animation by Hazelnoods (@Hazelnoods)<br>Referencing: Badgers by Weebl's Stuff</div>`
-    + `<div style="font-size:24px;font-family:monospace;color:black;font-weight:bold;position:absolute;z-index: 1; left: 130px; top: 711px;white-space: nowrap">Photos taken from<br>Dancing Cats - Go Kitty Go!</div>`;
-    popups[4].document.body.innerHTML = `<img style="width:100%;transform: translateY(-127px);image-rendering: pixelated;background:#FFFFFF" src="/assets/iphone.png" />`;
-    popups[3].document.body.innerHTML = `<video style="width:100%;height:100%" src="/assets/badger.mp4" muted autoplay loop disableRemotePlayback />`;
-    popups[1].document.body.innerHTML = `<img style="width:100%;height:100%;image-rendering: pixelated;background:#FFFFFF" src="/assets/kitten_1.png" />`;
+    popups[0].document.body = <>
+      {plain("#FFFFFF")}
+      <div style="
+        font-size: 24px;
+        font-family: monospace;
+        color: black;
+        font-weight: bold;
+        position: absolute;
+        z-index: 1;
+        left: 385px;
+        top: 55px;
+        white-space: nowrap;
+      ">
+        Illustration by Retromochi (@retromochi)<br/>
+        Referencing: That one chibi hugging picture
+      </div>
+      <div style="
+        font-size: 24px;
+        font-family: monospace;
+        color: black;
+        font-weight: bold;
+        position: absolute;
+        z-index: 1;
+        left: 72px;
+        top: 415px;
+        white-space: nowrap;
+      ">
+        Animation by Hazelnoods (@Hazelnoods)<br/>
+        Referencing: Badgers by Weebl's Stuff
+      </div>
+      <div style="
+        font-size: 24px;
+        font-family: monospace;
+        color: black;
+        font-weight: bold;
+        position: absolute;
+        z-index: 1;
+        left: 130px;
+        top: 711px;
+        white-space: nowrap;
+      ">
+        Photos taken from<br/>
+        Dancing Cats - Go Kitty Go!
+      </div>
+    </>;
+    popups[4].document.body = <img src="/assets/iphone.png" style="
+      width: 100%;
+      transform: translateY(-127px);
+      image-rendering: pixelated;
+      background: #FFF;"
+    />;
+    popups[3].document.body = <video
+      style="width:100%; height:100%;"
+      src="/assets/badger.mp4"
+      muted autoplay loop disableRemotePlayback
+    />;
+    popups[1].document.body = <img
+      style="width:100%; height:100%; image-rendering:pixelated; background:#FFF;"
+      src="/assets/kitten_1.png"
+    />;
   }
   
   if (currentBeat >= 123 && currentBeat < 124) {
@@ -3493,7 +4687,46 @@ function part6(currentBeat) {
         // This text was originally going to have the original "my Patrons" text
         // but I figured it may imply that they are *my* Patrons who paid for this
         // project, so I changed it to a more generic "my subscribers" instead.
-        const patronText = "Thank you so much to\nall my subscribers!\n\n-\n\n1016\nA_Kawaii_Dragon\nAaron Dee Music\nAdam Bartlett\nAdarkone\nAerick Fae\nAire\nAlex Orgeron\nAlicorn Capony\nAlison Madden\nAmber Loveshock\nAmbrose\nAmpderg\nAppleTina\nasteroid blues\nBahd108\nBavarian Banshee\nBlackened Blue\nBlackWater\nBlue Rain\nBonk Six\nBrandon Johnson\nBria Katrina\nCaedon\nCandyFlossDemon\nCaori\nCappy\nCerily Writes\nChibaDeer\nChilloutJosh\nChristopher Anderson\nChristopher Menz\nChrysocollaDawn\nChuck\nCodeDashie\ncompressedfish\nCraky\nCyeion\nDaniel\nDaniel Oaks\nDanielle Gormley\nDavid Prince\nDawnshy\nDazzling Flash\nDelta Sierra\nDistrictZeee\nDizzy\nDongo\nDostluk V Harmony\nDragonexus\nDraycos Reivoltisia\nEclipse Flower\nEden Laing\nEdward Snowden\nEggBuhlan\nEmmaline Inlaw\nEnthalos L’arpenteur\nErrubin\nEurazba\nFeurigJaeger\nFierce Pug\nFlak\nFlakyftw\nFlashnight\nFury Lightning\nGiancarlo Ranalli\nGlitter\nGran Cabron\nGrant Yurisic\nGuthix Smith\nHeartTheWolf\nHinterland Seer\nHoshdalele\nHyper Dash\nIsn Cocks\nJack Eisenberg\nJared\nJess\nJimmyJam\nJonas Kjærgaard\nJust-A-Micro\nKaciekk\nKalexan\nKate\nKathryn\nKhaliber\nKnightOfGames\nKorroki Aternak\nLancks\nLiam Mckenzie\nLittleFox\nLokit\nLunacae\nLunguini\nMallghost\nmagicblue\nMelanieN222\nMelody Heartsong\nMetri Konor\nMichael Rissaweg\nMidien\nMikusagi\nMiniponies\nMint Deer\nMirage\nMoonie\nnervwrack\nNoble Brew\nNotetaker\nNugget\nNyxie\nOctavia Harmony\nOliviaLB\nOmegacreeper\nowlcoholik\nP\nPegajace\nPenns87\nPetrichor\nPhilip Parkinson\npvb306\nR\nRapha110\nratphomet\nRayGunBlast\nrebane2001\nRezzy\nRobClemz\nRose edge\nRyan Schaedler\nSaltyMalt\nSawtoothWaves\nScezumin\nScoonie\nSgtwaflez\nSheol\nShugnussy\nSilver Spirit\nSininenVarjo\nSkydreams\nSol-R\nSomeguy123\nSpeejays\nSpiral_Donut\nstarmanblue\nSteineronie\nStrix Pulsatrix\nSubtiltyCypress\nTaldork\nTalia Hoemke\nTaylor Capiola\nTech Support\nTheArisoner\nTheory Pop\nTiffany Clinton\nTK\nTriban Trabil\nTrizzy SkyChaser\nTuffhover\nTurtle\nTwilight Sparkle\nViolet Ray\nViktiipunk\nVladimir Lestrade\nWinterSnow\nWolfyMind\nWubby\nXepherTim\nYaher\nYankee Proud\nZachary Blazin\nZachary Lerman\nZephhyLeo\nZephlon\nzxadventurer";
+        const patronText = "Thank you so much to\nall my subscribers!\n\n-\n\n"
+        const patrons = [
+          "1016", "A_Kawaii_Dragon", "Aaron Dee Music", "Adam Bartlett",
+          "Adarkone", "Aerick Fae", "Aire", "Alex Orgeron", "Alicorn Capony",
+          "Alison Madden", "Amber Loveshock", "Ambrose", "Ampderg", "AppleTina",
+          "asteroid blues", "Bahd108", "Bavarian Banshee", "Blackened Blue",
+          "BlackWater", "Blue Rain", "Bonk Six", "Brandon Johnson", "Bria Katrina",
+          "Caedon", "CandyFlossDemon", "Caori", "Cappy", "Cerily Writes",
+          "ChibaDeer", "ChilloutJosh", "Christopher Anderson", "Christopher Menz",
+          "ChrysocollaDawn", "Chuck", "CodeDashie", "compressedfish", "Craky",
+          "Cyeion", "Daniel", "Daniel Oaks", "Danielle Gormley", "David Prince",
+          "Dawnshy", "Dazzling Flash", "Delta Sierra", "DistrictZeee", "Dizzy",
+          "Dongo", "Dostluk V Harmony", "Dragonexus", "Draycos Reivoltisia",
+          "Eclipse Flower", "Eden Laing", "Edward Snowden", "EggBuhlan",
+          "Emmaline Inlaw", "Enthalos L’arpenteur", "Errubin", "Eurazba",
+          "FeurigJaeger", "Fierce Pug", "Flak", "Flakyftw", "Flashnight",
+          "Fury Lightning", "Giancarlo Ranalli", "Glitter", "Gran Cabron",
+          "Grant Yurisic", "Guthix Smith", "HeartTheWolf", "Hinterland Seer",
+          "Hoshdalele", "Hyper Dash", "Isn Cocks", "Jack Eisenberg", "Jared",
+          "Jess", "JimmyJam", "Jonas Kjærgaard", "Just-A-Micro", "Kaciekk",
+          "Kalexan", "Kate", "Kathryn", "Khaliber", "KnightOfGames",
+          "Korroki Aternak", "Lancks", "Liam Mckenzie", "LittleFox", "Lokit",
+          "Lunacae", "Lunguini", "Mallghost", "magicblue", "MelanieN222",
+          "Melody Heartsong", "Metri Konor", "Michael Rissaweg", "Midien",
+          "Mikusagi", "Miniponies", "Mint Deer", "Mirage", "Moonie", "nervwrack",
+          "Noble Brew", "Notetaker", "Nugget", "Nyxie", "Octavia Harmony",
+          "OliviaLB", "Omegacreeper", "owlcoholik", "P", "Pegajace", "Penns87",
+          "Petrichor", "Philip Parkinson", "pvb306", "R", "Rapha110", "ratphomet",
+          "RayGunBlast", "rebane2001", "Rezzy", "RobClemz", "Rose edge",
+          "Ryan Schaedler", "SaltyMalt", "SawtoothWaves", "Scezumin", "Scoonie",
+          "Sgtwaflez", "Sheol", "Shugnussy", "Silver Spirit", "SininenVarjo",
+          "Skydreams", "Sol-R", "Someguy123", "Speejays", "Spiral_Donut",
+          "starmanblue", "Steineronie", "Strix Pulsatrix", "SubtiltyCypress",
+          "Taldork", "Talia Hoemke", "Taylor Capiola", "Tech Support",
+          "TheArisoner", "Theory Pop", "Tiffany Clinton", "TK", "Triban Trabil",
+          "Trizzy SkyChaser", "Tuffhover", "Turtle", "Twilight Sparkle",
+          "Violet Ray", "Viktiipunk", "Vladimir Lestrade", "WinterSnow",
+          "WolfyMind", "Wubby", "XepherTim", "Yaher", "Yankee Proud",
+          "Zachary Blazin", "Zachary Lerman", "ZephhyLeo", "Zephlon", "zxadventurer"
+        ];
         const p = popups[4].document.createElement("p");
         p.id = "patrons";
         p.style.fontFamily = "arial, sans-serif";
@@ -3505,8 +4738,8 @@ function part6(currentBeat) {
         p.style.marginBottom = "950px";
         popups[4].document.body.parentElement.style.overflow = "auto";
         popups[4].document.body.style.backgroundColor = "#996875";
-        p.innerText = patronText;
-        p.innerHTML = p.innerHTML.replace(`rebane2001`, `<span style="color: #FFAAFF">rebane2001</span>`);
+        p.innerText = patronText + patrons.join("\n");
+        p.innerHTML = p.innerHTML.replace(`rebane2001`, `<span style="color:#FFAAFF">rebane2001</span>`);
         popups[4].document.body.innerHTML = ""; // TODO WHY IS THIS HERE?
         popups[4].document.body.appendChild(p);
       } else {
@@ -3555,7 +4788,7 @@ function mainLoop() {
   
   const frameStart = window.performance.now() || Date.now();
   
-  if (frameRateLimit && frameStart - lastFrame < 1000/(frameRateLimit == 1 ? 77 : 32)) {
+  if (frameRateLimit && frameStart - lastFrame < 1000/(frameRateLimit === 1 ? 77 : 32)) {
     requestAnimationFrame(mainLoop);
     return
   }
@@ -3564,7 +4797,7 @@ function mainLoop() {
   
   if (rateLimitState) rateLimitState = (rateLimitState + 1) % (2 + windowRateLimit);
   
-  if (DEBUG_MODE && document.getElementById("debug").style.display != "none") {
+  if (DEBUG_MODE && document.getElementById("debug").style.display !== "none") {
     state.innerText = `currentBeat: ${currentBeat.toFixed(2)}\ncurrentBeat x4: ${(currentBeat*4).toFixed(2)}\npopupState: ${JSON.stringify(popupState, null, 2)}`;
     //state.style.backgroundColor = ((currentBeat*4)%2) > 1 ? "#FFFFEE" : "#EEFFFF";
     mainAudio.style.webkitFilter = "sepia(1)" + (((currentBeat*4)%2) > 1 ? " hue-rotate(45deg)" : "");
@@ -3610,7 +4843,7 @@ function mainLoop() {
 }
 
 document.onkeypress = (event) => {
-  if (event.keyCode == 32) {
+  if (event.keyCode === 32) {
     window.emergencyStop();
   }
 }
@@ -3642,7 +4875,26 @@ function onMIDIFailure(msg) {
 }
 
 // idk if this is accurate, I have to do -12 for it to match what I have in FL
-const midiNoteMap = {"G9": 127, "F#9": 126, "F9": 125, "E9": 124, "D#9": 123, "D9": 122, "C#9": 121, "C9": 120, "B8": 119, "A#8": 118, "A8": 117, "G#8": 116, "G8": 115, "F#8": 114, "F8": 113, "E8": 112, "D#8": 111, "D8": 110, "C#8": 109, "C8": 108, "B7": 107, "A#7": 106, "A7": 105, "G#7": 104, "G7": 103, "F#7": 102, "F7": 101, "E7": 100, "D#7": 99, "D7": 98, "C#7": 97, "C7": 96, "B6": 95, "A#6": 94, "A6": 93, "G#6": 92, "G6": 91, "F#6": 90, "F6": 89, "E6": 88, "D#6": 87, "D6": 86, "C#6": 85, "C6": 84, "B5": 83, "A#5": 82, "A5": 81, "G#5": 80, "G5": 79, "F#5": 78, "F5": 77, "E5": 76, "D#5": 75, "D5": 74, "C#5": 73, "C5": 72, "B4": 71, "A#4": 70, "A4 ": 69, "G#4": 68, "G4": 67, "F#4": 66, "F4": 65, "E4": 64, "D#4": 63, "D4": 62, "C#4": 61, "C4 ": 60, "B3": 59, "A#3": 58, "A3": 57, "G#3": 56, "G3": 55, "F#3": 54, "F3": 53, "E3": 52, "D#3": 51, "D3": 50, "C#3": 49, "C3": 48, "B2": 47, "A#2": 46, "A2": 45, "G#2": 44, "G2": 43, "F#2": 42, "F2": 41, "E2": 40, "D#2": 39, "D2": 38, "C#2": 37, "C2": 36, "B1": 35, "A#1": 34, "A1": 33, "G#1": 32, "G1": 31, "F#1": 30, "F1": 29, "E1": 28, "D#1": 27, "D1": 26, "C#1": 25, "C1": 24, "B0": 23, "A#0": 22, "A0": 21};
+const midiNoteMap = {
+  "G9": 127, "F#9": 126, "F9": 125, "E9": 124, "D#9": 123, "D9": 122,
+  "C#9": 121, "C9": 120, "B8": 119, "A#8": 118, "A8": 117, "G#8": 116,
+  "G8": 115, "F#8": 114, "F8": 113, "E8": 112, "D#8": 111, "D8": 110,
+  "C#8": 109, "C8": 108, "B7": 107, "A#7": 106, "A7": 105, "G#7": 104,
+  "G7": 103, "F#7": 102, "F7": 101, "E7": 100, "D#7": 99, "D7": 98,
+  "C#7": 97, "C7": 96, "B6": 95, "A#6": 94, "A6": 93, "G#6": 92,
+  "G6": 91, "F#6": 90, "F6": 89, "E6": 88, "D#6": 87, "D6": 86,
+  "C#6": 85, "C6": 84, "B5": 83, "A#5": 82, "A5": 81, "G#5": 80,
+  "G5": 79, "F#5": 78, "F5": 77, "E5": 76, "D#5": 75, "D5": 74,
+  "C#5": 73, "C5": 72, "B4": 71, "A#4": 70, "A4 ": 69, "G#4": 68,
+  "G4": 67, "F#4": 66, "F4": 65, "E4": 64, "D#4": 63, "D4": 62,
+  "C#4": 61, "C4 ": 60, "B3": 59, "A#3": 58, "A3": 57, "G#3": 56,
+  "G3": 55, "F#3": 54, "F3": 53, "E3": 52, "D#3": 51, "D3": 50,
+  "C#3": 49, "C3": 48, "B2": 47, "A#2": 46, "A2": 45, "G#2": 44,
+  "G2": 43, "F#2": 42, "F2": 41, "E2": 40, "D#2": 39, "D2": 38,
+  "C#2": 37, "C2": 36, "B1": 35, "A#1": 34, "A1": 33, "G#1": 32,
+  "G1": 31, "F#1": 30, "F1": 29, "E1": 28, "D#1": 27, "D1": 26,
+  "C#1": 25, "C1": 24, "B0": 23, "A#0": 22, "A0": 21
+};
 
 const patterns = [
   [
@@ -3678,7 +4930,7 @@ function sendMidiData(midiData) {
     console.error(e);
   }
   try {
-    navigator?.vibrate?.(midiData[0] == 0x90 ? midiData[1] : 0);
+    navigator?.vibrate?.(midiData[0] === 0x90 ? midiData[1] : 0);
   } catch (e) {
     console.error(e);
   }
@@ -3691,9 +4943,8 @@ function playPatternNote(patternNote, offset) {
 
 function playPatternWithOffset(patternIndex, offset) {
   const pattern = patterns[patternIndex];
-  for (const patternNote of pattern) {
+  for (const patternNote of pattern)
     playPatternNote(patternNote, offset);
-  }
 }
 
 // UTIL
@@ -3704,6 +4955,9 @@ function bounceBack(x) {
 function easeOutCubic(x) {
   return 1 - Math.pow(1 - x, 3);
 }
+
+
+//I don't know why rebane did it like this but it's kinda funny lmao
 
 console
 [`log`]
