@@ -3300,7 +3300,7 @@ function part4(currentBeat) {
     for (let i = 0; i < 4; i++) {
       const arrowEl = popups[0].document.getElementById(`r${i}`); // 100
       const perfectEl = popups[0].document.getElementById(`p${i}`); // 24
-      arrowEl.style.filter = "brightness(" + Math.max(1,1.5-((currentBeat*4)%1)) + ")";
+      arrowEl.style.filter = `brightness(${Math.max(1,1.5-((currentBeat*4)%1))})`;
       
       const offsetX = 480 + ((i-1.5)*offsetXmult) - 100;
       
@@ -3754,7 +3754,7 @@ function part6(currentBeat) {
       window.colorA = [255, 147, 0];
       window.colorB = [255, 147, 255];
       document.getElementById('paintpng').onpointerup = (e) => {
-        isDrawing=e.buttons;
+        isDrawing = e.buttons;
       };
       window.penSize = 10;
       document.getElementById('paintpng').onpointerdown = (e) => {
